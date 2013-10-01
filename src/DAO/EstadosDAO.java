@@ -23,7 +23,6 @@ public class EstadosDAO {
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             rs = ps.executeQuery();
-            rs.first();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }

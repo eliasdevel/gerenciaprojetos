@@ -59,12 +59,17 @@ public class Funcoes {
     }
 
     /**
-     *
-     * <b>Método para popular JTable</b> <br />
-     * Recebe um JTable: tabela que será populada <br />
-     * Uma String Com os nomes dos índices da JTable separados por vírgula<br />
-     * Um Result Set com o resultado de uma consulta no banco de dados. <br />
-     * E uma String com o nome das colunas da tabela no banco de dados.
+     * <div style='border: 1px solid black; text-align:center;
+     * background:white'>
+     * <b>Método para popular JTable</b></div> <br/>
+     * Recebe um <span style='color:blue'>JTable:</span> tabela que será
+     * populada <br />
+     * Uma <span style='color:blue'>String:</span> Com os nomes dos índices da
+     * JTable separados por vírgula<br />
+     * Um <span style='color:blue'>ResultSet:</span> com o resultado de uma
+     * consulta no banco de dados. <br />
+     * E uma <span style='color:blue'>String:</span> com o nome das colunas da
+     * tabela no banco de dados.
      *
      * @param tb JTable a ser populado
      * @param cabecas Nomes separados por vírgula que ficarão no cabeçalho da
@@ -74,6 +79,7 @@ public class Funcoes {
      * nomes do cabeçalho
      */
     public static void populaTabela(JTable tb, String cabecas, ResultSet rs, String colunas) {
+        if(tb!=null){
         tb.setRowHeight(24);
         String separador = ",";
         String[] cabe = cabecas.split(separador);
@@ -109,6 +115,9 @@ public class Funcoes {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao selecionar tabela:" + ex);
+        }
+        }else{
+            JOptionPane.showMessageDialog(null, "tabela nula");
         }
     }
 
@@ -155,11 +164,8 @@ public class Funcoes {
      * @return String - com os ids separados por vírgila.
      */
     public String populaComboBox(JComboBox cb, ResultSet rs, String colunaNomes, String colunaId) {
-
         int lin = 0;
         String valores = "";
-
-
         try {
             while (rs.next()) {
                 lin++;
@@ -171,7 +177,7 @@ public class Funcoes {
             rs.beforeFirst();
             int i = 0;
             while (rs.next()) {
-                valores += rs.getInt(colunaId);
+                valores += rs.getString(colunaId);
                 if (!rs.isLast()) {
                     valores += ",";
                 }
@@ -182,9 +188,7 @@ public class Funcoes {
         } catch (SQLException ex) {
             Logger.getLogger(Funcoes.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return valores;
-
     }
 
     /**

@@ -123,6 +123,8 @@ public class DesenvolvedoresControl {
             }
         }
         if (operante == 'n') {
+            Funcoes.limparCampos(p);
+            Funcoes.limparCampos(p2);
             bt.setText("Salvar");
             tp.setSelectedIndex(1);
             codigo.setText(1 + "");

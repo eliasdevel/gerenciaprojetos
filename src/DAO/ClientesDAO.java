@@ -33,15 +33,15 @@ public class ClientesDAO {
     private String sqlLimit;
     ResultSet rs = null;
 
-    public static void main(String[] args) {
-        ConexaoBD con = new ConexaoBD();
-        con.abriuConexao();
-        ClientesDAO c = new ClientesDAO();
-        Cliente cli;
-        cli = new Cliente(1, 430780, "Elias", "(51)-82492748", "elias.muller1@gmail.com", "adicional");
-        System.out.println(cli.getEmail());
-        c.iud('i', cli);
-    }
+//    public static void main(String[] args) {
+//        ConexaoBD con = new ConexaoBD();
+//        con.abriuConexao();
+//        ClientesDAO c = new ClientesDAO();
+//        Cliente cli;
+//        cli = new Cliente(1, 430780, "Elias", "(51)-82492748", "elias.muller1@gmail.com", "adicional");
+//        System.out.println(cli.getEmail());
+//        c.iud('i', cli);
+//    }
 
     public ClientesDAO() {
     }
@@ -52,8 +52,8 @@ public class ClientesDAO {
             pesquisa = "%" + pesquisa + "%";
 
             String sql = "SELECT C.idcliente,C.nome,C.telefone,C.email,C.adicional,C.idcidade,"
-                    + "(select nome from cidade where idcidade=C.idcidade)AS cidade"
-                    + "     FROM clientes C WHERE nome like ? ORDER BY nome";
+                    + "(select nome from cidades where idcidade=C.idcidade)AS cidade"
+                    + "     FROM clientes C WHERE C.nome like ? ORDER BY nome";
 
             try {
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);

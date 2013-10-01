@@ -4,11 +4,14 @@
  */
 package view;
 
+import DAO.CidadesDAO;
+import DAO.ClientesDAO;
 import DAO.DAO;
 import control.CategoriasControl;
 import control.ClientesControl;
 import control.DesenvolvedoresControl;
 import control.DesenvolvedoresControl;
+import control.SelecionarControl;
 import gerenciadorprojetos.Gerenciadorprojetos;
 import java.beans.PropertyVetoException;
 import java.sql.ResultSet;
@@ -33,14 +36,15 @@ public class fPrincipal extends javax.swing.JFrame {
 
     char operante;
     Funcoes f = new Funcoes();
+    SelecionarControl cS;
     CategoriasControl cCat;
     DesenvolvedoresControl cDes;
     ClientesControl cCli;
+    String janela;
 
     /**
      * Creates new form fPrincipal
      */
-    
     public fPrincipal() {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -52,7 +56,6 @@ public class fPrincipal extends javax.swing.JFrame {
 
         //dpDesktop.setSize(Gerenciadorprojetos.DIMENSAO);
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,6 +71,7 @@ public class fPrincipal extends javax.swing.JFrame {
         tfFiltroSel1 = new javax.swing.JTextField();
         spSelecionar1 = new javax.swing.JScrollPane();
         tbSelecionar1 = new javax.swing.JTable();
+        jLabel10 = new javax.swing.JLabel();
         dpDesktop = new javax.swing.JDesktopPane();
         ifDesenvolvedores = new javax.swing.JInternalFrame();
         tpDesenvolvedores = new javax.swing.JTabbedPane();
@@ -124,6 +128,13 @@ public class fPrincipal extends javax.swing.JFrame {
         tbProjetoDes = new javax.swing.JTable();
         tfProjetoDes = new javax.swing.JTextField();
         pnProjetoDes = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTree1 = new javax.swing.JTree();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         btSalvarPro = new javax.swing.JButton();
         btSairPro = new javax.swing.JButton();
         ifClientes = new javax.swing.JInternalFrame();
@@ -131,14 +142,12 @@ public class fPrincipal extends javax.swing.JFrame {
         pPesquisaCli = new javax.swing.JPanel();
         lbFiltroCli = new javax.swing.JLabel();
         tfFiltroCli = new javax.swing.JTextField();
-        spClientes = new javax.swing.JScrollPane();
-        tbClientes = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         pCadastrarCli = new javax.swing.JPanel();
         lbNomeCli = new javax.swing.JLabel();
-        lbEstadoCli = new javax.swing.JLabel();
         tfNomeCli = new javax.swing.JTextField();
         lbCodigoCli = new javax.swing.JLabel();
-        cbEstadosCli = new javax.swing.JComboBox();
         lbTelefoneCli = new javax.swing.JLabel();
         lbEmailCli = new javax.swing.JLabel();
         tfEmailCli = new javax.swing.JTextField();
@@ -158,8 +167,13 @@ public class fPrincipal extends javax.swing.JFrame {
         mDesenvolvedores = new javax.swing.JMenu();
         miCadDesenvolvedores = new javax.swing.JMenuItem();
         miCadCategorias = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mClientes = new javax.swing.JMenuItem();
+        mProjetos = new javax.swing.JMenu();
+        jmProjetos = new javax.swing.JMenuItem();
+        jmTopicos = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+
+        dlSelecionar.setModal(true);
 
         lbFiltroSel1.setText("Filtro:");
 
@@ -208,6 +222,8 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(spSelecionar1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jLabel10.setText("jLabel10");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Projetos");
@@ -541,7 +557,7 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGroup(pPesquisaProLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pPesquisaProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+                    .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 967, Short.MAX_VALUE)
                     .addGroup(pPesquisaProLayout.createSequentialGroup()
                         .addComponent(lbFiltroPro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -556,7 +572,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(tfFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbFiltroPro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
+                .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE))
         );
 
         tpProjetos.addTab("Pesquisar", pPesquisaPro);
@@ -597,32 +613,56 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        jLabel7.setText("Cliente:");
+
+        jScrollPane6.setViewportView(jTree1);
+
+        jLabel9.setText("Tópicos:");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane7.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout pCadastrarProLayout = new javax.swing.GroupLayout(pCadastrarPro);
         pCadastrarPro.setLayout(pCadastrarProLayout);
         pCadastrarProLayout.setHorizontalGroup(
             pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pCadastrarProLayout.createSequentialGroup()
+            .addGroup(pCadastrarProLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnProjetoDes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
-                    .addComponent(tfNomeDes1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pCadastrarProLayout.createSequentialGroup()
+                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pCadastrarProLayout.createSequentialGroup()
                         .addComponent(lbTituloPro)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbCodigoDes1))
-                    .addComponent(tfEmail1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ftfTelefone1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pCadastrarProLayout.createSequentialGroup()
-                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pCadastrarProLayout.createSequentialGroup()
-                        .addComponent(lbDesenvolvedor)
-                        .addGap(3, 3, 3)
-                        .addComponent(tfProjetoDes)))
-                .addContainerGap())
+                        .addGap(235, 235, 235)
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pCadastrarProLayout.createSequentialGroup()
+                                .addComponent(pnProjetoDes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(134, 134, 134))
+                            .addGroup(pCadastrarProLayout.createSequentialGroup()
+                                .addComponent(lbCodigoDes1)
+                                .addContainerGap())))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pCadastrarProLayout.createSequentialGroup()
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfProjetoDes, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(tfNomeDes1, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(ftfTelefone1, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(tfEmail1, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lbDesenvolvedor, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(pCadastrarProLayout.createSequentialGroup()
+                                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(408, 408, 408))))
         );
         pCadastrarProLayout.setVerticalGroup(
             pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -631,24 +671,39 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbTituloPro)
                     .addComponent(lbCodigoDes1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfNomeDes1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ftfTelefone1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfEmail1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfProjetoDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbDesenvolvedor))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnProjetoDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pCadastrarProLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfNomeDes1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ftfTelefone1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfEmail1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(pCadastrarProLayout.createSequentialGroup()
+                                .addComponent(pnProjetoDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0))
+                            .addGroup(pCadastrarProLayout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfProjetoDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbDesenvolvedor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pCadastrarProLayout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
+                            .addComponent(jScrollPane7))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -676,7 +731,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(btSalvarPro)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btSairPro))
-            .addComponent(tpProjetos)
+            .addComponent(tpProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, 999, Short.MAX_VALUE)
         );
         ifProjetosLayout.setVerticalGroup(
             ifProjetosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -684,9 +739,8 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addGroup(ifProjetosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btSalvarPro)
                     .addComponent(btSairPro))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(tpProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addGap(18, 18, 18)
+                .addComponent(tpProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         ifProjetos.setBounds(270, 60, 510, 410);
@@ -705,7 +759,7 @@ public class fPrincipal extends javax.swing.JFrame {
             }
         });
 
-        tbClientes.setModel(new javax.swing.table.DefaultTableModel(
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -716,8 +770,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbClientes.setToolTipText("");
-        spClientes.setViewportView(tbClientes);
+        jScrollPane4.setViewportView(jTable1);
 
         javax.swing.GroupLayout pPesquisaCliLayout = new javax.swing.GroupLayout(pPesquisaCli);
         pPesquisaCli.setLayout(pPesquisaCliLayout);
@@ -726,11 +779,11 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGroup(pPesquisaCliLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pPesquisaCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
                     .addGroup(pPesquisaCliLayout.createSequentialGroup()
                         .addComponent(lbFiltroCli)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfFiltroCli)))
+                        .addComponent(tfFiltroCli, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pPesquisaCliLayout.setVerticalGroup(
@@ -741,17 +794,14 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(tfFiltroCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbFiltroCli))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         tpClientes.addTab("Pesquisar", pPesquisaCli);
 
         lbNomeCli.setForeground(new java.awt.Color(169, 53, 53));
         lbNomeCli.setText(" Nome:");
-
-        lbEstadoCli.setForeground(new java.awt.Color(169, 53, 53));
-        lbEstadoCli.setText(" Estado:");
 
         lbCodigoCli.setText("1");
 
@@ -775,8 +825,13 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/editar.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/pesquisar.png"))); // NOI18N
         jButton2.setText("Buscar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Observação: Campos em vermelho são obrigatórios!");
 
@@ -795,8 +850,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addGroup(pCadastrarCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane5)
                     .addGroup(pCadastrarCliLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(122, 122, 122)
+                        .addGap(248, 248, 248)
                         .addComponent(pCidadesCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(tfNomeCli)
                     .addGroup(pCadastrarCliLayout.createSequentialGroup()
@@ -804,21 +858,19 @@ public class fPrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lbCodigoCli))
                     .addComponent(tfEmailCli)
-                    .addComponent(cbEstadosCli, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ftfTelefoneCli)
                     .addGroup(pCadastrarCliLayout.createSequentialGroup()
-                        .addComponent(lbCidadeCli)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfCidadeCli)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2))
-                    .addGroup(pCadastrarCliLayout.createSequentialGroup()
                         .addGroup(pCadastrarCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbCidadeCli)
                             .addComponent(lbTelefoneCli)
                             .addComponent(lbEmailCli)
-                            .addComponent(lbEstadoCli)
-                            .addComponent(jLabel5))
-                        .addGap(0, 99, Short.MAX_VALUE)))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pCadastrarCliLayout.createSequentialGroup()
+                        .addComponent(tfCidadeCli, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
                 .addContainerGap())
         );
         pCadastrarCliLayout.setVerticalGroup(
@@ -839,22 +891,19 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfEmailCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbEstadoCli)
+                .addComponent(lbCidadeCli)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbEstadosCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pCadastrarCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbCidadeCli)
+                .addGroup(pCadastrarCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tfCidadeCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(64, 64, 64)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pCidadesCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
+                .addGap(24, 24, 24)
+                .addComponent(pCidadesCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -882,7 +931,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(btSalvarCli)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btSairCli))
-            .addComponent(tpClientes)
+            .addComponent(tpClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
         );
         ifClientesLayout.setVerticalGroup(
             ifClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -919,13 +968,28 @@ public class fPrincipal extends javax.swing.JFrame {
 
         mArquivo.add(mDesenvolvedores);
 
-        jMenuItem1.setText("Clientes");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mClientes.setText("Clientes");
+        mClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mClientesActionPerformed(evt);
             }
         });
-        mArquivo.add(jMenuItem1);
+        mArquivo.add(mClientes);
+
+        mProjetos.setText("Projetos");
+
+        jmProjetos.setText("Cadastro de Projetos");
+        jmProjetos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmProjetosActionPerformed(evt);
+            }
+        });
+        mProjetos.add(jmProjetos);
+
+        jmTopicos.setText("Cadastro de topicos");
+        mProjetos.add(jmTopicos);
+
+        mArquivo.add(mProjetos);
 
         mbMenuTotal.add(mArquivo);
 
@@ -942,7 +1006,7 @@ public class fPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
 
         pack();
@@ -959,9 +1023,7 @@ public class fPrincipal extends javax.swing.JFrame {
     private void miCadCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCadCategoriasActionPerformed
         cCat = new CategoriasControl();
         cCat.populaCategorias(tfFiltro, tbCategorias, tpCategorias, btSalvar, tfTitulo, taDescricao, lbCodigoCategoria);
-
         ifCategorias.setVisible(true);
-
     }//GEN-LAST:event_miCadCategoriasActionPerformed
 
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
@@ -1008,39 +1070,52 @@ public class fPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_tfFiltroCliKeyReleased
 
     private void btSalvarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarCliActionPerformed
-        // TODO add your handling code here:
+        cCli.acaoBotaoNovoSalvar();
     }//GEN-LAST:event_btSalvarCliActionPerformed
 
     private void btSairCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairCliActionPerformed
         cCli.acaoBotaoSair();
     }//GEN-LAST:event_btSairCliActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        cCli = new ClientesControl(
-                ifClientes,
-                tpClientes,
-                pPesquisaCli,
-                pCadastrarCli,
-                tbClientes,
-                lbCodigoCli,
-                tfFiltroCli,
-                cbEstadosCli,
-                tfEmailCli,
-                ftfTelefoneCli,
-                tfEmailCli,
-                taAdicionalCli,
-                dlSelecionar,
-                tbCategorias,
-                tfFiltroCli,
-                btSalvarCli,
-                btSairCli);
-
+    private void mClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mClientesActionPerformed
+        cCli = new ClientesControl(jTable1);
+        cCli.setTb(jTable1);
+        cCli.setBtSalvar(btSalvarCli);
+        cCli.setBtSair(btSairCli);
+        cCli.setAdicional(taAdicionalCli);
+        cCli.setCodigo(lbCodigoCli);
+        cCli.setEmail(tfEmailCli);
+        cCli.setFrame(ifClientes);
+        cCli.setFiltro(tfFiltroCli);
+        cCli.setNome(tfNomeCli);
+        cCli.setTelefone(ftfTelefoneCli);
+        cCli.setTp(tpClientes);
+        cCli.setCidade(tfCidadeCli);
+        cCli.setP(pPesquisaCli);
+        cCli.setP2(pCadastrarCli);
+//        Funcoes.populaTabela(jTable1, "idcidade,Nome,Telefone,Email,Cidade", new ClientesDAO().resultado(tfFiltroCli.getText()), "idcidade,nome,telefone,email,cidade");
         ifClientes.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mClientesActionPerformed
 
     private void tfFiltroSel1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroSel1KeyReleased
-        // TODO add your handling code here:
+        cS.filtro();
     }//GEN-LAST:event_tfFiltroSel1KeyReleased
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        cS = new SelecionarControl();
+        cS.setDl(dlSelecionar);
+        cS.setJanela("cidades");
+        cS.setFiltro(tfFiltroSel1);
+        cS.setTb(tbSelecionar1);
+        cS.filtro();
+        cCli.setIdcidade(cS.getCodigo());
+        tfCidadeCli.setText(cS.getCodigo());
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jmProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmProjetosActionPerformed
+   
+    }//GEN-LAST:event_jmProjetosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1086,7 +1161,6 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btSalvarDes;
     private javax.swing.JButton btSalvarPro;
     private javax.swing.JComboBox cbCategoriaDes;
-    private javax.swing.JComboBox cbEstadosCli;
     private javax.swing.JDialog dlSelecionar;
     private javax.swing.JDesktopPane dpDesktop;
     private javax.swing.JFormattedTextField ftfTelefone;
@@ -1098,17 +1172,28 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JInternalFrame ifProjetos;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTree jTree1;
+    private javax.swing.JMenuItem jmProjetos;
+    private javax.swing.JMenuItem jmTopicos;
     private javax.swing.JLabel lbCategoriaDes;
     private javax.swing.JLabel lbCidadeCli;
     private javax.swing.JLabel lbCodigoCategoria;
@@ -1118,7 +1203,6 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lbDescricao;
     private javax.swing.JLabel lbDesenvolvedor;
     private javax.swing.JLabel lbEmailCli;
-    private javax.swing.JLabel lbEstadoCli;
     private javax.swing.JLabel lbFiltro;
     private javax.swing.JLabel lbFiltro1;
     private javax.swing.JLabel lbFiltroCli;
@@ -1130,7 +1214,9 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lbTitulo;
     private javax.swing.JLabel lbTituloPro;
     private javax.swing.JMenu mArquivo;
+    private javax.swing.JMenuItem mClientes;
     private javax.swing.JMenu mDesenvolvedores;
+    private javax.swing.JMenu mProjetos;
     private javax.swing.JMenuBar mbMenuTotal;
     private javax.swing.JMenuItem miCadCategorias;
     private javax.swing.JMenuItem miCadDesenvolvedores;
@@ -1144,7 +1230,6 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel pPesquisaDes;
     private javax.swing.JPanel pPesquisaPro;
     private javax.swing.JPanel pnProjetoDes;
-    private javax.swing.JScrollPane spClientes;
     private javax.swing.JScrollPane spDescricao;
     private javax.swing.JScrollPane spProjetos;
     private javax.swing.JScrollPane spSelecionar1;
@@ -1153,7 +1238,6 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JTable tbCategorias;
     private javax.swing.JTable tbCategorias1;
     private javax.swing.JTable tbCategorias2;
-    private javax.swing.JTable tbClientes;
     private javax.swing.JTable tbProjetoDes;
     private javax.swing.JTable tbSelecionar1;
     private javax.swing.JTextField tfCidadeCli;

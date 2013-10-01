@@ -2,15 +2,12 @@ package control;
 
 import DAO.ClientesDAO;
 import DAO.DAO;
-import DAO.DesenvolvedoresDAO;
 import DAO.EstadosDAO;
 import entidadesRelacoes.Cliente;
-import entidadesRelacoes.Desenvolvedor;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.TextArea;
 import java.sql.ResultSet;
-import javax.swing.ComboBoxEditor;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -24,13 +21,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import util.Funcoes;
 import view.Msg;
-import view.fPrincipal;
 
 /**
  *
  * @author elias
  */
-public class ClientesControl {
+public final class ClientesControl {
 
     JInternalFrame frame;
     ResultSet rs;
@@ -44,8 +40,9 @@ public class ClientesControl {
     JTextField nome;
     JFormattedTextField telefone;
     JTextField email;
+    JTextField cidade;
     JTextArea adicional;
-    JDialog cidade;
+    String idcidade;
     JTable cidades;
     JTextField filtroCidade;
     JButton btSalvar;
@@ -53,67 +50,29 @@ public class ClientesControl {
     String[] idEstado;
     String idsEstado;
     Funcoes f;
-    int idCidade;
     char operante;
 
-    public ClientesControl(JInternalFrame frame, JTabbedPane tp, JPanel p, JPanel p2, JTable tb, JLabel codigo, JTextField filtro, JComboBox estado,
-            JTextField nome, JFormattedTextField telefone, JTextField email, JTextArea adicional,
-            JDialog cidade, JTable cidades, JTextField filtroCidade, JButton btSalvar, JButton btSair) {
-        this.frame = frame;
+    public ClientesControl(JTable tb) {
 
-        this.tp = tp;
-        this.p = p;
-        this.p2 = p2;
+
         this.tb = tb;
-        this.codigo = codigo;
-        this.filtro = filtro;
-        this.estado = estado;
-        this.nome = nome;
-        this.telefone = telefone;
-        this.email = email;
-        this.adicional = adicional;
-        this.cidade = cidade;
-        this.cidades = cidades;
-        this.filtroCidade = filtroCidade;
-//        filtroCidade = new JTextField() {
-//            public void filtroCidadeKeyReleased(java.awt.event.ActionEvent evt) {
-//            }
-//        };
-
-        this.btSalvar = btSalvar;
-//        this.btSair.addActionListener(estado);
-        this.btSair = btSair;
+        popula();
     }
 
-    public void pupulaComboEstados() {
-        f = new Funcoes();
-        EstadosDAO dao = new EstadosDAO();
+    public void popula() {
+        rs = new ClientesDAO().resultado("");
+        try {
+            rs.first();
+            Funcoes.populaTabela(this.tb, "idcidade,Nome,Telefone,Email", this.rs, "idcidade,nome,telefone,email");
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-        rs = dao.linhas();
-        idsEstado = f.populaComboBox(estado, rs, "nome", "sigla");
-        idEstado = idsEstado.split(",");
-//        f = null;
-        //Obtem o Editor do seu JComboBox  
-//        ComboBoxEditor editor = estado.getEditor();
-//        //Obtem o componente de edicao do ComboBoxEditor  
-//        Component component = editor.getEditorComponent();
-//        //Adiciona os ouvintes FocusAdapter, que serao responsaveis por escutar eventos de foco  
-//        component.addFocusListener(new java.awt.event.FocusAdapter() {
-//            @Override
-//            public void focusLost(java.awt.event.FocusEvent evt) {
-//            }
-//        });
     }
-//    private void populaCidades() {
-//        Dimension d = new Dimension(467, 200);
-//        JTable tbCidades = new JTable();
-//        Funcoes.populaTabelaComIndices(tbCidades, "Selecionar,Excluir,Nome", rs, "idcidade,idcidade");
-//        cidades.add(tbCidades);
-//        cidades.setSize(d);
-//        tbCidades.setSize(d);
-//    }
 
     public void acaoBotaoNovoSalvar() {
+
+
         int idCat = 0;
         if (this.tp.getSelectedIndex() != 1) {
             operante = 'n';
@@ -123,9 +82,9 @@ public class ClientesControl {
                 operante = 'u';
             }
         }
-        Cliente c = new Cliente(Integer.parseInt(codigo.getText()), 1, nome.getText(), telefone.getText(), email.getText(), adicional.getText());
         ClientesDAO iuds = new ClientesDAO();
         if (operante == 'u' || operante == 'i') {
+            Cliente c = new Cliente(Integer.parseInt(codigo.getText()), Integer.parseInt(cidade.getText()), nome.getText(), telefone.getText(), email.getText(), adicional.getText());
             if (c.getNome().length() > 0) {
                 if (iuds.iud(operante, c) > 0) {
                     Funcoes.limparCampos(p);
@@ -156,13 +115,182 @@ public class ClientesControl {
         this.tp.setSelectedIndex(0);
     }
 
-    public void mostraCidades() {
-        cidade.setSize(600, 400);
-        cidade.setVisible(true);
-        ResultSet rs = null;
-        DAO d = new DAO(rs);
-        rs = d.get("cidades");
-        f.populaTabela(cidades, "codigo,codigo,nome, sigla", rs, "idcidade,idcidade,nome,siglaestado");
+    //    class cidades extends JDialog
+    public JInternalFrame getFrame() {
+        return frame;
     }
-//    class cidades extends JDialog
+
+    public void setFrame(JInternalFrame frame) {
+        frame.setSize(500, 600);
+        this.frame = frame;
+    }
+
+    public ResultSet getRs() {
+        return rs;
+    }
+
+    public void setRs(ResultSet rs) {
+        this.rs = rs;
+    }
+
+    public JTabbedPane getTp() {
+        return tp;
+    }
+
+    public void setTp(JTabbedPane tp) {
+        this.tp = tp;
+    }
+
+    public JPanel getP() {
+        return p;
+    }
+
+    public void setP(JPanel p) {
+        this.p = p;
+    }
+
+    public JPanel getP2() {
+        return p2;
+    }
+
+    public void setP2(JPanel p2) {
+        this.p2 = p2;
+    }
+
+    public JTable getTb() {
+        return tb;
+    }
+
+    public void setTb(JTable tb) {
+        this.tb = tb;
+    }
+
+    public JLabel getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(JLabel codigo) {
+        this.codigo = codigo;
+    }
+
+    public JTextField getFiltro() {
+        return filtro;
+    }
+
+    public void setFiltro(JTextField filtro) {
+        this.filtro = filtro;
+    }
+
+    public JComboBox getEstado() {
+        return estado;
+    }
+
+    public void setEstado(JComboBox estado) {
+        this.estado = estado;
+    }
+
+    public JTextField getNome() {
+        return nome;
+    }
+
+    public void setNome(JTextField nome) {
+        this.nome = nome;
+    }
+
+    public JFormattedTextField getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(JFormattedTextField telefone) {
+        Funcoes.formataCampo(telefone, "(**)****-****");
+        this.telefone = telefone;
+    }
+
+    public JTextField getEmail() {
+        return email;
+    }
+
+    public void setEmail(JTextField email) {
+        this.email = email;
+    }
+
+    public JTextArea getAdicional() {
+        return adicional;
+    }
+
+    public void setAdicional(JTextArea adicional) {
+        this.adicional = adicional;
+    }
+
+    public JTable getCidades() {
+        return cidades;
+    }
+
+    public void setCidades(JTable cidades) {
+        this.cidades = cidades;
+    }
+
+    public JTextField getFiltroCidade() {
+        return filtroCidade;
+    }
+
+    public void setFiltroCidade(JTextField filtroCidade) {
+        this.filtroCidade = filtroCidade;
+    }
+
+    public JButton getBtSalvar() {
+        return btSalvar;
+    }
+
+    public void setBtSalvar(JButton btSalvar) {
+        this.btSalvar = btSalvar;
+    }
+
+    public JButton getBtSair() {
+        return btSair;
+    }
+
+    public void setBtSair(JButton btSair) {
+        this.btSair = btSair;
+    }
+
+    public String[] getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(String[] idEstado) {
+        this.idEstado = idEstado;
+    }
+
+    public String getIdsEstado() {
+        return idsEstado;
+    }
+
+    public void setIdsEstado(String idsEstado) {
+        this.idsEstado = idsEstado;
+    }
+
+    public char getOperante() {
+        return operante;
+    }
+
+    public void setOperante(char operante) {
+        this.operante = operante;
+    }
+
+    public JTextField getCidade() {
+        return this.cidade;
+    }
+
+    public void setCidade(JTextField cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getIdcidade() {
+        return idcidade;
+    }
+
+    public void setIdcidade(String idcidade) {
+        this.idcidade = idcidade;
+    }
 }
