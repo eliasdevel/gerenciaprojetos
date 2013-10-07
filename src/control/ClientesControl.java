@@ -92,6 +92,7 @@ public final class ClientesControl {
                 if (iuds.iud(operante, c) > 0) {
                     Funcoes.limparCampos(p);
                     Funcoes.limparCampos(p2);
+                    adicional.setText("");
                     new Msg().msgRegistrado(frame);
                     tp.setSelectedIndex(0);
                     btSalvar.setText("Novo");
@@ -135,6 +136,7 @@ public final class ClientesControl {
             nome.setText(c.getNome() + "");
             telefone.setText(c.getTelefone());
             idcidade = c.getIdcidade() +"";
+            adicional.setText(c.getAdicional());
             cidade.setText(new CidadesDAO().linha(idcidade).getNome());
             email.setText(c.getEmail());
             btSalvar.setText("Salvar");
