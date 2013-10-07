@@ -56,7 +56,7 @@ public class CidadesDAO {
 
     public Cidade linha(String id) {
         Cidade c = new Cidade(Integer.parseInt(id), "", "", "");
-        String sql = "SELECT idcidade,nome,siglaestado FROM cidades WHERE idcidade = ?";
+        String sql = "SELECT idcidade,nome,siglaestado,cep FROM cidades WHERE idcidade = ?";
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, id);
@@ -64,7 +64,7 @@ public class CidadesDAO {
             rs.first();
             c.setNome(rs.getString("nome"));
             c.setSiglaestado(rs.getString("siglaestado"));
-            c.setCep(rs.getString("cep"));
+            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }

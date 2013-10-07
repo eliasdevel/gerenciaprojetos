@@ -4,14 +4,27 @@
  */
 package control;
 
+import DAO.ProjetosDAO;
 import entidadesRelacoes.Projeto;
 import entidadesRelacoes.ProjetoDesenvolvedor;
 import entidadesRelacoes.ProjetoTopico;
+import entidadesRelacoes.Topico;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import util.Funcoes;
 import view.Editar;
@@ -23,144 +36,227 @@ import view.Msg;
  * @author elias
  */
 public class ProjetosControl {
-    
+
+    char operante;
+    JTable tb;
+    JTable desenvolvedores;
+    JTable topicos;
     JInternalFrame form;
+    JTabbedPane tp;
+    JPanel p1;
+    JPanel p2;
+    JButton bt;
+    JButton btSalvar;
+    JTextField titulo;
+    JTextArea descricao;
+    int idCliente;
+    JFormattedTextField dataInicio;
+    JTextField cliente;
+    JFormattedTextField dataPrevisao;
+    JFormattedTextField dataFim;
+//    Tópicos
+    JTabbedPane tpTopicos;
+    JPanel p1Topicos;
+    JPanel p2Topicos;
+    ArrayList<Topico> topicosList = new ArrayList();
+    JLabel codigo;
+    int[] i = new int[1];
+    ResultSet rs;
 
-    JTextField nome;
-    JFormattedTextField data;
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-//     public void acaoBotaoNovoSalvar() {
-//        int idCat = 0;
-//        if (this.tp.getSelectedIndex() != 1) {
-//            operante = 'n';
-//        } else {
-//            idCat = Integer.parseInt(this.idCategoria[cb.getSelectedIndex()]);
-//            if (operante != 'i') {
-//                operante = 'u';
-//            }
-//        }
-//        Desenvolvedor d = new Desenvolvedor(Integer.parseInt(codigo.getText()),
-//                idCat, nome.getText(),
-//                telefone.getText(),
-//                email.getText());
-//
-//        DesenvolvedoresDAO iuds = new DesenvolvedoresDAO();
-//        if (operante == 'u' || operante == 'i') {
-//            if (d.getNome().length() > 0) {
-//                if (iuds.iud(operante, d) > 0) {
-//                    Funcoes.limparCampos(p);
-//                    Funcoes.limparCampos(p2);
-//                    new Msg().msgRegistrado(form);
-//                    tp.setSelectedIndex(0);
-//                    bt.setText("Novo");
-//                    populaDesenvolvedores();
-//                }
-//            } else {
-//                new Msg().msgGeneric("O nome precisa ser preenchido!");
-//            }
-//        }
-//        if (operante == 'n') {
-//            Funcoes.limparCampos(p);
-//            Funcoes.limparCampos(p2);
-//            bt.setText("Salvar");
-//            tp.setSelectedIndex(1);
-//            codigo.setText(1 + "");
-//            operante = 'i';
-//        }
-//    }
-//
-//    public void acaoSair() {
-//        tp.setSelectedIndex(0);
-//        frame.setVisible(false);
-//        cb.removeAllItems();
-//        Funcoes.limparCampos(p);
-//        Funcoes.limparCampos(p2);
-//        bt.setText("Novo");
-//        operante = 'n';
-//    }
-//
-//    class editDes extends Editar
-//            implements ActionListener {
-//
-//        public editDes(JTable tb, int column) {
-//            super(tb, column);
-//        }
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            tp.setSelectedIndex(1);
-//            codigo.setText(e.getActionCommand() + "");
-//            operante = 'u';
-//            f = new Funcoes();
-//            DesenvolvedoresDAO pes = new DesenvolvedoresDAO();
-//            Desenvolvedor des = pes.linha(e.getActionCommand() + "");
-//            nome.setText(des.getNome() + "");
-//            telefone.setText(des.getTelefone());
-//            email.setText(des.getEmail());
-//            bt.setText("Salvar");
-//            f.selecionaIndiceCombo(cb, idCategoria, des.getIdCategoria() + "");
-//            
-//            //JOptionPane.showMessageDialog(null, des.getIdCategoria()+idCategoria[2]);
-//        }
-//    }
-//
-//    class delDes extends Excluir
-//            implements ActionListener {
-//
-//        public delDes(JTable tb, int column) {
-//            super(tb, column);
-//        }
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            if (new Msg().opcaoExcluir(p)) {
-//
-//                DesenvolvedoresDAO dao = new DesenvolvedoresDAO();
-//                dao.iud('d', new Desenvolvedor(Integer.parseInt(e.getActionCommand()), 0, "", "", ""));
-//                populaDesenvolvedores();
-//                dao = null;
-//            }
-//                populaDesenvolvedores();
-//        }
-//    }
+    public void popularProjetos(String pesquisa) {
+        rs = new ProjetosDAO().resultado(pesquisa);
+        try {
+            rs.first();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProjetosControl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Funcoes.populaTabela(tb, "Titulo,Cliente,ID,Descrição", rs, "titulo,cliente,idprojeto,descricao");
+    }
 
-   
+    public void acaoBotaoNovoSalvar() {
+
+        if (this.tp.getSelectedIndex() != 1) {
+            operante = 'n';
+        } else {
+            if (operante != 'i') {
+                operante = 'u';
+            }
+        }
+        if (operante == 'u' || operante == 'i') {
+            ProjetosDAO iuds = new ProjetosDAO();
+            Projeto p = new Projeto(Integer.parseInt(codigo.getText()), idCliente, titulo.getText(), descricao.getText(), false);
+            if (p.getTitulo().length() > 0) {
+                if (p.getIdcliente() > 0) {
+                    if (iuds.iud(operante, p) > 0) {
+                        Funcoes.limparCampos(p1);
+                        Funcoes.limparCampos(p2);
+                        descricao.setText("");
+                        new Msg().msgRegistrado(form);
+                        tp.setSelectedIndex(0);
+                        btSalvar.setText("Novo");
+                        popularProjetos("");
+                    }
+                } else {
+
+                    new Msg().msgGeneric("O Cliente precisa ser preenchido!");
+                }
+            } else {
+                new Msg().msgGeneric("O Título precisa ser preenchido!");
+            }
+        }
+        if (operante == 'n') {
+            btSalvar.setText("Salvar");
+            tp.setSelectedIndex(1);
+            codigo.setText(1 + "");
+            operante = 'i';
+        }
+
+    }
+
+    public void acaoSair() {
+        tp.setSelectedIndex(0);
+        form.setVisible(false);
+        Funcoes.limparCampos(p1);
+        Funcoes.limparCampos(p2);
+        descricao.setText("");
+        bt.setText("Novo");
+        operante = 'n';
+    }
+
+    public JButton getBtSalvar() {
+        return btSalvar;
+    }
+
+    public void setBtSalvar(JButton btSalvar) {
+        this.btSalvar = btSalvar;
+    }
+
+    public JTextField getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(JTextField cliente) {
+        this.cliente = cliente;
+    }
+
+    public JTable getTb() {
+        return tb;
+    }
+
+    public void setTb(JTable tb) {
+        this.tb = tb;
+    }
+
+    public JTable getDesenvolvedores() {
+        return desenvolvedores;
+    }
+
+    public void setDesenvolvedores(JTable desenvolvedores) {
+        this.desenvolvedores = desenvolvedores;
+    }
+
+    public JTable getTopicos() {
+        return topicos;
+    }
+
+    public void setTopicos(JTable topicos) {
+        this.topicos = topicos;
+    }
+
     public JInternalFrame getForm() {
         return form;
     }
 
     public void setForm(JInternalFrame form) {
         this.form = form;
+        this.form.setSize(1000, 800);
     }
 
-    public JTextField getNome() {
-        return nome;
+    public JTabbedPane getTp() {
+        return tp;
     }
 
-    public void setNome(JTextField nome) {
-        this.nome = nome;
+    public void setTp(JTabbedPane tp) {
+        this.tp = tp;
     }
 
-    public JFormattedTextField getData() {
-        return data;
+    public JPanel getP1() {
+        return p1;
     }
 
-    public void setData(JFormattedTextField data) {
-        this.data = data;
+    public void setP1(JPanel p1) {
+        this.p1 = p1;
     }
-    
+
+    public JPanel getP2() {
+        return p2;
+    }
+
+    public void setP2(JPanel p2) {
+        this.p2 = p2;
+    }
+
+    public JButton getBt() {
+        return bt;
+    }
+
+    public void setBt(JButton bt) {
+        this.bt = bt;
+    }
+
+    public JTextField getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(JTextField titulo) {
+        this.titulo = titulo;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
+    }
+
+    public JTextArea getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(JTextArea descricao) {
+        this.descricao = descricao;
+    }
+
+    public JFormattedTextField getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(JFormattedTextField dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public JFormattedTextField getDataPrevisao() {
+        return dataPrevisao;
+    }
+
+    public void setDataPrevisao(JFormattedTextField dataPrevisao) {
+        this.dataPrevisao = dataPrevisao;
+    }
+
+    public JFormattedTextField getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(JFormattedTextField dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public JLabel getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(JLabel codigo) {
+        this.codigo = codigo;
+    }
 }

@@ -1,4 +1,4 @@
- /*
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -79,45 +79,45 @@ public class Funcoes {
      * nomes do cabeçalho
      */
     public static void populaTabela(JTable tb, String cabecas, ResultSet rs, String colunas) {
-        if(tb!=null){
-        tb.setRowHeight(24);
-        String separador = ",";
-        String[] cabe = cabecas.split(separador);
-        int col = cabe.length;
-        try {
-            if (rs.next()) {
-                rs.beforeFirst();
-                int lin = 0;
-                while (rs.next()) {
-                    lin++;
-                }
-                rs.beforeFirst();
-                Object[][] dadosT = new Object[lin][col];
-                String[] indicess = colunas.split(separador);
-                int i = 0;
-                while (rs.next()) {
-                    for (int j = 0; j < col; j++) {
-                        dadosT[i][j] = rs.getString(indicess[j]);
+        if (tb != null) {
+            tb.setRowHeight(24);
+            String separador = ",";
+            String[] cabe = cabecas.split(separador);
+            int col = cabe.length;
+            try {
+                if (rs.next()) {
+                    rs.beforeFirst();
+                    int lin = 0;
+                    while (rs.next()) {
+                        lin++;
                     }
-                    i++;
-                }
-                tb.setModel(new DefaultTableModel(dadosT, cabe) {
-                    @Override
-                    public boolean isCellEditable(int row, int column) {
-                        boolean editavel = false;
-
-                        if (column == 0 || column == 1) {
-                            editavel = true;
+                    rs.beforeFirst();
+                    Object[][] dadosT = new Object[lin][col];
+                    String[] indicess = colunas.split(separador);
+                    int i = 0;
+                    while (rs.next()) {
+                        for (int j = 0; j < col; j++) {
+                            dadosT[i][j] = rs.getString(indicess[j]);
                         }
-                        return editavel;
+                        i++;
                     }
-                });
+                    tb.setModel(new DefaultTableModel(dadosT, cabe) {
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                            boolean editavel = false;
+
+                            if (column == 0 || column == 1) {
+                                editavel = true;
+                            }
+                            return editavel;
+                        }
+                    });
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao selecionar tabela:" + ex);
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao selecionar tabela:" + ex);
-        }
-        }else{
-            JOptionPane.showMessageDialog(null, "tabela nula");
+        } else {
+            JOptionPane.showMessageDialog(null, "A variável JTable setada esta nula");
         }
     }
 
@@ -219,10 +219,7 @@ public class Funcoes {
     public static void formataCampo(JFormattedTextField jft, String mascara) {
         MaskFormatter formato = null;
         try {
-
-
             formato = new MaskFormatter(mascara);
-
         } catch (ParseException ex) {
             System.out.println("Erro na máscara: " + ex);
         }

@@ -4,6 +4,7 @@ import DAO.ClientesDAO;
 import DAO.DAO;
 import DAO.EstadosDAO;
 import entidadesRelacoes.Cliente;
+import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -20,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import util.Funcoes;
+import view.Editar;
 import view.Msg;
 
 /**
@@ -67,6 +69,7 @@ public final class ClientesControl {
         } catch (SQLException ex) {
             Logger.getLogger(ClientesControl.class.getName()).log(Level.SEVERE, null, ex);
         }
+        new editCli(tb, 0);
 
     }
 
@@ -77,14 +80,13 @@ public final class ClientesControl {
         if (this.tp.getSelectedIndex() != 1) {
             operante = 'n';
         } else {
-//            idCat = Integer.parseInt(this.idCategoria[cb.getSelectedIndex()]);
             if (operante != 'i') {
                 operante = 'u';
             }
         }
         ClientesDAO iuds = new ClientesDAO();
         if (operante == 'u' || operante == 'i') {
-            Cliente c = new Cliente(Integer.parseInt(codigo.getText()), Integer.parseInt(cidade.getText()), nome.getText(), telefone.getText(), email.getText(), adicional.getText());
+            Cliente c = new Cliente(Integer.parseInt(codigo.getText()), Integer.parseInt(idcidade), nome.getText(), telefone.getText(), email.getText(), adicional.getText());
             if (c.getNome().length() > 0) {
                 if (iuds.iud(operante, c) > 0) {
                     Funcoes.limparCampos(p);
@@ -92,7 +94,7 @@ public final class ClientesControl {
                     new Msg().msgRegistrado(frame);
                     tp.setSelectedIndex(0);
                     btSalvar.setText("Novo");
-//                    populaDesenvolvedores();
+                    popula();
                 }
             } else {
                 new Msg().msgGeneric("O nome precisa ser preenchido!");
@@ -115,7 +117,28 @@ public final class ClientesControl {
         this.tp.setSelectedIndex(0);
     }
 
-    //    class cidades extends JDialog
+    class editCli extends Editar {
+
+        public editCli(JTable tb, int coluna) {
+            super(tb, coluna);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            tp.setSelectedIndex(1);
+            codigo.setText(e.getActionCommand() + "");
+            operante = 'u';
+            f = new Funcoes();
+            ClientesDAO dao = new ClientesDAO();
+            Cliente c = dao.linha(e.getActionCommand());
+            nome.setText(c.getNome() + "");
+            telefone.setText(c.getTelefone());
+            email.setText(c.getEmail());
+            btSalvar.setText("Salvar");
+
+        }
+    }
+
     public JInternalFrame getFrame() {
         return frame;
     }

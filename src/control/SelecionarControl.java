@@ -5,6 +5,7 @@
 package control;
 
 import DAO.CidadesDAO;
+import DAO.ClientesDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -31,6 +32,11 @@ public class SelecionarControl {
         if (janela.equals("cidades")) {
             ResultSet rs = new CidadesDAO().resultado(filtro.getText());
             Funcoes.populaTabelaSelecao(tb, "Selecione,Nome,Estado", rs, "idcidade,nome,siglaestado");
+            dl.setSize(500, 600);
+        }
+        if (janela.equals("clientes")) {
+            ResultSet rs = new ClientesDAO().resultado(filtro.getText());
+            Funcoes.populaTabelaSelecao(tb, "Selecione,Nome,Telefone,Email,Cidade", rs, "idcliente,nome,telefone,email,cidade");
             dl.setSize(500, 600);
         }
         new Select(tb, 0);

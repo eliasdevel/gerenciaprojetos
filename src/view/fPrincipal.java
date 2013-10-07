@@ -11,6 +11,7 @@ import control.CategoriasControl;
 import control.ClientesControl;
 import control.DesenvolvedoresControl;
 import control.DesenvolvedoresControl;
+import control.ProjetosControl;
 import control.SelecionarControl;
 import gerenciadorprojetos.Gerenciadorprojetos;
 import java.beans.PropertyVetoException;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 import javax.naming.spi.DirStateFactory;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import util.Funcoes;
@@ -40,6 +42,7 @@ public class fPrincipal extends javax.swing.JFrame {
     CategoriasControl cCat;
     DesenvolvedoresControl cDes;
     ClientesControl cCli;
+    ProjetosControl cPro;
     String janela;
 
     /**
@@ -114,27 +117,36 @@ public class fPrincipal extends javax.swing.JFrame {
         lbFiltroPro = new javax.swing.JLabel();
         tfFiltroPro = new javax.swing.JTextField();
         spProjetos = new javax.swing.JScrollPane();
-        tbCategorias2 = new javax.swing.JTable();
+        tbProjetos = new javax.swing.JTable();
         pCadastrarPro = new javax.swing.JPanel();
         lbTituloPro = new javax.swing.JLabel();
         lbDesenvolvedor = new javax.swing.JLabel();
-        tfNomeDes1 = new javax.swing.JTextField();
-        lbCodigoDes1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        tfEmail1 = new javax.swing.JTextField();
-        ftfTelefone1 = new javax.swing.JFormattedTextField();
+        tfTituloPro = new javax.swing.JTextField();
+        lbCodigoPro = new javax.swing.JLabel();
+        spDesenvolvedoresPro = new javax.swing.JScrollPane();
+        tbDesenvolvedoresPro = new javax.swing.JTable();
+        tfClientePro = new javax.swing.JTextField();
+        lbClientePro = new javax.swing.JLabel();
+        btAdicionarDesenvolvedorPro = new javax.swing.JButton();
+        btBuscarClientePro = new javax.swing.JButton();
+        btCadastrarClientePro = new javax.swing.JButton();
+        lbDataPrevisao = new javax.swing.JLabel();
+        lbDatainicio = new javax.swing.JLabel();
+        ftfDataInicioPro = new javax.swing.JFormattedTextField();
+        ftfDataPrevisaoPro = new javax.swing.JFormattedTextField();
+        chProjetoPro = new javax.swing.JCheckBox();
+        lbDescricaoPro = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tbProjetoDes = new javax.swing.JTable();
-        tfProjetoDes = new javax.swing.JTextField();
-        pnProjetoDes = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        jTree1 = new javax.swing.JTree();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        taDescricaoProjeto = new javax.swing.JTextArea();
+        tpTopicos = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        spTopicosPro = new javax.swing.JScrollPane();
+        tbTopicosPro = new javax.swing.JTable();
+        spDescricaoTopicoPro = new javax.swing.JScrollPane();
+        taDescricaoTopicoPro = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        lbTopicos = new javax.swing.JLabel();
+        btSalvarTopicoPro = new javax.swing.JButton();
         btSalvarPro = new javax.swing.JButton();
         btSairPro = new javax.swing.JButton();
         ifClientes = new javax.swing.JInternalFrame();
@@ -523,7 +535,7 @@ public class fPrincipal extends javax.swing.JFrame {
         ifCategorias.setBounds(270, 60, 510, 410);
         dpDesktop.add(ifCategorias, javax.swing.JLayeredPane.PALETTE_LAYER);
 
-        ifProjetos.setTitle("Desenvolvedores");
+        ifProjetos.setTitle("Projetos");
         ifProjetos.setVisible(false);
 
         tpProjetos.setEnabled(false);
@@ -536,7 +548,7 @@ public class fPrincipal extends javax.swing.JFrame {
             }
         });
 
-        tbCategorias2.setModel(new javax.swing.table.DefaultTableModel(
+        tbProjetos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -547,8 +559,8 @@ public class fPrincipal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbCategorias2.setToolTipText("");
-        spProjetos.setViewportView(tbCategorias2);
+        tbProjetos.setToolTipText("");
+        spProjetos.setViewportView(tbProjetos);
 
         javax.swing.GroupLayout pPesquisaProLayout = new javax.swing.GroupLayout(pPesquisaPro);
         pPesquisaPro.setLayout(pPesquisaProLayout);
@@ -557,7 +569,7 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGroup(pPesquisaProLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pPesquisaProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 967, Short.MAX_VALUE)
+                    .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 933, Short.MAX_VALUE)
                     .addGroup(pPesquisaProLayout.createSequentialGroup()
                         .addComponent(lbFiltroPro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -572,7 +584,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(tfFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbFiltroPro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE))
+                .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE))
         );
 
         tpProjetos.addTab("Pesquisar", pPesquisaPro);
@@ -581,13 +593,10 @@ public class fPrincipal extends javax.swing.JFrame {
 
         lbDesenvolvedor.setText("*Desenvolvedores:");
 
-        lbCodigoDes1.setText("1");
+        lbCodigoPro.setForeground(new java.awt.Color(250, 250, 250));
+        lbCodigoPro.setText("1");
 
-        jLabel3.setText("Telefone:");
-
-        jLabel4.setText("Email:");
-
-        tbProjetoDes.setModel(new javax.swing.table.DefaultTableModel(
+        tbDesenvolvedoresPro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -598,30 +607,101 @@ public class fPrincipal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(tbProjetoDes);
+        spDesenvolvedoresPro.setViewportView(tbDesenvolvedoresPro);
 
-        tfProjetoDes.setText("jTextField1");
+        tfClientePro.setEditable(false);
+        tfClientePro.setToolTipText("Preencimento somente via botão Buscar.");
 
-        javax.swing.GroupLayout pnProjetoDesLayout = new javax.swing.GroupLayout(pnProjetoDes);
-        pnProjetoDes.setLayout(pnProjetoDesLayout);
-        pnProjetoDesLayout.setHorizontalGroup(
-            pnProjetoDesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        lbClientePro.setText("Cliente:");
+
+        btAdicionarDesenvolvedorPro.setText("Adicionar");
+
+        btBuscarClientePro.setText("Buscar");
+        btBuscarClientePro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btBuscarClienteProActionPerformed(evt);
+            }
+        });
+
+        btCadastrarClientePro.setText("Cadastrar");
+
+        lbDataPrevisao.setText("Data de Previsão:");
+
+        lbDatainicio.setText("Data de Início:");
+
+        ftfDataInicioPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ftfDataInicioProActionPerformed(evt);
+            }
+        });
+
+        chProjetoPro.setText("Pronto");
+
+        lbDescricaoPro.setText("Descricao:");
+
+        taDescricaoProjeto.setColumns(20);
+        taDescricaoProjeto.setRows(5);
+        jScrollPane3.setViewportView(taDescricaoProjeto);
+
+        tpTopicos.setEnabled(false);
+
+        tbTopicosPro.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbTopicosPro.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        spTopicosPro.setViewportView(tbTopicosPro);
+
+        taDescricaoTopicoPro.setColumns(20);
+        taDescricaoTopicoPro.setRows(5);
+        spDescricaoTopicoPro.setViewportView(taDescricaoTopicoPro);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(76, Short.MAX_VALUE)
+                .addComponent(spTopicosPro, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spDescricaoTopicoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13))
         );
-        pnProjetoDesLayout.setVerticalGroup(
-            pnProjetoDesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spDescricaoTopicoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spTopicosPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(131, Short.MAX_VALUE))
         );
 
-        jLabel7.setText("Cliente:");
+        tpTopicos.addTab("Topicos do Projeto", jPanel1);
 
-        jScrollPane6.setViewportView(jTree1);
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 516, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 571, Short.MAX_VALUE)
+        );
 
-        jLabel9.setText("Tópicos:");
+        tpTopicos.addTab("Manutenção", jPanel2);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane7.setViewportView(jTextArea1);
+        lbTopicos.setText("Tópicos:");
+
+        btSalvarTopicoPro.setText("Novo");
 
         javax.swing.GroupLayout pCadastrarProLayout = new javax.swing.GroupLayout(pCadastrarPro);
         pCadastrarPro.setLayout(pCadastrarProLayout);
@@ -630,81 +710,86 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGroup(pCadastrarProLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(pCadastrarProLayout.createSequentialGroup()
+                            .addComponent(tfTituloPro, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(chProjetoPro, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
+                        .addComponent(lbClientePro)
+                        .addComponent(ftfDataInicioPro, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ftfDataPrevisaoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbDataPrevisao)
+                        .addGroup(pCadastrarProLayout.createSequentialGroup()
+                            .addComponent(lbDesenvolvedor)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btAdicionarDesenvolvedorPro))
+                        .addComponent(lbDatainicio)
+                        .addGroup(pCadastrarProLayout.createSequentialGroup()
+                            .addComponent(tfClientePro, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btBuscarClientePro)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btCadastrarClientePro))
+                        .addComponent(lbDescricaoPro)
+                        .addComponent(jScrollPane3)
+                        .addComponent(spDesenvolvedoresPro, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(lbTituloPro))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pCadastrarProLayout.createSequentialGroup()
-                        .addComponent(lbTituloPro)
-                        .addGap(235, 235, 235)
-                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pCadastrarProLayout.createSequentialGroup()
-                                .addComponent(pnProjetoDes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(134, 134, 134))
-                            .addGroup(pCadastrarProLayout.createSequentialGroup()
-                                .addComponent(lbCodigoDes1)
-                                .addContainerGap())))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pCadastrarProLayout.createSequentialGroup()
-                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfProjetoDes, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(tfNomeDes1, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(ftfTelefone1, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(tfEmail1, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lbDesenvolvedor, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)))
+                        .addComponent(lbTopicos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(pCadastrarProLayout.createSequentialGroup()
-                                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(408, 408, 408))))
+                        .addComponent(btSalvarTopicoPro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbCodigoPro))
+                    .addGroup(pCadastrarProLayout.createSequentialGroup()
+                        .addComponent(tpTopicos)
+                        .addContainerGap())))
         );
         pCadastrarProLayout.setVerticalGroup(
             pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pCadastrarProLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbTituloPro)
-                    .addComponent(lbCodigoDes1))
                 .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pCadastrarProLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbTituloPro)
+                            .addComponent(lbTopicos)
+                            .addComponent(btSalvarTopicoPro)))
+                    .addComponent(lbCodigoPro))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pCadastrarProLayout.createSequentialGroup()
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfTituloPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(chProjetoPro))
+                        .addGap(8, 8, 8)
+                        .addComponent(lbDescricaoPro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbClientePro)
+                        .addGap(1, 1, 1)
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfClientePro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btBuscarClientePro)
+                            .addComponent(btCadastrarClientePro))
+                        .addGap(5, 5, 5)
+                        .addComponent(lbDatainicio)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ftfDataInicioPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbDataPrevisao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ftfDataPrevisaoPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tfNomeDes1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9))
+                            .addComponent(lbDesenvolvedor)
+                            .addComponent(btAdicionarDesenvolvedorPro))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ftfTelefone1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfEmail1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(pCadastrarProLayout.createSequentialGroup()
-                                .addComponent(pnProjetoDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0))
-                            .addGroup(pCadastrarProLayout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfProjetoDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbDesenvolvedor)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pCadastrarProLayout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
-                            .addComponent(jScrollPane7))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(spDesenvolvedoresPro, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addComponent(tpTopicos)))
         );
 
         tpProjetos.addTab("Manutenção", pCadastrarPro);
@@ -731,7 +816,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(btSalvarPro)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btSairPro))
-            .addComponent(tpProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, 999, Short.MAX_VALUE)
+            .addComponent(tpProjetos)
         );
         ifProjetosLayout.setVerticalGroup(
             ifProjetosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -940,7 +1025,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(btSairCli)
                     .addComponent(btSalvarCli))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tpClientes))
+                .addComponent(tpClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE))
         );
 
         ifClientes.setBounds(270, 60, 510, 410);
@@ -1006,7 +1091,7 @@ public class fPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
         );
 
         pack();
@@ -1058,11 +1143,13 @@ public class fPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_tfFiltroProKeyReleased
 
     private void btSalvarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarProActionPerformed
+        cPro.acaoBotaoNovoSalvar();
         // TODO add your handling code here:
     }//GEN-LAST:event_btSalvarProActionPerformed
 
     private void btSairProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairProActionPerformed
-        // TODO add your handling code here:
+        cPro.acaoSair();
+        cPro = null;
     }//GEN-LAST:event_btSairProActionPerformed
 
     private void tfFiltroCliKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroCliKeyReleased
@@ -1109,13 +1196,50 @@ public class fPrincipal extends javax.swing.JFrame {
         cS.setTb(tbSelecionar1);
         cS.filtro();
         cCli.setIdcidade(cS.getCodigo());
-        tfCidadeCli.setText(cS.getCodigo());
+//        JOptionPane.showMessageDialog(null, cCli.getIdcidade());
+        tfCidadeCli.setText(new CidadesDAO().linha(cCli.getIdcidade()).getNome());
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jmProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmProjetosActionPerformed
-   
+
+        cPro = new ProjetosControl();
+        cPro.setForm(ifProjetos);
+        cPro.setTp(tpProjetos);
+        cPro.setP1(pPesquisaPro);
+        cPro.setP2(pCadastrarPro);
+        cPro.setBt(btSalvarPro);
+        cPro.setTb(tbProjetos);
+
+        cPro.setBtSalvar(btSalvarPro);
+        cPro.setCliente(tfClientePro);
+        cPro.setTitulo(tfTituloPro);
+        cPro.setDescricao(taDescricaoProjeto);
+        cPro.setCodigo(lbCodigoPro);
+        cPro.setDataInicio(ftfDataInicioPro);
+        cPro.setDataPrevisao(ftfDataPrevisaoPro);
+        cPro.setDesenvolvedores(tbDesenvolvedoresPro);
+        cPro.setTopicos(tbTopicosPro);
+        cPro.popularProjetos("");
+        ifProjetos.setVisible(true);
+
+
     }//GEN-LAST:event_jmProjetosActionPerformed
+
+    private void btBuscarClienteProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarClienteProActionPerformed
+        cS = new SelecionarControl();
+        cS.setDl(dlSelecionar);
+        cS.setJanela("clientes");
+        cS.setFiltro(tfFiltroSel1);
+        cS.setTb(tbSelecionar1);
+        cS.filtro();
+        cPro.setIdCliente(Integer.parseInt(cS.getCodigo()));
+        tfClientePro.setText(new ClientesDAO().linha(cPro.getIdCliente() + "").getNome());
+    }//GEN-LAST:event_btBuscarClienteProActionPerformed
+
+    private void ftfDataInicioProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfDataInicioProActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ftfDataInicioProActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1152,6 +1276,9 @@ public class fPrincipal extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAdicionarDesenvolvedorPro;
+    private javax.swing.JButton btBuscarClientePro;
+    private javax.swing.JButton btCadastrarClientePro;
     private javax.swing.JButton btSair;
     private javax.swing.JButton btSairCli;
     private javax.swing.JButton btSairDes;
@@ -1160,11 +1287,14 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btSalvarCli;
     private javax.swing.JButton btSalvarDes;
     private javax.swing.JButton btSalvarPro;
+    private javax.swing.JButton btSalvarTopicoPro;
     private javax.swing.JComboBox cbCategoriaDes;
+    private javax.swing.JCheckBox chProjetoPro;
     private javax.swing.JDialog dlSelecionar;
     private javax.swing.JDesktopPane dpDesktop;
+    private javax.swing.JFormattedTextField ftfDataInicioPro;
+    private javax.swing.JFormattedTextField ftfDataPrevisaoPro;
     private javax.swing.JFormattedTextField ftfTelefone;
-    private javax.swing.JFormattedTextField ftfTelefone1;
     private javax.swing.JFormattedTextField ftfTelefoneCli;
     private javax.swing.JInternalFrame ifCategorias;
     private javax.swing.JInternalFrame ifClientes;
@@ -1174,33 +1304,30 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTree jTree1;
     private javax.swing.JMenuItem jmProjetos;
     private javax.swing.JMenuItem jmTopicos;
     private javax.swing.JLabel lbCategoriaDes;
     private javax.swing.JLabel lbCidadeCli;
+    private javax.swing.JLabel lbClientePro;
     private javax.swing.JLabel lbCodigoCategoria;
     private javax.swing.JLabel lbCodigoCli;
     private javax.swing.JLabel lbCodigoDes;
-    private javax.swing.JLabel lbCodigoDes1;
+    private javax.swing.JLabel lbCodigoPro;
+    private javax.swing.JLabel lbDataPrevisao;
+    private javax.swing.JLabel lbDatainicio;
     private javax.swing.JLabel lbDescricao;
+    private javax.swing.JLabel lbDescricaoPro;
     private javax.swing.JLabel lbDesenvolvedor;
     private javax.swing.JLabel lbEmailCli;
     private javax.swing.JLabel lbFiltro;
@@ -1213,6 +1340,7 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lbTelefoneCli;
     private javax.swing.JLabel lbTitulo;
     private javax.swing.JLabel lbTituloPro;
+    private javax.swing.JLabel lbTopicos;
     private javax.swing.JMenu mArquivo;
     private javax.swing.JMenuItem mClientes;
     private javax.swing.JMenu mDesenvolvedores;
@@ -1229,20 +1357,25 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel pPesquisaCli;
     private javax.swing.JPanel pPesquisaDes;
     private javax.swing.JPanel pPesquisaPro;
-    private javax.swing.JPanel pnProjetoDes;
     private javax.swing.JScrollPane spDescricao;
+    private javax.swing.JScrollPane spDescricaoTopicoPro;
+    private javax.swing.JScrollPane spDesenvolvedoresPro;
     private javax.swing.JScrollPane spProjetos;
     private javax.swing.JScrollPane spSelecionar1;
+    private javax.swing.JScrollPane spTopicosPro;
     private javax.swing.JTextArea taAdicionalCli;
     private javax.swing.JTextArea taDescricao;
+    private javax.swing.JTextArea taDescricaoProjeto;
+    private javax.swing.JTextArea taDescricaoTopicoPro;
     private javax.swing.JTable tbCategorias;
     private javax.swing.JTable tbCategorias1;
-    private javax.swing.JTable tbCategorias2;
-    private javax.swing.JTable tbProjetoDes;
+    private javax.swing.JTable tbDesenvolvedoresPro;
+    private javax.swing.JTable tbProjetos;
     private javax.swing.JTable tbSelecionar1;
+    private javax.swing.JTable tbTopicosPro;
     private javax.swing.JTextField tfCidadeCli;
+    private javax.swing.JTextField tfClientePro;
     private javax.swing.JTextField tfEmail;
-    private javax.swing.JTextField tfEmail1;
     private javax.swing.JTextField tfEmailCli;
     private javax.swing.JTextField tfFiltro;
     private javax.swing.JTextField tfFiltroCli;
@@ -1251,12 +1384,12 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField tfFiltroSel1;
     private javax.swing.JTextField tfNomeCli;
     private javax.swing.JTextField tfNomeDes;
-    private javax.swing.JTextField tfNomeDes1;
-    private javax.swing.JTextField tfProjetoDes;
     private javax.swing.JTextField tfTitulo;
+    private javax.swing.JTextField tfTituloPro;
     private javax.swing.JTabbedPane tpCategorias;
     private javax.swing.JTabbedPane tpClientes;
     private javax.swing.JTabbedPane tpDesenvolvedores;
     private javax.swing.JTabbedPane tpProjetos;
+    private javax.swing.JTabbedPane tpTopicos;
     // End of variables declaration//GEN-END:variables
 }
