@@ -65,7 +65,7 @@ public final class ClientesControl {
         rs = new ClientesDAO().resultado("");
         try {
             rs.first();
-            Funcoes.populaTabela(this.tb, "idcidade,Nome,Telefone,Email", this.rs, "idcidade,nome,telefone,email");
+            Funcoes.populaTabela(this.tb, "Editar,Nome,Telefone,Email", this.rs, "idcliente,nome,telefone,email");
         } catch (SQLException ex) {
             Logger.getLogger(ClientesControl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -130,9 +130,10 @@ public final class ClientesControl {
             operante = 'u';
             f = new Funcoes();
             ClientesDAO dao = new ClientesDAO();
-            Cliente c = dao.linha(e.getActionCommand());
+            Cliente c = dao.linha(e.getActionCommand()+"");
             nome.setText(c.getNome() + "");
             telefone.setText(c.getTelefone());
+            idcidade = c.getIdcidade() +"";
             email.setText(c.getEmail());
             btSalvar.setText("Salvar");
 
