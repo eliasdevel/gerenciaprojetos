@@ -1195,8 +1195,9 @@ public class fPrincipal extends javax.swing.JFrame {
         cS.setFiltro(tfFiltroSel1);
         cS.setTb(tbSelecionar1);
         cS.filtro();
+        if(cS.getCodigo()!=null){
         cCli.setIdcidade(cS.getCodigo());
-//        JOptionPane.showMessageDialog(null, cCli.getIdcidade());
+        }
         tfCidadeCli.setText(new CidadesDAO().linha(cCli.getIdcidade()).getNome());
 
     }//GEN-LAST:event_jButton2ActionPerformed

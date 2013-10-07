@@ -1,5 +1,6 @@
 package control;
 
+import DAO.CidadesDAO;
 import DAO.ClientesDAO;
 import DAO.DAO;
 import DAO.EstadosDAO;
@@ -134,8 +135,10 @@ public final class ClientesControl {
             nome.setText(c.getNome() + "");
             telefone.setText(c.getTelefone());
             idcidade = c.getIdcidade() +"";
+            cidade.setText(new CidadesDAO().linha(idcidade).getNome());
             email.setText(c.getEmail());
             btSalvar.setText("Salvar");
+            
 
         }
     }
