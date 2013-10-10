@@ -21,16 +21,14 @@ public class ProjetosDAO {
 
     public ResultSet resultado(String pesquisa) {
         if (pesquisa != null) {
-//        String where = "";
             pesquisa = "%" + pesquisa + "%";
-
-            String sql = "SELECT idprojeto,(select nome from clientes c where p.idcliente = c.idcliente ) as cliente, titulo,descricao FROM projetos p "               ;
-//                    + "WHERE p.titulo like ? OR p.descricao LIKE ? ORDER BY p.titulo";
-
+            String sql = "SELECT idprojeto,c.nome AS cliente, titulo,descricao FROM projetos p INNER JOIN clientes c ON c.idcliente = p.idcliente"   
+                    + " WHERE p.titulo like ? OR p.descricao LIKE ?  OR c.nome LIKE ? ORDER BY p.titulo";
             try {
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
-//                ps.setString(1, pesquisa);
-//                ps.setString(2, pesquisa);
+                ps.setString(1, pesquisa);
+                ps.setString(2, pesquisa);
+                ps.setString(3, pesquisa);
                 rs = ps.executeQuery();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro: " + ex);

@@ -43,15 +43,15 @@ public class DesenvolvedoresControl {
     JButton bt;
     JTextField filtro;
     JTable tb;
-    JLabel codigo;
     String[] idCategoria;
+ int codigo;
     String idsCategoria;
     JInternalFrame frame;
     Funcoes f;
 
     public DesenvolvedoresControl(ResultSet rs, JTabbedPane tp, JComboBox cb, JTextField nome,
             JFormattedTextField telefone, JTextField email, JPanel p, JPanel p2,
-            JInternalFrame form, JButton bt, JTextField filtro, JTable tb, JLabel codigo,
+            JInternalFrame form, JButton bt, JTextField filtro, JTable tb, 
             JInternalFrame frame) {
         this.rs = rs;
         this.frame = frame;
@@ -70,7 +70,6 @@ public class DesenvolvedoresControl {
         this.filtro = filtro;
         this.tb = tb;
         this.tb.setSize(600, 500);
-        this.codigo = codigo;
 
     }
 
@@ -102,7 +101,7 @@ public class DesenvolvedoresControl {
                 operante = 'u';
             }
         }
-        Desenvolvedor d = new Desenvolvedor(Integer.parseInt(codigo.getText()),
+        Desenvolvedor d = new Desenvolvedor(codigo,
                 idCat, nome.getText(),
                 telefone.getText(),
                 email.getText());
@@ -127,19 +126,23 @@ public class DesenvolvedoresControl {
             Funcoes.limparCampos(p2);
             bt.setText("Salvar");
             tp.setSelectedIndex(1);
-            codigo.setText(1 + "");
+           
             operante = 'i';
         }
     }
 
-    public void acaoSair() {
+    public void acaoCancelar() {
         tp.setSelectedIndex(0);
-        frame.setVisible(false);
         cb.removeAllItems();
         Funcoes.limparCampos(p);
         Funcoes.limparCampos(p2);
         bt.setText("Novo");
         operante = 'n';
+    }
+    
+    public void acaoSair() {
+        acaoCancelar();
+        frame.setVisible(false);
     }
 
     class editDes extends Editar
@@ -152,7 +155,7 @@ public class DesenvolvedoresControl {
         @Override
         public void actionPerformed(ActionEvent e) {
             tp.setSelectedIndex(1);
-            codigo.setText(e.getActionCommand() + "");
+            codigo = Integer.parseInt(e.getActionCommand());
             operante = 'u';
             f = new Funcoes();
             DesenvolvedoresDAO pes = new DesenvolvedoresDAO();

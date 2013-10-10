@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -38,6 +39,8 @@ import view.Msg;
 public class ProjetosControl {
 
     char operante;
+    JCheckBox prontoPro;
+   
     JTable tb;
     JTable desenvolvedores;
     JTable topicos;
@@ -59,8 +62,7 @@ public class ProjetosControl {
     JPanel p1Topicos;
     JPanel p2Topicos;
     ArrayList<Topico> topicosList = new ArrayList();
-    JLabel codigo;
-    int[] i = new int[1];
+    int codigo;
     ResultSet rs;
 
     public void popularProjetos(String pesquisa) {
@@ -74,7 +76,8 @@ public class ProjetosControl {
     }
 
     public void acaoBotaoNovoSalvar() {
-
+       
+        
         if (this.tp.getSelectedIndex() != 1) {
             operante = 'n';
         } else {
@@ -84,7 +87,7 @@ public class ProjetosControl {
         }
         if (operante == 'u' || operante == 'i') {
             ProjetosDAO iuds = new ProjetosDAO();
-            Projeto p = new Projeto(Integer.parseInt(codigo.getText()), idCliente, titulo.getText(), descricao.getText(), false);
+            Projeto p = new Projeto(codigo, idCliente, titulo.getText(), descricao.getText(), false);
             if (p.getTitulo().length() > 0) {
                 if (p.getIdcliente() > 0) {
                     if (iuds.iud(operante, p) > 0) {
@@ -97,25 +100,29 @@ public class ProjetosControl {
                         popularProjetos("");
                     }
                 } else {
-
                     new Msg().msgGeneric("O Cliente precisa ser preenchido!");
+                    cliente.requestFocus();
                 }
             } else {
                 new Msg().msgGeneric("O Título precisa ser preenchido!");
+                titulo.requestFocus();
             }
         }
         if (operante == 'n') {
             btSalvar.setText("Salvar");
             tp.setSelectedIndex(1);
-            codigo.setText(1 + "");
             operante = 'i';
         }
 
     }
 
     public void acaoSair() {
-        tp.setSelectedIndex(0);
+        acaoCancelar();
         form.setVisible(false);
+    }
+
+    public void acaoCancelar() {
+        tp.setSelectedIndex(0);
         Funcoes.limparCampos(p1);
         Funcoes.limparCampos(p2);
         descricao.setText("");
@@ -252,11 +259,20 @@ public class ProjetosControl {
         this.dataFim = dataFim;
     }
 
-    public JLabel getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(JLabel codigo) {
+    public void setCodigo(int codigo) {
         this.codigo = codigo;
+    }
+
+    public JCheckBox getProntoPro() {
+        return prontoPro;
+    }
+
+    public void setProntoPro(JCheckBox prontoPro) {
+        this.prontoPro = prontoPro;
+
     }
 }

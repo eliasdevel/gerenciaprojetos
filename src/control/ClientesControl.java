@@ -37,7 +37,7 @@ public final class ClientesControl {
     JPanel p;
     JPanel p2;
     JTable tb;
-    JLabel codigo;
+    int codigo;
     JTextField filtro;
     JComboBox estado;
     JTextField nome;
@@ -87,8 +87,9 @@ public final class ClientesControl {
         }
         ClientesDAO iuds = new ClientesDAO();
         if (operante == 'u' || operante == 'i') {
-            Cliente c = new Cliente(Integer.parseInt(codigo.getText()), Integer.parseInt(idcidade), nome.getText(), telefone.getText(), email.getText(), adicional.getText());
-            if (c.getNome().length() > 0) {
+            if (nome.getText().length() > 0) {
+            if (cidade.getText().length() > 0) {
+            Cliente c = new Cliente(codigo, Integer.parseInt(idcidade), nome.getText(), telefone.getText(), email.getText(), adicional.getText());
                 if (iuds.iud(operante, c) > 0) {
                     Funcoes.limparCampos(p);
                     Funcoes.limparCampos(p2);
@@ -99,13 +100,18 @@ public final class ClientesControl {
                     popula();
                 }
             } else {
+                new Msg().msgGeneric("A Cidade precisa ser preenchida!");
+                cidade.requestFocus();
+            }
+            } else {
                 new Msg().msgGeneric("O nome precisa ser preenchido!");
+                nome.requestFocus();
             }
         }
         if (operante == 'n') {
             btSalvar.setText("Salvar");
             tp.setSelectedIndex(1);
-            codigo.setText(1 + "");
+            codigo = 1;
             operante = 'i';
         }
     }
@@ -113,10 +119,16 @@ public final class ClientesControl {
     public void selecionarClientes() {
     }
 
-    public void acaoBotaoSair() {
-        this.frame.setVisible(false);
+    public void acaoCancelar() {
+        popula();
         this.btSalvar.setText("Novo");
+        Funcoes.limparCampos(p);
+        Funcoes.limparCampos(p2);
         this.tp.setSelectedIndex(0);
+    }
+    public void acaoBotaoSair() {
+        acaoCancelar();
+        this.frame.setVisible(false);
     }
 
     class editCli extends Editar {
@@ -128,7 +140,7 @@ public final class ClientesControl {
         @Override
         public void actionPerformed(ActionEvent e) {
             tp.setSelectedIndex(1);
-            codigo.setText(e.getActionCommand() + "");
+            codigo = Integer.parseInt(e.getActionCommand());
             operante = 'u';
             f = new Funcoes();
             ClientesDAO dao = new ClientesDAO();
@@ -194,11 +206,11 @@ public final class ClientesControl {
         this.tb = tb;
     }
 
-    public JLabel getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(JLabel codigo) {
+    public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
 

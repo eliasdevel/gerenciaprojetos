@@ -19,7 +19,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -47,18 +46,19 @@ import view.Msg;
 public class CategoriasControl {
     
     int id;
+    int codigo;
     char operante;
     ResultSet rs;
     
-    public void populaCategorias(JTextField filtro, JTable tb, JTabbedPane tp, JButton bt, JTextField titulo, JTextArea descricao, JLabel codigo) {
+    public void populaCategorias(JTextField filtro, JTable tb, JTabbedPane tp, JButton bt, JTextField titulo, JTextArea descricao) {
         String pesquisa = filtro.getText();
         CategoriasDAO iuds = new CategoriasDAO();
         rs = iuds.resultado(pesquisa);
         Funcoes.populaTabela(tb, "Exclir,Editar,Titulo,Descricao", rs, "idcategoria,idcategoria,titulo,descricao");
         
         defineRenderers(tb);
-        new Editar(tb, 1, tp, titulo, descricao, codigo, bt);
-        new Excluir(tb, 0, tp, filtro, bt, titulo, descricao, codigo);
+        new Editar(tb, 1, tp, titulo, descricao, bt);
+        new Excluir(tb, 0, tp, filtro, bt, titulo, descricao);
         
         
     }
@@ -85,7 +85,7 @@ public class CategoriasControl {
         
     }
     
-    public void acaoBotaoNovoSalvar(JTabbedPane tp, JTextField titulo, JPanel p, JTextArea descricao, JInternalFrame form, JButton bt, JTextField filtro, JTable tb, JLabel codigo) {
+    public void acaoBotaoNovoSalvar(JTabbedPane tp, JTextField titulo, JPanel p, JTextArea descricao, JInternalFrame form, JButton bt, JTextField filtro, JTable tb) {
         
         if (tp.getSelectedIndex() != 1) {
             operante = 'n';
@@ -94,7 +94,7 @@ public class CategoriasControl {
                 operante = 'u';
             }
         }
-        Categoria c = new Categoria(Integer.parseInt(codigo.getText()), titulo.getText(), descricao.getText());
+        Categoria c = new Categoria(this.codigo, titulo.getText(), descricao.getText());
         CategoriasDAO iuds = new CategoriasDAO();
         
         if (operante == 'u' || operante == 'i') {
@@ -105,7 +105,7 @@ public class CategoriasControl {
                     new Msg().msgRegistrado(form);
                     tp.setSelectedIndex(0);
                     bt.setText("Novo");
-                    populaCategorias(filtro, tb, tp, bt, titulo, descricao, codigo);
+                    populaCategorias(filtro, tb, tp, bt, titulo, descricao);
                 }
             } else {
                 new Msg().msgGeneric("O título é Precisa ser preenchido!");
@@ -117,7 +117,7 @@ public class CategoriasControl {
         if (operante == 'n') {
             bt.setText("Salvar");
             tp.setSelectedIndex(1);
-            codigo.setText(1 + "");
+            
             operante = 'i';
             
         }
@@ -159,7 +159,7 @@ public class CategoriasControl {
         
         JButton bts;
         JTextField titulo;
-        JLabel codigo;
+       
         JTextArea descricao;
         JTable table;
         JButton renderButton;
@@ -167,14 +167,14 @@ public class CategoriasControl {
         JButton editButton;
         String text = "Editar";
         
-        public Editar(JTable table, int column, JTabbedPane tp, JTextField titulo, JTextArea descricao, JLabel codigo, JButton bts) {
+        public Editar(JTable table, int column, JTabbedPane tp, JTextField titulo, JTextArea descricao,  JButton bts) {
             super();
             this.bts = bts;
             this.table = table;
             this.tp = tp;
             this.descricao = descricao;
             this.titulo = titulo;
-            this.codigo = codigo;
+          
             renderButton = new JButton();
             
             try {
@@ -230,13 +230,12 @@ public class CategoriasControl {
         public void actionPerformed(ActionEvent e) {
             
             tp.setSelectedIndex(1);
-            codigo.setText(e.getActionCommand() + "");
+            codigo = Integer.parseInt(e.getActionCommand());
             System.out.println(id);
             operante = 'u';
             CategoriasDAO pes = new CategoriasDAO();
             Categoria cat = pes.linha(e.getActionCommand() + "");
             titulo.setText(cat.getTitulo() + "");
-            System.out.println(cat.getDescricao());
             descricao.setText(cat.getDescricao() + "");
             bts.setText("Salvar");
             
@@ -256,7 +255,7 @@ public class CategoriasControl {
         JButton editButton;
         String text = "Editar";
         
-        public Excluir(JTable table, int column, JTabbedPane tp, JTextField filtro, JButton bt, JTextField titulo, JTextArea descricao, JLabel codigo) {
+        public Excluir(JTable table, int column, JTabbedPane tp, JTextField filtro, JButton bt, JTextField titulo, JTextArea descricao) {
             super();
             this.filtro = filtro;
             this.table = table;
@@ -325,7 +324,7 @@ public class CategoriasControl {
                     new Msg().msgEstaVinculado(null);
                 }
             }
-                    populaCategorias(filtro, table, tp, bts, filtro, descricao, codigo);
+                    populaCategorias(filtro, table, tp, bts, filtro, descricao);
         }
     }
 }

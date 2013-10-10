@@ -51,9 +51,7 @@ public class Funcoes {
                 ((JTextField) component).setText(null);
             } else {
 
-                if (component instanceof JScrollPane) {
-                    System.out.println("pane");
-                }
+              
             }
         }
     }
@@ -102,6 +100,8 @@ public class Funcoes {
                         i++;
                     }
                     tb.setModel(new DefaultTableModel(dadosT, cabe) {
+
+                        //sobreescreve colunas dizendo se são editáveis
                         @Override
                         public boolean isCellEditable(int row, int column) {
                             boolean editavel = false;

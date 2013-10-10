@@ -40,18 +40,17 @@ public class SelecionarControl {
             dl.setSize(500, 600);
         }
         new Select(tb, 0);
+        if(!dl.isShowing()){
         dl.setLocationByPlatform(true);
         dl.setVisible(true);
+        }
     }
     
     
-    class Select extends Selecionar
-            implements ActionListener {
-
+    class Select extends Selecionar{
         public Select(JTable tb, int column) {
             super(tb, column);
         }
-
         @Override
         public void actionPerformed(ActionEvent e) {
         codigo = e.getActionCommand();
