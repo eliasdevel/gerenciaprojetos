@@ -63,6 +63,7 @@ public final class ClientesControl {
     }
 
     public void popula() {
+       
         rs = new ClientesDAO().resultado("");
         try {
             rs.first();

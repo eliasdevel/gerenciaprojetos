@@ -133,11 +133,13 @@ public class DesenvolvedoresControl {
 
     public void acaoCancelar() {
         tp.setSelectedIndex(0);
-        cb.removeAllItems();
+       
+        
         Funcoes.limparCampos(p);
         Funcoes.limparCampos(p2);
         bt.setText("Novo");
         operante = 'n';
+       
     }
     
     public void acaoSair() {
@@ -183,7 +185,6 @@ public class DesenvolvedoresControl {
 
                 DesenvolvedoresDAO dao = new DesenvolvedoresDAO();
                 dao.iud('d', new Desenvolvedor(Integer.parseInt(e.getActionCommand()), 0, "", "", ""));
-                populaDesenvolvedores();
                 dao = null;
             }
                 populaDesenvolvedores();

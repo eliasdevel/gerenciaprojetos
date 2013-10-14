@@ -12,7 +12,8 @@ public class Topico {
     int id;
     String titulo;
     String descricao;
-
+    boolean pronto;
+    
     public int getId() {
         return id;
     }
@@ -37,10 +38,21 @@ public class Topico {
         this.descricao = descricao;
     }
 
-    public Topico(int id, String titulo, String descricao) {
+    public boolean isPronto() {
+        return pronto;
+    }
+
+    public void setPronto(boolean pronto) {
+        this.pronto = pronto;
+    }
+    
+    
+
+    public Topico(int id, String titulo, String descricao, boolean pronto) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
+        this.pronto = pronto;
     }
     
 }

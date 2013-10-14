@@ -17,18 +17,23 @@ import javax.swing.JOptionPane;
  * @author elias
  */
 public class ProjetosDAO {
-      ResultSet rs = null;
+
+    ResultSet rs = null;
 
     public ResultSet resultado(String pesquisa) {
         if (pesquisa != null) {
-            pesquisa = "%" + pesquisa + "%";
-            String sql = "SELECT idprojeto,c.nome AS cliente, titulo,descricao FROM projetos p INNER JOIN clientes c ON c.idcliente = p.idcliente"   
-                    + " WHERE p.titulo like ? OR p.descricao LIKE ?  OR c.nome LIKE ? ORDER BY p.titulo";
+           String pesquisa2 = "%" + pesquisa + "%";
+            String sql = "SELECT idprojeto,c.nome AS cliente, titulo,descricao FROM projetos p INNER JOIN clientes c ON c.idcliente = p.idcliente";
+            String where = "WHERE p.titulo like ? OR p.descricao LIKE ?  OR c.nome LIKE ? ORDER BY p.titulo";
+
             try {
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
-                ps.setString(1, pesquisa);
-                ps.setString(2, pesquisa);
-                ps.setString(3, pesquisa);
+                if (!pesquisa.trim().equals("")) {
+                    sql += where;
+                    ps.setString(1, pesquisa2);
+                    ps.setString(2, pesquisa2);
+                    ps.setString(3, pesquisa2);
+                }
                 rs = ps.executeQuery();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro: " + ex);
@@ -41,21 +46,23 @@ public class ProjetosDAO {
 
     }
 
-    public Categoria linha(String id) {
-        Categoria c = new Categoria(1,null,null);
-            c.setId(Integer.parseInt(id));
-        String sql = "SELECT * FROM categorias WHERE idcategoria = ?";
+    public Projeto linha(String id) {
+        Projeto p = new Projeto(0, 0, null, null, false);
+        String sql = "SELECT * FROM projetos WHERE idprojeto = ?";
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, id);
             rs = ps.executeQuery();
             rs.first();
-            c.setTitulo(rs.getString("titulo"));
-            c.setDescricao(rs.getString("descricao"));
+            p.setTitulo(rs.getString("titulo"));
+            p.setDescricao(rs.getString("descricao"));
+            p.setId(rs.getInt("idprojeto"));
+            p.setIdcliente(rs.getInt("idcliente"));
+            p.setPronto(rs.getBoolean("pronto"));
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }
-        return c;
+        return p;
     }
 
     public int iud(char op, Projeto p) {
@@ -69,11 +76,14 @@ public class ProjetosDAO {
                 ps.setInt(2, p.getIdcliente());
                 ps.setString(3, p.getDescricao());
                 rows = ps.executeUpdate();
+                rs = ConexaoBD.con.createStatement().executeQuery("SELECT MAX(idprojeto) AS maior FROM projetos");
+                rs.first();
+                p.setId(rs.getInt("maior"));
                 ps.close();
             } else {
                 if (op == 'u') {
 //                                                      1              2              3                     4
-                    sql = "UPDATE projetos SET titulo = ?, descricao = ?, idcliente = ? WHERE idcategoria = ?";
+                    sql = "UPDATE projetos SET titulo = ?, descricao = ?, idcliente = ? WHERE idprojeto = ?";
                     PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                     ps.setString(1, p.getTitulo());
                     ps.setString(2, p.getDescricao());

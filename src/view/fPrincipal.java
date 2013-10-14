@@ -6,22 +6,13 @@ package view;
 
 import DAO.CidadesDAO;
 import DAO.ClientesDAO;
-import DAO.DAO;
+import DAO.TopicosDAO;
 import control.CategoriasControl;
 import control.ClientesControl;
 import control.DesenvolvedoresControl;
-import control.DesenvolvedoresControl;
 import control.ProjetosControl;
 import control.SelecionarControl;
-import gerenciadorprojetos.Gerenciadorprojetos;
-import java.beans.PropertyVetoException;
-import java.sql.ResultSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.spi.DirStateFactory;
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
+import entidadesRelacoes.Topico;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import util.Funcoes;
@@ -143,9 +134,15 @@ public class fPrincipal extends javax.swing.JFrame {
         spDescricaoTopicoPro = new javax.swing.JScrollPane();
         taDescricaoTopicoPro = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         lbTopicos = new javax.swing.JLabel();
-        btSalvarTopicoPro = new javax.swing.JButton();
+        btNovoTopicoPro = new javax.swing.JButton();
         btCancelarPro = new javax.swing.JButton();
+        btAdicionarTopicoPro = new javax.swing.JButton();
         btSalvarPro = new javax.swing.JButton();
         btSairPro = new javax.swing.JButton();
         ifClientes = new javax.swing.JInternalFrame();
@@ -291,7 +288,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(lbFiltro1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         tpDesenvolvedores.addTab("Pesquisar", pPesquisaDes);
@@ -357,7 +354,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(lbCategoriaDes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbCategoriaDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         tpDesenvolvedores.addTab("Manutenção", pCadastrarDes);
@@ -548,15 +545,20 @@ public class fPrincipal extends javax.swing.JFrame {
 
         tbProjetos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "nenhum registro", "nenhum registro"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tbProjetos.setToolTipText("");
         spProjetos.setViewportView(tbProjetos);
 
@@ -567,7 +569,7 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGroup(pPesquisaProLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pPesquisaProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 869, Short.MAX_VALUE)
+                    .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
                     .addGroup(pPesquisaProLayout.createSequentialGroup()
                         .addComponent(lbFiltroPro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -642,16 +644,26 @@ public class fPrincipal extends javax.swing.JFrame {
 
         tbTopicosPro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Excluír", "Título"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tbTopicosPro.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tbTopicosPro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbTopicosProMouseClicked(evt);
+            }
+        });
         spTopicosPro.setViewportView(tbTopicosPro);
 
         taDescricaoTopicoPro.setColumns(20);
@@ -663,11 +675,9 @@ public class fPrincipal extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(spTopicosPro, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(spTopicosPro, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spDescricaoTopicoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13))
+                .addComponent(spDescricaoTopicoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -681,27 +691,61 @@ public class fPrincipal extends javax.swing.JFrame {
 
         tpTopicos.addTab("Topicos do Projeto", jPanel1);
 
+        jLabel3.setText("Título:");
+
+        jLabel4.setText("Descrição:");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane6.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 452, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 571, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tpTopicos.addTab("Manutenção", jPanel2);
 
         lbTopicos.setText("Tópicos:");
 
-        btSalvarTopicoPro.setText("Novo");
+        btNovoTopicoPro.setText("Novo");
 
         btCancelarPro.setText("Cancelar");
         btCancelarPro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btCancelarProActionPerformed(evt);
+            }
+        });
+
+        btAdicionarTopicoPro.setText("Adicionar");
+        btAdicionarTopicoPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAdicionarTopicoProActionPerformed(evt);
             }
         });
 
@@ -740,12 +784,14 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pCadastrarProLayout.createSequentialGroup()
                         .addComponent(lbTopicos)
+                        .addGap(2, 2, 2)
+                        .addComponent(btAdicionarTopicoPro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btSalvarTopicoPro)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btNovoTopicoPro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                         .addComponent(btCancelarPro))
                     .addGroup(pCadastrarProLayout.createSequentialGroup()
-                        .addComponent(tpTopicos)
+                        .addComponent(tpTopicos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addContainerGap())))
         );
         pCadastrarProLayout.setVerticalGroup(
@@ -757,7 +803,8 @@ public class fPrincipal extends javax.swing.JFrame {
                         .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lbTituloPro)
                             .addComponent(lbTopicos)
-                            .addComponent(btSalvarTopicoPro)))
+                            .addComponent(btNovoTopicoPro)
+                            .addComponent(btAdicionarTopicoPro)))
                     .addComponent(btCancelarPro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -765,9 +812,9 @@ public class fPrincipal extends javax.swing.JFrame {
                         .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tfTituloPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(chProjetoPro))
-                        .addGap(8, 8, 8)
-                        .addComponent(lbDescricaoPro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbDescricaoPro)
+                        .addGap(8, 8, 8)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbClientePro)
@@ -1098,7 +1145,7 @@ public class fPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE)
+            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
         );
 
         pack();
@@ -1146,7 +1193,7 @@ public class fPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btSairDesActionPerformed
 
     private void tfFiltroProKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroProKeyReleased
-     cPro.popularProjetos(tfFiltroPro.getText());
+        cPro.popularProjetos(tfFiltroPro.getText());
     }//GEN-LAST:event_tfFiltroProKeyReleased
 
     private void btSalvarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarProActionPerformed
@@ -1202,8 +1249,8 @@ public class fPrincipal extends javax.swing.JFrame {
         cS.setFiltro(tfFiltroSel1);
         cS.setTb(tbSelecionar1);
         cS.filtro();
-        if(cS.getCodigo()!=null){
-        cCli.setIdcidade(cS.getCodigo());
+        if (cS.getCodigo() != null) {
+            cCli.setIdcidade(cS.getCodigo());
         }
         tfCidadeCli.setText(new CidadesDAO().linha(cCli.getIdcidade()).getNome());
 
@@ -1223,7 +1270,8 @@ public class fPrincipal extends javax.swing.JFrame {
         cPro.setCliente(tfClientePro);
         cPro.setTitulo(tfTituloPro);
         cPro.setDescricao(taDescricaoProjeto);
-       cPro.setProntoPro(chProjetoPro);
+        cPro.setProntoPro(chProjetoPro);
+        cPro.setDescricaoTopico(taDescricaoTopicoPro);
         cPro.setDataInicio(ftfDataInicioPro);
         cPro.setDataPrevisao(ftfDataPrevisaoPro);
         cPro.setDesenvolvedores(tbDesenvolvedoresPro);
@@ -1250,16 +1298,33 @@ public class fPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_ftfDataInicioProActionPerformed
 
     private void btCancelarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarProActionPerformed
-     cPro.acaoCancelar();
+        cPro.acaoCancelar();
     }//GEN-LAST:event_btCancelarProActionPerformed
 
     private void btCancelarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarCliActionPerformed
-cCli.acaoCancelar();
+        cCli.acaoCancelar();
     }//GEN-LAST:event_btCancelarCliActionPerformed
 
     private void btCancelarDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarDesActionPerformed
-   cDes.acaoCancelar();
+        cDes.acaoCancelar();
     }//GEN-LAST:event_btCancelarDesActionPerformed
+
+    private void btAdicionarTopicoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdicionarTopicoProActionPerformed
+        cS = new SelecionarControl();
+        cS.setDl(dlSelecionar);
+        cS.setJanela("topicos");
+        cS.setFiltro(tfFiltroSel1);
+        cS.setTb(tbSelecionar1);
+        cS.filtro();
+        Topico t = new TopicosDAO().linha(cS.getCodigo());
+        if (t != null) {
+            cPro.addTopico(t);
+        }
+    }//GEN-LAST:event_btAdicionarTopicoProActionPerformed
+
+    private void tbTopicosProMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbTopicosProMouseClicked
+        cPro.descreveTopico();
+    }//GEN-LAST:event_tbTopicosProMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1297,11 +1362,13 @@ cCli.acaoCancelar();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAdicionarDesenvolvedorPro;
+    private javax.swing.JButton btAdicionarTopicoPro;
     private javax.swing.JButton btBuscarClientePro;
     private javax.swing.JButton btCadastrarClientePro;
     private javax.swing.JButton btCancelarCli;
     private javax.swing.JButton btCancelarDes;
     private javax.swing.JButton btCancelarPro;
+    private javax.swing.JButton btNovoTopicoPro;
     private javax.swing.JButton btSair;
     private javax.swing.JButton btSairCli;
     private javax.swing.JButton btSairDes;
@@ -1310,7 +1377,6 @@ cCli.acaoCancelar();
     private javax.swing.JButton btSalvarCli;
     private javax.swing.JButton btSalvarDes;
     private javax.swing.JButton btSalvarPro;
-    private javax.swing.JButton btSalvarTopicoPro;
     private javax.swing.JComboBox cbCategoriaDes;
     private javax.swing.JCheckBox chProjetoPro;
     private javax.swing.JDialog dlSelecionar;
@@ -1327,6 +1393,8 @@ cCli.acaoCancelar();
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu2;
@@ -1337,7 +1405,10 @@ cCli.acaoCancelar();
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JMenuItem jmProjetos;
     private javax.swing.JMenuItem jmTopicos;
     private javax.swing.JLabel lbCategoriaDes;

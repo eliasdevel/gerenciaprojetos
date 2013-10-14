@@ -6,10 +6,13 @@ package DAO;
 
 import connection.ConexaoBD;
 import entidadesRelacoes.Categoria;
+import entidadesRelacoes.Topico;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import view.Msg;
 
 /**
  *
@@ -17,15 +20,16 @@ import javax.swing.JOptionPane;
  */
 public class TopicosDAO {
     
-      ResultSet rs = null;
-
+    ResultSet rs = null;
+    ArrayList<Topico> topicosList;
+    
     public ResultSet resultado(String pesquisa) {
         if (pesquisa != null) {
 //        String where = "";
             pesquisa = "%" + pesquisa + "%";
-
-            String sql = "SELECT idcategoria,idcategoria,titulo,descricao FROM categorias WHERE titulo like ? ORDER BY titulo";
-
+            
+            String sql = "SELECT idtopico,titulo,descricao FROM topicos WHERE titulo like ? ORDER BY titulo";
+            
             try {
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                 ps.setString(1, pesquisa);
@@ -38,13 +42,12 @@ public class TopicosDAO {
             JOptionPane.showMessageDialog(null, "A variável de pesquisa não pode ser nula!, se quiser uma variavé sem valor mande: \"\" ");
         }
         return rs;
-
+        
     }
-
-    public Categoria linha(String id) {
-        Categoria c = new Categoria(1,null,null);
-            c.setId(Integer.parseInt(id));
-        String sql = "SELECT * FROM categorias WHERE idcategoria = ?";
+    
+    public Topico linha(String id) {
+        Topico c = new Topico(1, null, null, false);
+        String sql = "SELECT * FROM topicos WHERE idtopico = ?";
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, id);
@@ -52,18 +55,37 @@ public class TopicosDAO {
             rs.first();
             c.setTitulo(rs.getString("titulo"));
             c.setDescricao(rs.getString("descricao"));
+            c.setId(rs.getInt("idtopico"));
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }
         return c;
     }
-
+    
+    public ArrayList linhas(String idProjeto) {
+        topicosList = new ArrayList();
+        String sql = "SELECT t.idtopico,t.titulo,t.descricao,pt.pronto FROM topicos t INNER JOIN projetos_topicos pt ON t.idtopico = pt.idtopico WHERE pt.idprojeto = ?";
+        try {
+            PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
+            ps.setString(1, idProjeto);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Topico t = new Topico(rs.getInt("idtopico"), rs.getString("titulo"), rs.getString("descricao"), rs.getBoolean("pronto"));
+                topicosList.add(t);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro: " + ex);
+        }
+        return topicosList;
+    }
+    
     public int iud(char op, Categoria c) {
         String sql;
         int rows = 0;
         try {
             if (op == 'i') {
-                sql = ("INSERT INTO categorias (titulo,descricao) VALUES(?,?)");
+                sql = ("INSERT INTO topicos (titulo,descricao) VALUES(?,?)");
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                 ps.setString(1, c.getTitulo());
                 ps.setString(2, c.getDescricao());
@@ -72,7 +94,7 @@ public class TopicosDAO {
             } else {
                 if (op == 'u') {
 //                                                        1              2                     3
-                    sql = "UPDATE categorias SET titulo = ?, descricao = ? WHERE idcategoria = ?";
+                    sql = "UPDATE topicos SET titulo = ?, descricao = ? WHERE idtopico = ?";
                     PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                     ps.setString(1, c.getTitulo());
                     ps.setString(2, c.getDescricao());
@@ -81,8 +103,8 @@ public class TopicosDAO {
                     ps.close();
                 } else {
                     if (op == 'd') {
-                        rows = ConexaoBD.con.createStatement().executeUpdate("DELETE FROM categorias "
-                                + "WHERE idcategoria = " + c.getId());
+                        rows = ConexaoBD.con.createStatement().executeUpdate("DELETE FROM topicos "
+                                + "WHERE idtopico = " + c.getId());
                     }
                 }
             }

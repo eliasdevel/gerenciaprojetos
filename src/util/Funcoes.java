@@ -5,6 +5,7 @@
 package util;
 
 import java.awt.Component;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -44,14 +45,19 @@ public class Funcoes {
         return out;
     }
 
+    public Date defineData(String data) {
+        Date x = null;
+        String[] datas = data.split("/");
+        x = new Date(Integer.parseInt(datas[2]), Integer.parseInt(datas[1]), Integer.parseInt(datas[0]));
+        return x;
+    }
+
     public static void limparCampos(JPanel container) {
         Component components[] = container.getComponents();
         for (Component component : components) {
             if (component instanceof JTextField) {
                 ((JTextField) component).setText(null);
             } else {
-
-              
             }
         }
     }
@@ -83,6 +89,7 @@ public class Funcoes {
             String[] cabe = cabecas.split(separador);
             int col = cabe.length;
             try {
+                    rs.beforeFirst();
                 if (rs.next()) {
                     rs.beforeFirst();
                     int lin = 0;
@@ -100,7 +107,6 @@ public class Funcoes {
                         i++;
                     }
                     tb.setModel(new DefaultTableModel(dadosT, cabe) {
-
                         //sobreescreve colunas dizendo se são editáveis
                         @Override
                         public boolean isCellEditable(int row, int column) {
@@ -112,6 +118,19 @@ public class Funcoes {
                             return editavel;
                         }
                     });
+                }else{
+                    
+                    Object[][] dadosT = new Object[1][col];
+                    tb.setModel(new DefaultTableModel(dadosT, cabe) {
+                        //sobreescreve colunas dizendo se são editáveis
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                            boolean editavel = false;                        
+                            return editavel;
+                        }
+                    });
+                   
+                    
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao selecionar tabela:" + ex);
@@ -196,7 +215,7 @@ public class Funcoes {
      *
      * @param cb Combobox
      * @param ids Vetor de String com ids,
-     * @param id String do id que deve ser selecionado
+     * @param id String do id que deve ser sString[] indicess = colunas.split(separador);elecionado
      */
     public void selecionaIndiceCombo(JComboBox cb, String[] ids, String id) {
         int j = 0;
