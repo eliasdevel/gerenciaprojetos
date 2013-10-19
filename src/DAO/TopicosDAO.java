@@ -52,10 +52,14 @@ public class TopicosDAO {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, id);
             rs = ps.executeQuery();
+            if(rs.next()){
             rs.first();
             c.setTitulo(rs.getString("titulo"));
             c.setDescricao(rs.getString("descricao"));
             c.setId(rs.getInt("idtopico"));
+            }else{
+                c=null;
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }
@@ -80,7 +84,7 @@ public class TopicosDAO {
         return topicosList;
     }
     
-    public int iud(char op, Categoria c) {
+    public int iud(char op, Topico c) {
         String sql;
         int rows = 0;
         try {
@@ -90,6 +94,9 @@ public class TopicosDAO {
                 ps.setString(1, c.getTitulo());
                 ps.setString(2, c.getDescricao());
                 rows = ps.executeUpdate();
+                rs = ConexaoBD.con.createStatement().executeQuery("SELECT MAX(idtopico) AS maior FROM topicos");
+                rs.first();
+                c.setId(rs.getInt("maior"));
                 ps.close();
             } else {
                 if (op == 'u') {

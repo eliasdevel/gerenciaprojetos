@@ -33,25 +33,25 @@ public class DesenvolvedoresControl {
     char operante;
     ResultSet rs;
     JTabbedPane tp;
+    JPanel p;
+    JPanel p2;
     JComboBox cb;
     JTextField nome;
     JFormattedTextField telefone;
     JTextField email;
-    JPanel p;
-    JPanel p2;
     JInternalFrame form;
     JButton bt;
     JTextField filtro;
     JTable tb;
     String[] idCategoria;
- int codigo;
+    int codigo;
     String idsCategoria;
     JInternalFrame frame;
     Funcoes f;
 
     public DesenvolvedoresControl(ResultSet rs, JTabbedPane tp, JComboBox cb, JTextField nome,
             JFormattedTextField telefone, JTextField email, JPanel p, JPanel p2,
-            JInternalFrame form, JButton bt, JTextField filtro, JTable tb, 
+            JInternalFrame form, JButton bt, JTextField filtro, JTable tb,
             JInternalFrame frame) {
         this.rs = rs;
         this.frame = frame;
@@ -126,22 +126,22 @@ public class DesenvolvedoresControl {
             Funcoes.limparCampos(p2);
             bt.setText("Salvar");
             tp.setSelectedIndex(1);
-           
+
             operante = 'i';
         }
     }
 
     public void acaoCancelar() {
         tp.setSelectedIndex(0);
-       
-        
+
+
         Funcoes.limparCampos(p);
         Funcoes.limparCampos(p2);
         bt.setText("Novo");
         operante = 'n';
-       
+
     }
-    
+
     public void acaoSair() {
         acaoCancelar();
         frame.setVisible(false);
@@ -167,7 +167,7 @@ public class DesenvolvedoresControl {
             email.setText(des.getEmail());
             bt.setText("Salvar");
             f.selecionaIndiceCombo(cb, idCategoria, des.getIdCategoria() + "");
-            
+
             //JOptionPane.showMessageDialog(null, des.getIdCategoria()+idCategoria[2]);
         }
     }
@@ -187,7 +187,7 @@ public class DesenvolvedoresControl {
                 dao.iud('d', new Desenvolvedor(Integer.parseInt(e.getActionCommand()), 0, "", "", ""));
                 dao = null;
             }
-                populaDesenvolvedores();
+            populaDesenvolvedores();
         }
     }
 }

@@ -61,9 +61,11 @@ public class CidadesDAO {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, id);
             rs = ps.executeQuery();
+            if(rs.next()){
             rs.first();
             c.setNome(rs.getString("nome"));
             c.setSiglaestado(rs.getString("siglaestado"));
+            }
             
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
