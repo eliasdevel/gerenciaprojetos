@@ -9,8 +9,6 @@ import entidadesRelacoes.ProjetoTopico;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import view.Msg;
 
@@ -27,8 +25,8 @@ public class ProjetosTopicosDAO {
 
             if (teste.estaNoProjeto("1", "1")) {
                 new Msg().msgGeneric("o tópico esta no projeto");
-                new Msg().msgGeneric(teste.linha(1,1).getIdProjeto()+"");
-                
+                new Msg().msgGeneric(teste.linha(1, 1).getIdProjeto() + "");
+
             } else {
                 new Msg().msgGeneric("o tópico não esta no projeto");
             }
@@ -74,7 +72,48 @@ public class ProjetosTopicosDAO {
             JOptionPane.showMessageDialog(null, "A variável de pesquisa não pode ser nula!, se quiser uma variavé sem valor mande: \"\" ");
         }
         return rs;
+    }
 
+    public boolean estaEmDoisProjetos(String idtopico) {
+        boolean esta = false;
+        String sql = "select * from projetos_topicos where idtopico = ?" ;
+        try {
+            PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
+            ps.setString(1, idtopico);
+            rs = ps.executeQuery();
+            int count = 0;
+            if (rs.next()) {
+                rs.beforeFirst();
+                while (rs.next()) {
+                    count++;
+                }
+            }
+            if (count != 0) {
+                if (count > 0) {
+                    esta = true;
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro para verificacao: " + ex+ sql);
+        }
+        return esta;
+    }
+    
+    public int porcentagem(int idprojeto){
+        int porcentagem =0;
+         String sql = "select ((select count(idtopico) from projetos_topicos where idprojeto = ? and pronto = true)*100/"
+                 + "(select count(idtopico) from projetos_topicos where idprojeto = ?))as porcentagem";
+            try {
+                PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
+                ps.setInt(1, idprojeto);
+                ps.setInt(2, idprojeto);
+                rs = ps.executeQuery();
+                rs.first();
+                porcentagem = rs.getInt("porcentagem");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro: " + ex);
+            }
+        return  porcentagem;
     }
 
     public ProjetoTopico linha(int idTopico, int idProjeto) {
@@ -118,7 +157,7 @@ public class ProjetosTopicosDAO {
                 } else {
                     if (op == 'd') {
                         rows = ConexaoBD.con.createStatement().executeUpdate("DELETE FROM projetos_topicos "
-                                + "WHERE idprojeto = "+ pt.getIdProjeto());
+                                + "WHERE idprojeto = " + pt.getIdProjeto());
                     }
                 }
             }

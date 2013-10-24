@@ -33,14 +33,10 @@ public class Concluir extends AbstractCellEditor
     public Concluir(JTable table, int column) {
         super();
         renderButton = new JButton();
-
         try {
-            Image img =null;
-           
-//                img =  ImageIO.read(getClass().getResource("/view/completo.png"));
-            
-                img =  ImageIO.read(getClass().getResource("/view/incompleto.png"));
-            
+
+            Image img = null;
+            img = ImageIO.read(getClass().getResource("/view/incompleto.png"));
             renderButton.setIcon(new ImageIcon(img));
         } catch (IOException ex) {
         }
@@ -57,27 +53,23 @@ public class Concluir extends AbstractCellEditor
     @Override
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if(table.getValueAt(row, column)==true){
-                          try {
-            Image img =null;
-                img =  ImageIO.read(getClass().getResource("/view/incompleto.png"));
-//                img =  ImageIO.read(getClass().getResource("/view/completo.png"));
-            
-            
-            renderButton.setIcon(new ImageIcon(img));
-        } catch (IOException ex) {
-        }
+        try {
+            if (table.getValueAt(row, column) == true) {
+                Image img = null;
+                img = ImageIO.read(getClass().getResource("/view/completo.png"));
+                renderButton.setIcon(new ImageIcon(img));
+                renderButton.setToolTipText("Definir como incompleto");
 
-            }else{
-                           try {
-            Image img =null;
-                img =  ImageIO.read(getClass().getResource("/view/completo.png"));
-            
-            
-            renderButton.setIcon(new ImageIcon(img));
-        } catch (IOException ex) {
-        }       
+
+            } else {
+                Image img = null;
+                img = ImageIO.read(getClass().getResource("/view/incompleto.png"));
+                renderButton.setIcon(new ImageIcon(img));
+                renderButton.setToolTipText("Definir como Completo");
             }
+        } catch (IOException ex) {
+            new Msg().msgGeneric("Erro de definir imagem do objeto da tabela.");
+        }
         if (hasFocus) {
             renderButton.setForeground(table.getForeground());
             renderButton.setBackground(UIManager.getColor("Button.background"));

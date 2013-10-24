@@ -5,16 +5,17 @@
 package DAO;
 
 import connection.ConexaoBD;
-import entidadesRelacoes.Categoria;
 import entidadesRelacoes.Projeto;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import util.Data;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author elias
+ * @author Elias Müller
+ *
  */
 public class ProjetosDAO {
 
@@ -22,7 +23,7 @@ public class ProjetosDAO {
 
     public ResultSet resultado(String pesquisa) {
         if (pesquisa != null) {
-           String pesquisa2 = "%" + pesquisa + "%";
+            String pesquisa2 = "%" + pesquisa + "%";
             String sql = "SELECT idprojeto,c.nome AS cliente, titulo,descricao FROM projetos p INNER JOIN clientes c ON c.idcliente = p.idcliente";
             String where = "WHERE p.titulo like ? OR p.descricao LIKE ?  OR c.nome LIKE ? ORDER BY p.titulo";
 
@@ -43,7 +44,6 @@ public class ProjetosDAO {
             JOptionPane.showMessageDialog(null, "A variável de pesquisa não pode ser nula!, se quiser uma variável sem valor mande: \"\" ");
         }
         return rs;
-
     }
 
     public Projeto linha(String id) {
@@ -59,6 +59,11 @@ public class ProjetosDAO {
             p.setId(rs.getInt("idprojeto"));
             p.setIdcliente(rs.getInt("idcliente"));
             p.setPronto(rs.getBoolean("pronto"));
+            Data d = new Data(1, 1, 1);
+            d.setDBData(rs.getString("dataInicial"));
+            p.setDataInicial(d.getData());
+            d.setDBData(rs.getString("dataPrevisao"));
+            p.setDataPrevisao(d.getData());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }
@@ -70,11 +75,16 @@ public class ProjetosDAO {
         int rows = 0;
         try {
             if (op == 'i') {
-                sql = ("INSERT INTO projetos (titulo,idcliente,descricao) VALUES(?,?,?)");
+                sql = ("INSERT INTO projetos (titulo,idcliente,descricao,dataInicial,dataPrevisao) VALUES(?,?,?,?,?)");
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
+                Data d = new Data(1, 1, 1);
                 ps.setString(1, p.getTitulo());
                 ps.setInt(2, p.getIdcliente());
                 ps.setString(3, p.getDescricao());
+                d.setData(p.getDataInicial());
+                ps.setString(4, d.getDBData());
+                d.setData(p.getDataPrevisao());
+                ps.setString(5, d.getDBData());
                 rows = ps.executeUpdate();
                 rs = ConexaoBD.con.createStatement().executeQuery("SELECT MAX(idprojeto) AS maior FROM projetos");
                 rs.first();
@@ -82,13 +92,17 @@ public class ProjetosDAO {
                 ps.close();
             } else {
                 if (op == 'u') {
-//                                                      1              2              3                     4
-                    sql = "UPDATE projetos SET titulo = ?, descricao = ?, idcliente = ? WHERE idprojeto = ?";
+                    sql = "UPDATE projetos SET titulo = ?, descricao = ?, idcliente = ?, dataInicial = ?,dataPrevisao = ? WHERE idprojeto = ?";
                     PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
+                    Data d = new Data(1, 1, 1);
                     ps.setString(1, p.getTitulo());
                     ps.setString(2, p.getDescricao());
                     ps.setInt(3, p.getIdcliente());
-                    ps.setInt(4, p.getId());
+                    d.setData(p.getDataInicial());
+                    ps.setString(4, d.getDBData());
+                    d.setData(p.getDataPrevisao());
+                    ps.setString(5, d.getDBData());
+                    ps.setInt(6, p.getId());
                     rows = ps.executeUpdate();
                     ps.close();
                 } else {

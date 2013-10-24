@@ -48,8 +48,14 @@ public class Funcoes {
     public Date defineData(String data) {
         Date x = null;
         String[] datas = data.split("/");
-        x = new Date(Integer.parseInt(datas[2]), Integer.parseInt(datas[1]), Integer.parseInt(datas[0]));
+        x = new Date(Integer.parseInt(datas[2]) - 1900, Integer.parseInt(datas[1]), Integer.parseInt(datas[0]));
         return x;
+    }
+
+    public String obtreData(Date d) {
+        String data = "";
+        data = "" + d.getDay() + "/" + d.getMonth() + "/" + d.getYear();
+        return data;
     }
 
     public static void limparCampos(JPanel container) {
@@ -89,7 +95,7 @@ public class Funcoes {
             String[] cabe = cabecas.split(separador);
             int col = cabe.length;
             try {
-                    rs.beforeFirst();
+                rs.beforeFirst();
                 if (rs.next()) {
                     rs.beforeFirst();
                     int lin = 0;
@@ -118,19 +124,19 @@ public class Funcoes {
                             return editavel;
                         }
                     });
-                }else{
-                    
+                } else {
+
                     Object[][] dadosT = new Object[1][col];
                     tb.setModel(new DefaultTableModel(dadosT, cabe) {
                         //sobreescreve colunas dizendo se são editáveis
                         @Override
                         public boolean isCellEditable(int row, int column) {
-                            boolean editavel = false;                        
+                            boolean editavel = false;
                             return editavel;
                         }
                     });
-                   
-                    
+
+
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro ao selecionar tabela:" + ex);
@@ -215,7 +221,8 @@ public class Funcoes {
      *
      * @param cb Combobox
      * @param ids Vetor de String com ids,
-     * @param id String do id que deve ser sString[] indicess = colunas.split(separador);elecionado
+     * @param id String do id que deve ser sString[] indicess =
+     * colunas.split(separador);elecionado
      */
     public void selecionaIndiceCombo(JComboBox cb, String[] ids, String id) {
         int j = 0;

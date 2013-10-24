@@ -6,7 +6,9 @@ package control;
 
 import DAO.CidadesDAO;
 import DAO.ClientesDAO;
+import DAO.DesenvolvedoresDAO;
 import DAO.TopicosDAO;
+import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -20,7 +22,6 @@ import view.Selecionar;
  *
  * @author elias
  */
-
 public class SelecionarControl {
 
     JDialog dl;
@@ -30,38 +31,48 @@ public class SelecionarControl {
     String codigo;
 
     public void filtro() {
-        if (janela.equals("cidades")) {
-            ResultSet rs = new CidadesDAO().resultado(filtro.getText());
-            Funcoes.populaTabelaSelecao(tb, "Selecione,Nome,Estado", rs, "idcidade,nome,siglaestado");
-            dl.setSize(500, 600);
-        }
-        if (janela.equals("clientes")) {
-            ResultSet rs = new ClientesDAO().resultado(filtro.getText());
-            Funcoes.populaTabelaSelecao(tb, "Selecione,Nome,Telefone,Email,Cidade", rs, "idcliente,nome,telefone,email,cidade");
-            dl.setSize(500, 600);
-        }
-        if (janela.equals("topicos")) {
-            ResultSet rs = new TopicosDAO().resultado(filtro.getText());
-            Funcoes.populaTabelaSelecao(tb, "Selecione,Titulo", rs, "idtopico,titulo");
-            dl.setSize(500, 600);
+        ResultSet rs;
+        switch (janela) {
+            case "cidades":
+                rs = new CidadesDAO().resultado(filtro.getText());
+                Funcoes.populaTabelaSelecao(tb, "Selecione,Nome,Estado", rs, "idcidade,nome,siglaestado");
+                dl.setSize(500, 600);
+                break;
+            case "clientes":
+                rs = new ClientesDAO().resultado(filtro.getText());
+                Funcoes.populaTabelaSelecao(tb, "Selecione,Nome,Telefone,Email,Cidade", rs, "idcliente,nome,telefone,email,cidade");
+                dl.setSize(500, 600);
+                break;
+            case "topicos":
+                rs = new TopicosDAO().resultado(filtro.getText());
+                Funcoes.populaTabelaSelecao(tb, "Selecione,Titulo", rs, "idtopico,titulo");
+                dl.setSize(500, 600);
+                break;
+            case "desenvolvedores":
+                rs = new DesenvolvedoresDAO().resultado(filtro.getText());
+                Funcoes.populaTabelaSelecao(tb, "Selecione,Nome", rs, "iddesenvolvedor,nome");
+                dl.setSize(500, 600);
+                break;
+                
         }
         new Select(tb, 0);
-        if(!dl.isShowing()){
-        dl.setLocationByPlatform(true);
-        dl.setVisible(true);
+        if (!dl.isShowing()) {
+            dl.setLocationByPlatform(true);
+            dl.setVisible(true);
         }
     }
-    
-    
-    class Select extends Selecionar{
+
+    class Select extends Selecionar {
+
         public Select(JTable tb, int column) {
             super(tb, column);
         }
+
         @Override
         public void actionPerformed(ActionEvent e) {
-        codigo = e.getActionCommand();
-        dl.setVisible(false);
-        filtro.setText("");
+            codigo = e.getActionCommand();
+            dl.setVisible(false);
+            filtro.setText("");
         }
     }
 

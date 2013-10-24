@@ -11,5 +11,29 @@ package entidadesRelacoes;
 public class ProjetoDesenvolvedor {
    int  idProjeto;
    int  idDesenvolvedor;
+
+    public ProjetoDesenvolvedor(int idProjeto, int idDesenvolvedor) {
+        this.idProjeto = idProjeto;
+        this.idDesenvolvedor = idDesenvolvedor;
+    }
+
+    public int getIdProjeto() {
+        return idProjeto;
+    }
+
+    public void setIdProjeto(int idProjeto) {
+        this.idProjeto = idProjeto;
+    }
+
+    public int getIdDesenvolvedor() {
+        return idDesenvolvedor;
+    }
+
+    public void setIdDesenvolvedor(int idDesenvolvedor) {
+        this.idDesenvolvedor = idDesenvolvedor;
+    }
+    
+     
+    
     
 }

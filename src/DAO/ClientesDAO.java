@@ -21,34 +21,15 @@ import util.Funcoes;
  */
 public class ClientesDAO {
 
-    private String bancoTabela;
-    private String sql;
-    private String[] consulta;
-    private String consultas;
-    private String[] coluna;
-    private String colunas;
-    private String sqlFrom;
-    private String sqlWhere;
-    private String sqlOrder;
-    private String sqlLimit;
-    ResultSet rs = null;
 
-//    public static void main(String[] args) {
-//        ConexaoBD con = new ConexaoBD();
-//        con.abriuConexao();
-//        ClientesDAO c = new ClientesDAO();
-//        Cliente cli;
-//        cli = new Cliente(1, 430780, "Elias", "(51)-82492748", "elias.muller1@gmail.com", "adicional");
-//        System.out.println(cli.getEmail());
-//        c.iud('i', cli);
-//    }
+    ResultSet rs = null;
 
     public ClientesDAO() {
     }
 
     public ResultSet resultado(String pesquisa) {
         if (pesquisa != null) {
-//        String where = "";
+
             pesquisa = "%" + pesquisa + "%";
 
             String sql = "SELECT C.idcliente,C.nome,C.telefone,C.email,C.adicional,C.idcidade,"
@@ -121,6 +102,10 @@ public class ClientesDAO {
                 ps.setString(4, c.getEmail());
                 ps.setString(5, c.getAdicional());
                 rows = ps.executeUpdate();
+                rs = ConexaoBD.con.createStatement().executeQuery("SELECT MAX(idcliente) AS maior FROM clientes");
+                rs.first();
+                c.setId(rs.getInt("maior"));
+
                 ps.close();
             } else {
                 if (op == 'u') {

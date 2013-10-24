@@ -52,13 +52,14 @@ public class TopicosDAO {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, id);
             rs = ps.executeQuery();
-            if(rs.next()){
-            rs.first();
-            c.setTitulo(rs.getString("titulo"));
-            c.setDescricao(rs.getString("descricao"));
-            c.setId(rs.getInt("idtopico"));
-            }else{
-                c=null;
+            if (rs.next()) {
+                rs.first();
+                c.setTitulo(rs.getString("titulo"));
+                c.setDescricao(rs.getString("descricao"));
+                c.setId(rs.getInt("idtopico"));
+                c.setPronto(false);
+            } else {
+                c = null;
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);

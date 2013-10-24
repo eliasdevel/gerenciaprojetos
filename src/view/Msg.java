@@ -29,7 +29,15 @@ public class Msg {
 
     public boolean opcaoExcluir(Component f) {
         boolean excluir = true;
-        int opcao = JOptionPane.showOptionDialog(null, "Deseja realmente excluir?", "Confirmação", 1, 1, null, new String[]{"sim", "não"}, 0);
+        int opcao = JOptionPane.showOptionDialog(null, "Deseja realmente excluir?", "Confirmação", 1, 1, null, new String[]{"Sim", "Não"}, 0);
+        if (opcao == 1) {
+            excluir = false;
+        }
+        return excluir;
+    }
+    public boolean opcaoDuplicado(Component f) {
+        boolean excluir = true;
+        int opcao = JOptionPane.showOptionDialog(null, "Este tópico esta vinculado a um ou mais projetos. Deseja realmente editar?", "Confirmação", 1, 1, null, new String[]{"Sim", "Não"}, 0);
         if (opcao == 1) {
             excluir = false;
         }

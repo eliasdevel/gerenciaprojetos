@@ -5,10 +5,14 @@
 package control;
 
 import DAO.ClientesDAO;
+import DAO.DesenvolvedoresDAO;
+import DAO.ProjetoDesenvolvedorDAO;
 import DAO.ProjetosDAO;
 import DAO.ProjetosTopicosDAO;
 import DAO.TopicosDAO;
+import entidadesRelacoes.Desenvolvedor;
 import entidadesRelacoes.Projeto;
+import entidadesRelacoes.ProjetoDesenvolvedor;
 import entidadesRelacoes.ProjetoTopico;
 import entidadesRelacoes.Topico;
 import java.awt.event.ActionEvent;
@@ -31,8 +35,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-import javax.swing.text.TableView;
 import util.Funcoes;
 import view.Concluir;
 import view.Editar;
@@ -73,6 +75,7 @@ public class ProjetosControl {
     JPanel p1Topicos;
     JPanel p2Topicos;
     ArrayList<Topico> topicosList = new ArrayList();
+    ArrayList<Desenvolvedor> desenvolvedorList = new ArrayList();
     int codigo;
     int codigoTopico;
     ResultSet rs;
@@ -104,21 +107,34 @@ public class ProjetosControl {
             ProjetosDAO iuds = new ProjetosDAO();
             TopicosDAO iudsTopicos = new TopicosDAO();
             ProjetosTopicosDAO iudsProjetosTopicos = new ProjetosTopicosDAO();
+            ProjetoDesenvolvedorDAO iudsprProjetosDesenvolvedor = new ProjetoDesenvolvedorDAO();
             Projeto p = new Projeto(codigo, idCliente, titulo.getText(), descricao.getText(), false);
+            p.setDataInicial(dataInicio.getText());
+            p.setDataPrevisao(dataPrevisao.getText());
             if (p.getTitulo().length() > 0) {
                 if (p.getIdcliente() > 0) {
                     if (iuds.iud(operante, p) > 0) {
 
-//                      rotina para inserção de tópicos 
+//                      rotina para inserção de tópicos e desenvolvedores
+                        ProjetoDesenvolvedor pd; //variável do projeto desenvolvedor
                         ProjetoTopico pt; //seta variavel de projeto tópico
-                        if (topicosList.size() > 0 && operante == 'u') {//verifica se o projeto esta em modo de edição e se array de tópicos não esta zerado
-                            pt = new ProjetoTopico(topicosList.get(0).getId(), p.getId(), topicosList.get(0).isPronto());
+
+                        if (operante == 'u') {//verifica se o projeto esta em modo de edição 
+                            pt = new ProjetoTopico(0, p.getId(), false);
                             iudsProjetosTopicos.iud('d', pt);//exclusão de topicos
                             pt = null;
+                            pd = new ProjetoDesenvolvedor(p.getId(), 0);
+                            iudsprProjetosDesenvolvedor.iud('d', pd);//exclusão de desenvolvedores
+                            pd = null;
                         }
                         for (int i = 0; i < topicosList.size(); i++) {
                             pt = new ProjetoTopico(topicosList.get(i).getId(), p.getId(), topicosList.get(i).isPronto());  // instancia novo objeto;
                             iudsProjetosTopicos.iud('i', pt);//inserção dos tópicos
+                            pt = null; //esvazia objeto
+                        }
+                        for (int i = 0; i < desenvolvedorList.size(); i++) {
+                            pd = new ProjetoDesenvolvedor(p.getId(), desenvolvedorList.get(i).getId());  // instancia novo objeto;
+                            iudsprProjetosDesenvolvedor.iud('i', pd);//inserção dos desenvolvedores
                             pt = null; //esvazia objeto
                         }
                         Funcoes.limparCampos(p1);
@@ -131,7 +147,10 @@ public class ProjetosControl {
                         popularProjetos("");
                         topicosList = null;
                         topicosList = new ArrayList();
+                        desenvolvedorList = null;
+                        desenvolvedorList = new ArrayList();
                         populaTopicos();
+                        populaDesenvolvedores();
                     }
                 } else {
                     new Msg().msgGeneric("O Cliente precisa ser preenchido!");
@@ -161,12 +180,12 @@ public class ProjetosControl {
         if (operanteTopicos == 'u' || operanteTopicos == 'i') {
             TopicosDAO iudsTopicos = new TopicosDAO();
             if (tituloTopico.getText().length() != 0) {
-                Topico t = new Topico(codigoTopico, tituloTopico.getText(), descricaoTopicoCad.getText(), true);
+                Topico t = new Topico(codigoTopico, tituloTopico.getText(), descricaoTopicoCad.getText(), false);
                 if (iudsTopicos.iud(operanteTopicos, t) > 0) {
                     new Msg().msgRegistrado(form);
-                    if(operanteTopicos=='i'){
-                    addTopico(t);
-                    }else{
+                    if (operanteTopicos == 'i') {
+                        addTopico(t);
+                    } else {
                         topicosList.get(topicos.getSelectedRow()).setDescricao(t.getDescricao());
                         topicosList.get(topicos.getSelectedRow()).setTitulo(t.getTitulo());
                     }
@@ -187,8 +206,6 @@ public class ProjetosControl {
             tpTopicos.setSelectedIndex(1);
             operanteTopicos = 'i';
         }
-
-
     }
 
     public void acaoSair() {
@@ -222,6 +239,15 @@ public class ProjetosControl {
             new Msg().msgGeneric("O tópico já esta na lista.");
         }
         populaTopicos();
+    }
+
+    public void addDesenvolvedor(Desenvolvedor d) {
+        if (!estaNaListaDesenvolvedor(d)) {
+            desenvolvedorList.add(d);
+        } else {
+            new Msg().msgGeneric("O desenvolvedor já esta na lista.");
+        }
+        populaDesenvolvedores();
     }
 
     public void removeTopico(int index) {
@@ -261,7 +287,7 @@ public class ProjetosControl {
                 }
             }
         }
-        topicos.setModel(new DefaultTableModel(dados, new Object[]{"Editar","Remover", "Concluído", "Titulo"}));
+        topicos.setModel(new DefaultTableModel(dados, new Object[]{"Editar", "Remover", "Concluído", "Titulo"}));
         new editTopico(topicos, 0);
         new delTopico(topicos, 1);
         new concluirTopico(topicos, 2);
@@ -285,15 +311,21 @@ public class ProjetosControl {
             operante = 'u';
             tp.setSelectedIndex(1);
             btSalvar.setText("Salvar");
+            DesenvolvedoresDAO ddao = new DesenvolvedoresDAO();
+
             TopicosDAO tdao = new TopicosDAO();
             ProjetosDAO pdao = new ProjetosDAO();
             Projeto p = pdao.linha(e.getActionCommand());
             codigo = p.getId();
             descricao.setText(p.getDescricao());
             idCliente = p.getIdcliente();
+            dataInicio.setText(p.getDataInicial());
+            dataPrevisao.setText(p.getDataPrevisao());
             cliente.setText(new ClientesDAO().linha(idCliente + "").getNome());
             titulo.setText(p.getTitulo());
             topicosList = tdao.linhas(e.getActionCommand());
+            desenvolvedorList = ddao.linhas(e.getActionCommand());
+            populaDesenvolvedores();
             populaTopicos();
         }
     }
@@ -310,7 +342,7 @@ public class ProjetosControl {
             ProjetosTopicosDAO tdao = new ProjetosTopicosDAO();
             Projeto p = pdao.linha(e.getActionCommand());
             if (new Msg().opcaoExcluir(form)) {
-                tdao.iud('d', new ProjetoTopico(0, p.getId(), true));
+                tdao.iud('d', new ProjetoTopico(0, p.getId(), false));
                 if (pdao.iud('d', p) == 0) {
                     new Msg().msgGeneric("Erro ao excluír");
                 }
@@ -343,13 +375,25 @@ public class ProjetosControl {
         public void actionPerformed(ActionEvent e) {
             operanteTopicos = 'u';
             TopicosDAO dao = new TopicosDAO();
+            ProjetosTopicosDAO ptdao = new ProjetosTopicosDAO();
             Topico t = dao.linha(e.getActionCommand());
+            if (ptdao.estaEmDoisProjetos(e.getActionCommand())) {
+                if (new Msg().opcaoDuplicado(form)) {
+                    editar(t);
+                } else {
+                    populaTopicos();
+                }
+            } else {
+                editar(t);
+            }
+        }
+
+        public void editar(Topico t) {
             codigoTopico = t.getId();
             tituloTopico.setText(t.getTitulo());
             descricaoTopicoCad.setText(t.getDescricao());
             tpTopicos.setSelectedIndex(1);
             btSalvarTopicos.setText("Salvar");
-            
         }
     }
 
@@ -378,10 +422,62 @@ public class ProjetosControl {
 
     public void descreveTopico() {
         int index = topicos.getSelectedRow();
-        if(index>=0){
-        descricaoTopico.setText(topicosList.get(index).getDescricao());
+        if (index >= 0) {
+            descricaoTopico.setText(topicosList.get(index).getDescricao());
         }
 
+    }
+
+//    Desenvolvedores
+    public void populaDesenvolvedores() {
+        Object[][] dados = new Object[desenvolvedorList.size()][3];
+        for (int i = 0; i < desenvolvedorList.size(); i++) {
+            for (int j = 0; j < 4; j++) {
+                switch (j) {
+                    case 0:
+                        dados[i][j] = desenvolvedorList.get(i).getId();
+                        break;
+                    case 1:
+                        dados[i][j] = desenvolvedorList.get(i).getNome();
+                        break;
+                }
+            }
+        }
+        desenvolvedores.setModel(new DefaultTableModel(dados, new Object[]{"Remover", "Nome"}));
+        new delDesenvolvedor(desenvolvedores, 0);
+        TableColumnModel modeloDaColuna = desenvolvedores.getColumnModel();
+        modeloDaColuna.getColumn(0).setMaxWidth(75);
+        modeloDaColuna.getColumn(0).setMinWidth(75);
+    }
+
+    private boolean estaNaListaDesenvolvedor(Desenvolvedor d) {
+        boolean esta = false;
+        for (int i = 0; i < desenvolvedorList.size(); i++) {
+            if (d.getId() == desenvolvedorList.get(i).getId()) {
+                esta = true;
+            }
+        }
+        return esta;
+    }
+
+    class delDesenvolvedor extends Excluir
+            implements ActionListener {
+
+        public delDesenvolvedor(JTable tb, int column) {
+            super(tb, column);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            removeDesenvolvedor(desenvolvedores.getSelectedRow());
+        }
+    }
+
+    public void removeDesenvolvedor(int index) {
+        if (new Msg().opcaoExcluir(form)) {
+            desenvolvedorList.remove(index);
+        }
+        populaDesenvolvedores();
     }
 
     public JButton getBtSalvar() {
@@ -425,6 +521,7 @@ public class ProjetosControl {
     }
 
     public void setDesenvolvedores(JTable desenvolvedores) {
+        desenvolvedores.setRowHeight(24);
         this.desenvolvedores = desenvolvedores;
     }
 
@@ -447,10 +544,9 @@ public class ProjetosControl {
         try {
             form.setMaximum(true);
         } catch (PropertyVetoException e) {
-            // Vetoed by internalFrame
-            // ... possibly add some handling for this case
+            new Msg().msgGeneric("Erro de definição no tamanho do formulário " + e);
         }
-//        this.form.setSize(1000, 800);
+
     }
 
     public JTabbedPane getTp() {

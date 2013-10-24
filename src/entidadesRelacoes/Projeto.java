@@ -4,15 +4,20 @@
  */
 package entidadesRelacoes;
 
+import java.sql.Date;
+
 /**
  *
  * @author elias
  */
 public class Projeto {
+
     int id;
     int idcliente;
     String titulo;
     String descricao;
+    String dataInicial;
+    String dataPrevisao;
     boolean pronto;
 
     public Projeto(int id, int idcliente, String titulo, String descricao, boolean pronto) {
@@ -29,6 +34,22 @@ public class Projeto {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDataInicial() {
+        return dataInicial;
+    }
+
+    public void setDataInicial(String dataInicial) {
+        this.dataInicial = dataInicial;
+    }
+
+    public String getDataPrevisao() {
+        return dataPrevisao;
+    }
+
+    public void setDataPrevisao(String dataPrevisao) {
+        this.dataPrevisao = dataPrevisao;
     }
 
     public int getIdcliente() {
@@ -62,7 +83,4 @@ public class Projeto {
     public void setPronto(boolean pronto) {
         this.pronto = pronto;
     }
-    
-    
-
 }

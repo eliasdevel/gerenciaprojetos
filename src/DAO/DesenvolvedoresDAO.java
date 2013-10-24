@@ -6,9 +6,11 @@ package DAO;
 
 import connection.ConexaoBD;
 import entidadesRelacoes.Desenvolvedor;
+import entidadesRelacoes.Topico;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,7 +20,7 @@ import javax.swing.JOptionPane;
 public class DesenvolvedoresDAO {
 
     ResultSet rs = null;
-
+ArrayList<Desenvolvedor> desenvolvedoresList;
     public ResultSet resultado(String pesquisa) {
         if (pesquisa != null) {
 //        String where = "";
@@ -63,6 +65,23 @@ public class DesenvolvedoresDAO {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }
         return d;
+    }
+     public ArrayList linhas(String idProjeto) {
+        desenvolvedoresList = new ArrayList();
+        String sql = "SELECT d.iddesenvolvedor,d.nome,d.idcategoria,d.telefone,d.email FROM desenvolvedores d INNER JOIN projetos_desenvolvedores pd ON d.iddesenvolvedor = pd.iddesenvolvedor WHERE pd.idprojeto = ?";
+        try {
+            PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
+            ps.setString(1, idProjeto);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Desenvolvedor d = new Desenvolvedor(rs.getInt("iddesenvolvedor"), rs.getInt("idcategoria"),rs.getString("nome"),rs.getString("telefone"),rs.getString("telefone"));
+                desenvolvedoresList.add(d);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro: " + ex);
+        }
+        return desenvolvedoresList;
     }
 
     public int iud(char op, Desenvolvedor d) {

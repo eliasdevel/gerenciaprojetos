@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -6,6 +6,7 @@ package view;
 
 import DAO.CidadesDAO;
 import DAO.ClientesDAO;
+import DAO.DesenvolvedoresDAO;
 import DAO.TopicosDAO;
 import control.CategoriasControl;
 import control.ClientesControl;
@@ -13,6 +14,7 @@ import control.DesenvolvedoresControl;
 import control.ProjetosControl;
 import control.Relatorios;
 import control.SelecionarControl;
+import entidadesRelacoes.Desenvolvedor;
 import entidadesRelacoes.Topico;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -27,7 +29,7 @@ import util.Funcoes;
  *
  */
 public class fPrincipal extends javax.swing.JFrame {
-    
+
     char operante;
     Funcoes f = new Funcoes();
     SelecionarControl cS;
@@ -290,7 +292,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(lbFiltro1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         tpDesenvolvedores.addTab("Pesquisar", pPesquisaDes);
@@ -356,7 +358,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(lbCategoriaDes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbCategoriaDes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
 
         tpDesenvolvedores.addTab("Manutenção", pCadastrarDes);
@@ -614,6 +616,11 @@ public class fPrincipal extends javax.swing.JFrame {
         lbClientePro.setText("Cliente:");
 
         btAdicionarDesenvolvedorPro.setText("Adicionar");
+        btAdicionarDesenvolvedorPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAdicionarDesenvolvedorProActionPerformed(evt);
+            }
+        });
 
         btBuscarClientePro.setText("Buscar");
         btBuscarClientePro.addActionListener(new java.awt.event.ActionListener() {
@@ -682,7 +689,7 @@ public class fPrincipal extends javax.swing.JFrame {
         pnListagemTopicoLayout.setHorizontalGroup(
             pnListagemTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnListagemTopicoLayout.createSequentialGroup()
-                .addComponent(spTopicosPro, javax.swing.GroupLayout.PREFERRED_SIZE, 19, Short.MAX_VALUE)
+                .addComponent(spTopicosPro, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(spDescricaoTopicoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -732,8 +739,8 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         tpTopicos.addTab("Manutenção", pnManutencaoTopico);
@@ -848,7 +855,7 @@ public class fPrincipal extends javax.swing.JFrame {
                             .addComponent(lbDesenvolvedor)
                             .addComponent(btAdicionarDesenvolvedorPro))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spDesenvolvedoresPro, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(spDesenvolvedoresPro, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addComponent(tpTopicos)))
         );
@@ -942,7 +949,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(lbFiltroCli))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         tpClientes.addTab("Pesquisar", pPesquisaCli);
@@ -1056,7 +1063,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(24, 24, 24)
                 .addComponent(pCidadesCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         tpClientes.addTab("Manutenção", pCadastrarCli);
@@ -1092,7 +1099,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(btSalvarCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btSairCli, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tpClientes))
+                .addComponent(tpClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE))
         );
 
         ifClientes.setBounds(270, 60, 510, 410);
@@ -1167,7 +1174,7 @@ public class fPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
         );
 
         pack();
@@ -1180,73 +1187,73 @@ public class fPrincipal extends javax.swing.JFrame {
         cDes.populaDesenvolvedores();
         ifDesenvolvedores.setVisible(true);
     }//GEN-LAST:event_miCadDesenvolvedoresActionPerformed
-    
+
     private void miCadCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCadCategoriasActionPerformed
         cCat = new CategoriasControl();
         cCat.populaCategorias(tfFiltro, tbCategorias, tpCategorias, btSalvar, tfTitulo, taDescricao);
         ifCategorias.setVisible(true);
     }//GEN-LAST:event_miCadCategoriasActionPerformed
-    
+
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
         cCat.acaoBotaoNovoSalvar(tpCategorias, tfTitulo, pCadastrar, taDescricao, ifCategorias, btSalvar, tfFiltro, tbCategorias);
     }//GEN-LAST:event_btSalvarActionPerformed
-    
+
     private void btSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairActionPerformed
         cCat.acaoSair(ifCategorias, tpCategorias, pCadastrar, pPesquisa, btSalvar);
         taDescricao.setText("");
         cCat = null;
     }//GEN-LAST:event_btSairActionPerformed
-    
+
     private void tfFiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroKeyReleased
         cCat.populaCategorias(tfFiltro, tbCategorias, tpCategorias, btSalvar, tfTitulo, taDescricao);
     }//GEN-LAST:event_tfFiltroKeyReleased
-    
+
     private void tfFiltroDesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroDesKeyReleased
         cDes.populaDesenvolvedores();
     }//GEN-LAST:event_tfFiltroDesKeyReleased
-    
+
     private void btSalvarDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarDesActionPerformed
         cDes.acaoBotaoNovoSalvar();
     }//GEN-LAST:event_btSalvarDesActionPerformed
-    
+
     private void btSairDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairDesActionPerformed
         cDes.acaoSair();
         cDes = null;
     }//GEN-LAST:event_btSairDesActionPerformed
-    
+
     private void tfFiltroProKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroProKeyReleased
         cPro.popularProjetos(tfFiltroPro.getText());
     }//GEN-LAST:event_tfFiltroProKeyReleased
-    
+
     private void btSalvarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarProActionPerformed
         cPro.acaoBotaoNovoSalvar();
         // TODO add your handling code here:
     }//GEN-LAST:event_btSalvarProActionPerformed
-    
+
     private void btSairProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairProActionPerformed
         cPro.acaoSair();
         cPro = null;
     }//GEN-LAST:event_btSairProActionPerformed
-    
+
     private void tfFiltroCliKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroCliKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_tfFiltroCliKeyReleased
-    
+
     private void btSalvarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarCliActionPerformed
         cCli.acaoBotaoNovoSalvar();
     }//GEN-LAST:event_btSalvarCliActionPerformed
-    
+
     private void btSairCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairCliActionPerformed
         cCli.acaoBotaoSair();
+       
     }//GEN-LAST:event_btSairCliActionPerformed
-    
+
     private void mClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mClientesActionPerformed
         cCli = new ClientesControl(jTable1);
         cCli.setTb(jTable1);
         cCli.setBtSalvar(btSalvarCli);
         cCli.setBtSair(btSairCli);
         cCli.setAdicional(taAdicionalCli);
-//        cCli.setCodigo(lbCodigoCli);
         cCli.setEmail(tfEmailCli);
         cCli.setFrame(ifClientes);
         cCli.setFiltro(tfFiltroCli);
@@ -1256,14 +1263,13 @@ public class fPrincipal extends javax.swing.JFrame {
         cCli.setCidade(tfCidadeCli);
         cCli.setP(pPesquisaCli);
         cCli.setP2(pCadastrarCli);
-//        Funcoes.populaTabela(jTable1, "idcidade,Nome,Telefone,Email,Cidade", new ClientesDAO().resultado(tfFiltroCli.getText()), "idcidade,nome,telefone,email,cidade");
         ifClientes.setVisible(true);
     }//GEN-LAST:event_mClientesActionPerformed
-    
+
     private void tfFiltroSel1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroSel1KeyReleased
         cS.filtro();
     }//GEN-LAST:event_tfFiltroSel1KeyReleased
-    
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1275,11 +1281,11 @@ public class fPrincipal extends javax.swing.JFrame {
             cCli.setIdcidade(cS.getCodigo());
         }
         tfCidadeCli.setText(new CidadesDAO().linha(cCli.getIdcidade()).getNome());
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
-    
+
     private void jmProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmProjetosActionPerformed
-        
+
         cPro = new ProjetosControl();
         cPro.setForm(ifProjetos);
         cPro.setTp(tpProjetos);
@@ -1287,7 +1293,7 @@ public class fPrincipal extends javax.swing.JFrame {
         cPro.setP2(pCadastrarPro);
         cPro.setBt(btSalvarPro);
         cPro.setTb(tbProjetos);
-        
+
         cPro.setBtSalvar(btSalvarPro);
         cPro.setCliente(tfClientePro);
         cPro.setTitulo(tfTituloPro);
@@ -1306,13 +1312,11 @@ public class fPrincipal extends javax.swing.JFrame {
         cPro.setTpTopicos(tpTopicos);
         cPro.setBtSalvarTopicos(btNovoTopicoPro);
         cPro.setTituloTopico(tfTituloTopico);
-        
-        
+
+
         ifProjetos.setVisible(true);
-        
-        
     }//GEN-LAST:event_jmProjetosActionPerformed
-    
+
     private void btBuscarClienteProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarClienteProActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1325,23 +1329,23 @@ public class fPrincipal extends javax.swing.JFrame {
             tfClientePro.setText(new ClientesDAO().linha(cPro.getIdCliente() + "").getNome());
         }
     }//GEN-LAST:event_btBuscarClienteProActionPerformed
-    
+
     private void ftfDataInicioProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfDataInicioProActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ftfDataInicioProActionPerformed
-    
+
     private void btCancelarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarProActionPerformed
         cPro.acaoCancelar();
     }//GEN-LAST:event_btCancelarProActionPerformed
-    
+
     private void btCancelarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarCliActionPerformed
         cCli.acaoCancelar();
     }//GEN-LAST:event_btCancelarCliActionPerformed
-    
+
     private void btCancelarDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarDesActionPerformed
         cDes.acaoCancelar();
     }//GEN-LAST:event_btCancelarDesActionPerformed
-    
+
     private void btAdicionarTopicoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdicionarTopicoProActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1351,26 +1355,40 @@ public class fPrincipal extends javax.swing.JFrame {
         cS.filtro();
         Topico t = new TopicosDAO().linha(cS.getCodigo());
         if (t != null) {
+            t.setPronto(false);
             cPro.addTopico(t);
         }
     }//GEN-LAST:event_btAdicionarTopicoProActionPerformed
-    
+
     private void tbTopicosProMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbTopicosProMouseClicked
         cPro.descreveTopico();
     }//GEN-LAST:event_tbTopicosProMouseClicked
-    
+
     private void btCadastrarClienteProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCadastrarClienteProActionPerformed
         mClientesActionPerformed(evt);
         btSalvarCliActionPerformed(evt);
     }//GEN-LAST:event_btCadastrarClienteProActionPerformed
-    
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         new Relatorios().listagem("RS");
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-    
+
     private void btNovoTopicoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNovoTopicoProActionPerformed
         cPro.acaoBotaoNovoTopico();
     }//GEN-LAST:event_btNovoTopicoProActionPerformed
+
+    private void btAdicionarDesenvolvedorProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdicionarDesenvolvedorProActionPerformed
+     cS = new SelecionarControl();
+        cS.setDl(dlSelecionar);
+        cS.setJanela("desenvolvedores");
+        cS.setFiltro(tfFiltroSel1);
+        cS.setTb(tbSelecionar1);
+        cS.filtro();
+        Desenvolvedor d = new DesenvolvedoresDAO().linha(cS.getCodigo());
+        if (d != null) {
+            cPro.addDesenvolvedor(d);
+        }
+    }//GEN-LAST:event_btAdicionarDesenvolvedorProActionPerformed
 
     /**
      * @param args the command line arguments
