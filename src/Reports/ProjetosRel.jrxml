@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProjetosRel" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5635d745-d8e8-4368-9c9b-168a6d8440a1">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="dataInicialPro" class="java.lang.String">
+		<defaultValueExpression><![CDATA[2010-10-10]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dataInicialPro2" class="java.lang.String">
+		<defaultValueExpression><![CDATA[2010-10-10]]></defaultValueExpression>
+	</parameter>
+	<parameter name="idclientePro" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="iddesenvolvedorPro" class="java.lang.String">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tituloPro" class="java.lang.String">
+		<defaultValueExpression><![CDATA[aa]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT idprojeto,c.nome AS cliente,p.dataInicial, titulo,descricao FROM projetos p INNER JOIN clientes c ON c.idcliente = p.idcliente WHERE
+(case
+when @dataInicialPro = true
+then  p.dataInicial BETWEEN $P{dataInicialPro} AND $P{dataInicialPro2}
+else true
+end)
+ AND
+(case
+when @idClientePro = true
+then  c.idcliente = $P{idclientePro}
+else true
+end)
+ AND
+(case
+when @idDesenvolvedorPro = true
+then  p.idprojeto IN (select pd.idprojeto from projetos_desenvolvedores pd where pd.iddesenvolvedor = $P{iddesenvolvedorPro})
+else true
+end)
+ AND
+(case when @tituloPro = true
+then  p.titulo LIKE $P{tituloPro}
+else true
+end) ORDER BY p.titulo]]>
+	</queryString>
+	<field name="idprojeto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dataInicial" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="de60540b-bac8-4d4b-bb43-f82849097c88" x="152" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="88300da9-123e-4e48-9c26-da990b36d2e9" x="31" y="2" width="121" height="20"/>
+				<textElement/>
+				<text><![CDATA[titulo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e29a8d6a-9e43-4c2c-9790-e55f54935b8e" x="252" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Data Inicial]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="25966cef-126a-487d-a709-efb6659d4369" x="152" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="898e09b6-9c5e-433c-9c45-04e4fcafff43" x="31" y="0" width="121" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="630c18c1-0c9a-4e8b-8f4a-b5b3ba2c3475" x="252" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dataInicial}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

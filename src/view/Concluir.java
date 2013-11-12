@@ -54,31 +54,58 @@ public class Concluir extends AbstractCellEditor
     public Component getTableCellRendererComponent(
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         try {
-            if (table.getValueAt(row, column) == true) {
+            String situacao = "";
+            if (table.getValueAt(row, column) == 'f') {
+                situacao = "Finalizado";
                 Image img = null;
                 img = ImageIO.read(getClass().getResource("/view/completo.png"));
                 renderButton.setIcon(new ImageIcon(img));
-                renderButton.setToolTipText("Definir como incompleto");
 
 
             } else {
-                Image img = null;
-                img = ImageIO.read(getClass().getResource("/view/incompleto.png"));
-                renderButton.setIcon(new ImageIcon(img));
-                renderButton.setToolTipText("Definir como Completo");
+                if (table.getValueAt(row, column) == 'c') {
+                    situacao = "Criado";
+                    Image img = null;
+                    img = ImageIO.read(getClass().getResource("/view/incompleto.png"));
+                    renderButton.setIcon(new ImageIcon(img));
+                } else {
+                    if (table.getValueAt(row, column) == 't') {
+                        situacao = "em fase de Teste";
+                        Image img = null;
+                        img = ImageIO.read(getClass().getResource("/view/teste.png"));
+                        renderButton.setIcon(new ImageIcon(img));
+                    } else {
+                        if (table.getValueAt(row, column) == 'd') {
+                            situacao = "em Desenvolvimento";
+                            Image img = null;
+                            img = ImageIO.read(getClass().getResource("/view/desenvolvimento.png"));
+                            renderButton.setIcon(new ImageIcon(img));
+
+                        } else {
+                            if (table.getValueAt(row, column) == 'p') {
+                                situacao = "Planejado";
+                                Image img = null;
+                                img = ImageIO.read(getClass().getResource("/view/planejado.png"));
+                                renderButton.setIcon(new ImageIcon(img));
+                            }
+                        }
+                    }
+                }
             }
+            String msg = "O tópico está " + situacao + ", clique para mudar a situação.";
+            renderButton.setToolTipText(msg);
         } catch (IOException ex) {
             new Msg().msgGeneric("Erro de definir imagem do objeto da tabela.");
         }
         if (hasFocus) {
-            renderButton.setForeground(table.getForeground());
-            renderButton.setBackground(UIManager.getColor("Button.background"));
+//            renderButton.setForeground(table.getForeground());
+//            renderButton.setBackground(UIManager.getColor("Button.background"));
         } else if (isSelected) {
-            renderButton.setForeground(table.getSelectionForeground());
-            renderButton.setBackground(table.getSelectionBackground());
+//            renderButton.setForeground(table.getSelectionForeground());
+//            renderButton.setBackground(table.getSelectionBackground());
         } else {
-            renderButton.setForeground(table.getForeground());
-            renderButton.setBackground(UIManager.getColor("Button.background"));
+//            renderButton.setForeground(table.getForeground());
+//            renderButton.setBackground(UIManager.getColor("Button.background"));
         }
 
         renderButton.setSize(50, 30);
@@ -89,8 +116,9 @@ public class Concluir extends AbstractCellEditor
     @Override
     public Component getTableCellEditorComponent(
             JTable table, Object value, boolean isSelected, int row, int column) {
+
         text = (value == null) ? "" : value.toString();
-        editButton.setText(text);
+        editButton.setActionCommand(text);
         return editButton;
     }
 

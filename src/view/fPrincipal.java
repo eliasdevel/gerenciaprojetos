@@ -14,10 +14,13 @@ import control.DesenvolvedoresControl;
 import control.ProjetosControl;
 import control.Relatorios;
 import control.SelecionarControl;
+import control.SituacaoControl;
+import entidadesRelacoes.Cliente;
 import entidadesRelacoes.Desenvolvedor;
 import entidadesRelacoes.Topico;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import util.Data;
 import util.Funcoes;
 
 /**
@@ -29,10 +32,11 @@ import util.Funcoes;
  *
  */
 public class fPrincipal extends javax.swing.JFrame {
-
+    
     char operante;
     Funcoes f = new Funcoes();
     SelecionarControl cS;
+    SituacaoControl cSit;
     CategoriasControl cCat;
     DesenvolvedoresControl cDes;
     ClientesControl cCli;
@@ -68,7 +72,10 @@ public class fPrincipal extends javax.swing.JFrame {
         tfFiltroSel1 = new javax.swing.JTextField();
         spSelecionar1 = new javax.swing.JScrollPane();
         tbSelecionar1 = new javax.swing.JTable();
+        dlSelecionarSituacao = new javax.swing.JDialog();
+        cbSituacao = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
+        btSelecionarSituacao = new javax.swing.JButton();
         dpDesktop = new javax.swing.JDesktopPane();
         ifDesenvolvedores = new javax.swing.JInternalFrame();
         tpDesenvolvedores = new javax.swing.JTabbedPane();
@@ -107,8 +114,21 @@ public class fPrincipal extends javax.swing.JFrame {
         ifProjetos = new javax.swing.JInternalFrame();
         tpProjetos = new javax.swing.JTabbedPane();
         pPesquisaPro = new javax.swing.JPanel();
-        lbFiltroPro = new javax.swing.JLabel();
-        tfFiltroPro = new javax.swing.JTextField();
+        pFiltrosPro = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        tfNomeFiltroPro = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        tfClienteFiltroPro = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        tfDesenvolvedorFiltroPro = new javax.swing.JTextField();
+        ftfData1FiltroPro = new javax.swing.JFormattedTextField();
+        ftfData2FiltroPro = new javax.swing.JFormattedTextField();
+        jLabel12 = new javax.swing.JLabel();
+        btDesenvolvedorFiltroPro = new javax.swing.JButton();
+        btClienteFiltroPro = new javax.swing.JButton();
+        btlimparFiltroPro = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         spProjetos = new javax.swing.JScrollPane();
         tbProjetos = new javax.swing.JTable();
         pCadastrarPro = new javax.swing.JPanel();
@@ -120,13 +140,10 @@ public class fPrincipal extends javax.swing.JFrame {
         tfClientePro = new javax.swing.JTextField();
         lbClientePro = new javax.swing.JLabel();
         btAdicionarDesenvolvedorPro = new javax.swing.JButton();
-        btBuscarClientePro = new javax.swing.JButton();
-        btCadastrarClientePro = new javax.swing.JButton();
         lbDataPrevisao = new javax.swing.JLabel();
         lbDatainicio = new javax.swing.JLabel();
         ftfDataInicioPro = new javax.swing.JFormattedTextField();
         ftfDataPrevisaoPro = new javax.swing.JFormattedTextField();
-        chProjetoPro = new javax.swing.JCheckBox();
         lbDescricaoPro = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         taDescricaoProjeto = new javax.swing.JTextArea();
@@ -142,10 +159,12 @@ public class fPrincipal extends javax.swing.JFrame {
         tfTituloTopico = new javax.swing.JTextField();
         jScrollPane6 = new javax.swing.JScrollPane();
         taDescricaoTopicoCad = new javax.swing.JTextArea();
+        btCancelarTopicoPro = new javax.swing.JButton();
         lbTopicos = new javax.swing.JLabel();
         btNovoTopicoPro = new javax.swing.JButton();
         btCancelarPro = new javax.swing.JButton();
         btAdicionarTopicoPro = new javax.swing.JButton();
+        btBuscarClienteCadPro = new javax.swing.JButton();
         btSalvarPro = new javax.swing.JButton();
         btSairPro = new javax.swing.JButton();
         ifClientes = new javax.swing.JInternalFrame();
@@ -155,6 +174,7 @@ public class fPrincipal extends javax.swing.JFrame {
         tfFiltroCli = new javax.swing.JTextField();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButton3 = new javax.swing.JButton();
         pCadastrarCli = new javax.swing.JPanel();
         lbNomeCli = new javax.swing.JLabel();
         tfNomeCli = new javax.swing.JTextField();
@@ -182,8 +202,6 @@ public class fPrincipal extends javax.swing.JFrame {
         mProjetos = new javax.swing.JMenu();
         jmProjetos = new javax.swing.JMenuItem();
         jmTopicos = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
 
         dlSelecionar.setModal(true);
 
@@ -235,7 +253,51 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel10.setText("jLabel10");
+        dlSelecionarSituacao.setModal(true);
+
+        cbSituacao.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Criado", "Planejado", "Desenvolvimento", "Teste", "Finalizado" }));
+        cbSituacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSituacaoActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Situação:");
+
+        btSelecionarSituacao.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/selecionar.png"))); // NOI18N
+        btSelecionarSituacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSelecionarSituacaoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout dlSelecionarSituacaoLayout = new javax.swing.GroupLayout(dlSelecionarSituacao.getContentPane());
+        dlSelecionarSituacao.getContentPane().setLayout(dlSelecionarSituacaoLayout);
+        dlSelecionarSituacaoLayout.setHorizontalGroup(
+            dlSelecionarSituacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlSelecionarSituacaoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(dlSelecionarSituacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(dlSelecionarSituacaoLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(cbSituacao, 0, 470, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dlSelecionarSituacaoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btSelecionarSituacao)))
+                .addContainerGap())
+        );
+        dlSelecionarSituacaoLayout.setVerticalGroup(
+            dlSelecionarSituacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dlSelecionarSituacaoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbSituacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btSelecionarSituacao)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciador de Projetos");
@@ -539,31 +601,144 @@ public class fPrincipal extends javax.swing.JFrame {
 
         tpProjetos.setEnabled(false);
 
-        lbFiltroPro.setText("Filtro:");
+        pFiltrosPro.setPreferredSize(new java.awt.Dimension(10, 0));
 
-        tfFiltroPro.addKeyListener(new java.awt.event.KeyAdapter() {
+        jLabel7.setText("Nome:");
+
+        tfNomeFiltroPro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                tfFiltroProKeyReleased(evt);
+                tfNomeFiltroProKeyReleased(evt);
             }
         });
+
+        jLabel8.setText("Cliente:");
+
+        tfClienteFiltroPro.setEditable(false);
+
+        jLabel9.setText("Desenvolvedor:");
+
+        jLabel11.setText("Período Data de início:");
+
+        tfDesenvolvedorFiltroPro.setEditable(false);
+
+        ftfData1FiltroPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ftfData1FiltroProActionPerformed(evt);
+            }
+        });
+
+        ftfData2FiltroPro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                ftfData2FiltroProKeyReleased(evt);
+            }
+        });
+
+        jLabel12.setText("a");
+
+        btDesenvolvedorFiltroPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/pesquisar.png"))); // NOI18N
+        btDesenvolvedorFiltroPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDesenvolvedorFiltroProActionPerformed(evt);
+            }
+        });
+
+        btClienteFiltroPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/pesquisar.png"))); // NOI18N
+        btClienteFiltroPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClienteFiltroProActionPerformed(evt);
+            }
+        });
+
+        btlimparFiltroPro.setText("Limpar");
+        btlimparFiltroPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btlimparFiltroProActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Relatório");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pFiltrosProLayout = new javax.swing.GroupLayout(pFiltrosPro);
+        pFiltrosPro.setLayout(pFiltrosProLayout);
+        pFiltrosProLayout.setHorizontalGroup(
+            pFiltrosProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pFiltrosProLayout.createSequentialGroup()
+                .addGroup(pFiltrosProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(tfNomeFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pFiltrosProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addGroup(pFiltrosProLayout.createSequentialGroup()
+                        .addComponent(tfClienteFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btClienteFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pFiltrosProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel9)
+                    .addGroup(pFiltrosProLayout.createSequentialGroup()
+                        .addComponent(tfDesenvolvedorFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btDesenvolvedorFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pFiltrosProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addGroup(pFiltrosProLayout.createSequentialGroup()
+                        .addComponent(ftfData1FiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ftfData2FiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btlimparFiltroPro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pFiltrosProLayout.setVerticalGroup(
+            pFiltrosProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pFiltrosProLayout.createSequentialGroup()
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pFiltrosProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btDesenvolvedorFiltroPro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pFiltrosProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(ftfData1FiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ftfData2FiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel12)
+                        .addComponent(btlimparFiltroPro)
+                        .addComponent(jButton1))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pFiltrosProLayout.createSequentialGroup()
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tfDesenvolvedorFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pFiltrosProLayout.createSequentialGroup()
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tfClienteFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pFiltrosProLayout.createSequentialGroup()
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tfNomeFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(btClienteFiltroPro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         tbProjetos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "nenhum registro", "nenhum registro"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tbProjetos.setToolTipText("");
+        ));
         spProjetos.setViewportView(tbProjetos);
 
         javax.swing.GroupLayout pPesquisaProLayout = new javax.swing.GroupLayout(pPesquisaPro);
@@ -573,22 +748,20 @@ public class fPrincipal extends javax.swing.JFrame {
             .addGroup(pPesquisaProLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pPesquisaProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
                     .addGroup(pPesquisaProLayout.createSequentialGroup()
-                        .addComponent(lbFiltroPro)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfFiltroPro)))
-                .addContainerGap())
+                        .addComponent(spProjetos)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pPesquisaProLayout.createSequentialGroup()
+                        .addComponent(pFiltrosPro, javax.swing.GroupLayout.DEFAULT_SIZE, 920, Short.MAX_VALUE)
+                        .addGap(75, 75, 75))))
         );
         pPesquisaProLayout.setVerticalGroup(
             pPesquisaProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pPesquisaProLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pPesquisaProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbFiltroPro)
-                    .addComponent(tfFiltroPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pFiltrosPro, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE))
+                .addComponent(spProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, 652, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(378, Short.MAX_VALUE))
         );
 
         tpProjetos.addTab("Pesquisar", pPesquisaPro);
@@ -599,13 +772,13 @@ public class fPrincipal extends javax.swing.JFrame {
 
         tbDesenvolvedoresPro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         spDesenvolvedoresPro.setViewportView(tbDesenvolvedoresPro);
@@ -622,20 +795,6 @@ public class fPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btBuscarClientePro.setText("Buscar");
-        btBuscarClientePro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btBuscarClienteProActionPerformed(evt);
-            }
-        });
-
-        btCadastrarClientePro.setText("Cadastrar");
-        btCadastrarClientePro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btCadastrarClienteProActionPerformed(evt);
-            }
-        });
-
         lbDataPrevisao.setText("Data de Previsão:");
 
         lbDatainicio.setText("Data de Início:");
@@ -645,8 +804,6 @@ public class fPrincipal extends javax.swing.JFrame {
                 ftfDataInicioProActionPerformed(evt);
             }
         });
-
-        chProjetoPro.setText("Pronto");
 
         lbDescricaoPro.setText("Descricao:");
 
@@ -689,7 +846,7 @@ public class fPrincipal extends javax.swing.JFrame {
         pnListagemTopicoLayout.setHorizontalGroup(
             pnListagemTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnListagemTopicoLayout.createSequentialGroup()
-                .addComponent(spTopicosPro, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
+                .addComponent(spTopicosPro, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(spDescricaoTopicoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -700,7 +857,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addGroup(pnListagemTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(spDescricaoTopicoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(spTopicosPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(564, Short.MAX_VALUE))
         );
 
         tpTopicos.addTab("Topicos do Projeto", pnListagemTopico);
@@ -713,6 +870,13 @@ public class fPrincipal extends javax.swing.JFrame {
         taDescricaoTopicoCad.setRows(5);
         jScrollPane6.setViewportView(taDescricaoTopicoCad);
 
+        btCancelarTopicoPro.setText("Cancelar");
+        btCancelarTopicoPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancelarTopicoProActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnManutencaoTopicoLayout = new javax.swing.GroupLayout(pnManutencaoTopico);
         pnManutencaoTopico.setLayout(pnManutencaoTopicoLayout);
         pnManutencaoTopicoLayout.setHorizontalGroup(
@@ -722,25 +886,29 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addGroup(pnManutencaoTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tfTituloTopico)
                     .addGroup(pnManutencaoTopicoLayout.createSequentialGroup()
-                        .addGroup(pnManutencaoTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                        .addComponent(jLabel4)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
+                    .addGroup(pnManutencaoTopicoLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btCancelarTopicoPro)))
                 .addContainerGap())
         );
         pnManutencaoTopicoLayout.setVerticalGroup(
             pnManutencaoTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnManutencaoTopicoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
+                .addGroup(pnManutencaoTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(btCancelarTopicoPro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfTituloTopico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(456, Short.MAX_VALUE))
         );
 
         tpTopicos.addTab("Manutenção", pnManutencaoTopico);
@@ -768,6 +936,13 @@ public class fPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btBuscarClienteCadPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/pesquisar.png"))); // NOI18N
+        btBuscarClienteCadPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btBuscarClienteCadProActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pCadastrarProLayout = new javax.swing.GroupLayout(pCadastrarPro);
         pCadastrarPro.setLayout(pCadastrarProLayout);
         pCadastrarProLayout.setHorizontalGroup(
@@ -776,10 +951,6 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(pCadastrarProLayout.createSequentialGroup()
-                            .addComponent(tfTituloPro, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(chProjetoPro, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                         .addComponent(lbClientePro)
                         .addComponent(ftfDataInicioPro, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(ftfDataPrevisaoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -789,15 +960,14 @@ public class fPrincipal extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(btAdicionarDesenvolvedorPro))
                         .addComponent(lbDatainicio)
-                        .addGroup(pCadastrarProLayout.createSequentialGroup()
-                            .addComponent(tfClientePro, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pCadastrarProLayout.createSequentialGroup()
+                            .addComponent(tfClientePro)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btBuscarClientePro)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btCadastrarClientePro))
+                            .addComponent(btBuscarClienteCadPro, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(lbDescricaoPro)
                         .addComponent(jScrollPane3)
-                        .addComponent(spDesenvolvedoresPro, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(spDesenvolvedoresPro, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                        .addComponent(tfTituloPro))
                     .addComponent(lbTituloPro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -807,10 +977,10 @@ public class fPrincipal extends javax.swing.JFrame {
                         .addComponent(btAdicionarTopicoPro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btNovoTopicoPro)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btCancelarPro))
                     .addGroup(pCadastrarProLayout.createSequentialGroup()
-                        .addComponent(tpTopicos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(tpTopicos)
                         .addContainerGap())))
         );
         pCadastrarProLayout.setVerticalGroup(
@@ -828,21 +998,18 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pCadastrarProLayout.createSequentialGroup()
-                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tfTituloPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chProjetoPro))
+                        .addComponent(tfTituloPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbDescricaoPro)
                         .addGap(8, 8, 8)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbClientePro)
-                        .addGap(1, 1, 1)
-                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(tfClientePro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btBuscarClientePro)
-                            .addComponent(btCadastrarClientePro))
-                        .addGap(5, 5, 5)
+                            .addComponent(btBuscarClienteCadPro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
                         .addComponent(lbDatainicio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ftfDataInicioPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -894,7 +1061,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(btSalvarPro)
                     .addComponent(btSairPro, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(tpProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tpProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, 1128, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         ifProjetos.setBounds(270, 60, 510, 410);
@@ -905,7 +1072,7 @@ public class fPrincipal extends javax.swing.JFrame {
 
         tpClientes.setEnabled(false);
 
-        lbFiltroCli.setText("Filtro:");
+        lbFiltroCli.setText("Nome:");
 
         tfFiltroCli.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -926,6 +1093,13 @@ public class fPrincipal extends javax.swing.JFrame {
         ));
         jScrollPane4.setViewportView(jTable1);
 
+        jButton3.setText("Relatório");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pPesquisaCliLayout = new javax.swing.GroupLayout(pPesquisaCli);
         pPesquisaCli.setLayout(pPesquisaCliLayout);
         pPesquisaCliLayout.setHorizontalGroup(
@@ -936,20 +1110,24 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
                     .addGroup(pPesquisaCliLayout.createSequentialGroup()
                         .addComponent(lbFiltroCli)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pPesquisaCliLayout.createSequentialGroup()
+                        .addComponent(tfFiltroCli)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfFiltroCli, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)))
+                        .addComponent(jButton3)))
                 .addContainerGap())
         );
         pPesquisaCliLayout.setVerticalGroup(
             pPesquisaCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pPesquisaCliLayout.createSequentialGroup()
-                .addContainerGap()
+                .addComponent(lbFiltroCli, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pPesquisaCliLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfFiltroCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbFiltroCli))
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         tpClientes.addTab("Pesquisar", pPesquisaCli);
@@ -1063,7 +1241,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(24, 24, 24)
                 .addComponent(pCidadesCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tpClientes.addTab("Manutenção", pCadastrarCli);
@@ -1090,7 +1268,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(btSalvarCli)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btSairCli, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(tpClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
+            .addComponent(tpClientes)
         );
         ifClientesLayout.setVerticalGroup(
             ifClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1099,7 +1277,7 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(btSalvarCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btSairCli, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tpClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE))
+                .addComponent(tpClientes))
         );
 
         ifClientes.setBounds(270, 60, 510, 410);
@@ -1152,18 +1330,6 @@ public class fPrincipal extends javax.swing.JFrame {
 
         mbMenuTotal.add(mArquivo);
 
-        jMenu2.setText("Edit");
-
-        jMenuItem1.setText("jMenuItem1");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMenuItem1);
-
-        mbMenuTotal.add(jMenu2);
-
         setJMenuBar(mbMenuTotal);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1174,7 +1340,7 @@ public class fPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
+            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
 
         pack();
@@ -1187,67 +1353,64 @@ public class fPrincipal extends javax.swing.JFrame {
         cDes.populaDesenvolvedores();
         ifDesenvolvedores.setVisible(true);
     }//GEN-LAST:event_miCadDesenvolvedoresActionPerformed
-
+    
     private void miCadCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCadCategoriasActionPerformed
         cCat = new CategoriasControl();
         cCat.populaCategorias(tfFiltro, tbCategorias, tpCategorias, btSalvar, tfTitulo, taDescricao);
         ifCategorias.setVisible(true);
     }//GEN-LAST:event_miCadCategoriasActionPerformed
-
+    
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
         cCat.acaoBotaoNovoSalvar(tpCategorias, tfTitulo, pCadastrar, taDescricao, ifCategorias, btSalvar, tfFiltro, tbCategorias);
     }//GEN-LAST:event_btSalvarActionPerformed
-
+    
     private void btSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairActionPerformed
         cCat.acaoSair(ifCategorias, tpCategorias, pCadastrar, pPesquisa, btSalvar);
         taDescricao.setText("");
         cCat = null;
     }//GEN-LAST:event_btSairActionPerformed
-
+    
     private void tfFiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroKeyReleased
         cCat.populaCategorias(tfFiltro, tbCategorias, tpCategorias, btSalvar, tfTitulo, taDescricao);
     }//GEN-LAST:event_tfFiltroKeyReleased
-
+    
     private void tfFiltroDesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroDesKeyReleased
         cDes.populaDesenvolvedores();
     }//GEN-LAST:event_tfFiltroDesKeyReleased
-
+    
     private void btSalvarDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarDesActionPerformed
         cDes.acaoBotaoNovoSalvar();
     }//GEN-LAST:event_btSalvarDesActionPerformed
-
+    
     private void btSairDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairDesActionPerformed
         cDes.acaoSair();
         cDes = null;
     }//GEN-LAST:event_btSairDesActionPerformed
-
-    private void tfFiltroProKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroProKeyReleased
-        cPro.popularProjetos(tfFiltroPro.getText());
-    }//GEN-LAST:event_tfFiltroProKeyReleased
-
+    
     private void btSalvarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarProActionPerformed
         cPro.acaoBotaoNovoSalvar();
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btSalvarProActionPerformed
-
+    
     private void btSairProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairProActionPerformed
         cPro.acaoSair();
+        
         cPro = null;
     }//GEN-LAST:event_btSairProActionPerformed
-
+    
     private void tfFiltroCliKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroCliKeyReleased
-        // TODO add your handling code here:
+        cCli.popula();
     }//GEN-LAST:event_tfFiltroCliKeyReleased
-
+    
     private void btSalvarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarCliActionPerformed
         cCli.acaoBotaoNovoSalvar();
     }//GEN-LAST:event_btSalvarCliActionPerformed
-
+    
     private void btSairCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairCliActionPerformed
         cCli.acaoBotaoSair();
-       
+        
     }//GEN-LAST:event_btSairCliActionPerformed
-
+    
     private void mClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mClientesActionPerformed
         cCli = new ClientesControl(jTable1);
         cCli.setTb(jTable1);
@@ -1256,20 +1419,22 @@ public class fPrincipal extends javax.swing.JFrame {
         cCli.setAdicional(taAdicionalCli);
         cCli.setEmail(tfEmailCli);
         cCli.setFrame(ifClientes);
-        cCli.setFiltro(tfFiltroCli);
+        
         cCli.setNome(tfNomeCli);
         cCli.setTelefone(ftfTelefoneCli);
         cCli.setTp(tpClientes);
         cCli.setCidade(tfCidadeCli);
         cCli.setP(pPesquisaCli);
         cCli.setP2(pCadastrarCli);
+        cCli.setFiltro(tfFiltroCli);
+        cCli.popula();
         ifClientes.setVisible(true);
     }//GEN-LAST:event_mClientesActionPerformed
-
+    
     private void tfFiltroSel1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroSel1KeyReleased
         cS.filtro();
     }//GEN-LAST:event_tfFiltroSel1KeyReleased
-
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1281,11 +1446,11 @@ public class fPrincipal extends javax.swing.JFrame {
             cCli.setIdcidade(cS.getCodigo());
         }
         tfCidadeCli.setText(new CidadesDAO().linha(cCli.getIdcidade()).getNome());
-
+        
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
     private void jmProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmProjetosActionPerformed
-
+        
         cPro = new ProjetosControl();
         cPro.setForm(ifProjetos);
         cPro.setTp(tpProjetos);
@@ -1293,18 +1458,25 @@ public class fPrincipal extends javax.swing.JFrame {
         cPro.setP2(pCadastrarPro);
         cPro.setBt(btSalvarPro);
         cPro.setTb(tbProjetos);
-
+        
         cPro.setBtSalvar(btSalvarPro);
         cPro.setCliente(tfClientePro);
         cPro.setTitulo(tfTituloPro);
         cPro.setDescricao(taDescricaoProjeto);
-        cPro.setProntoPro(chProjetoPro);
+        
         cPro.setDescricaoTopico(taDescricaoTopicoPro);
         cPro.setDataInicio(ftfDataInicioPro);
         cPro.setDataPrevisao(ftfDataPrevisaoPro);
         cPro.setDesenvolvedores(tbDesenvolvedoresPro);
         cPro.setTopicos(tbTopicosPro);
-        cPro.popularProjetos("");
+
+//      Situação
+        cSit = new SituacaoControl();
+        cSit.setDl(dlSelecionarSituacao);
+        cSit.setCb(cbSituacao);
+        cSit.setBt(btSelecionarSituacao);
+        cPro.setSitControl(cSit);
+        
 //        Tópicos
         cPro.setP1Topicos(pnListagemTopico);
         cPro.setP2Topicos(pnManutencaoTopico);
@@ -1313,39 +1485,32 @@ public class fPrincipal extends javax.swing.JFrame {
         cPro.setBtSalvarTopicos(btNovoTopicoPro);
         cPro.setTituloTopico(tfTituloTopico);
 
-
+//        Filtros
+        cPro.setFiltroCli(tfClienteFiltroPro);
+        cPro.setFiltroDes(tfDesenvolvedorFiltroPro);
+        cPro.setFiltroNom(tfNomeFiltroPro);
+        cPro.setFiltroData1(ftfData1FiltroPro);
+        cPro.setFiltroData2(ftfData2FiltroPro);
+        btlimparFiltroProActionPerformed(evt);
         ifProjetos.setVisible(true);
     }//GEN-LAST:event_jmProjetosActionPerformed
-
-    private void btBuscarClienteProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarClienteProActionPerformed
-        cS = new SelecionarControl();
-        cS.setDl(dlSelecionar);
-        cS.setJanela("clientes");
-        cS.setFiltro(tfFiltroSel1);
-        cS.setTb(tbSelecionar1);
-        cS.filtro();
-        if (cS.getCodigo() != null) {
-            cPro.setIdCliente(Integer.parseInt(cS.getCodigo()));
-            tfClientePro.setText(new ClientesDAO().linha(cPro.getIdCliente() + "").getNome());
-        }
-    }//GEN-LAST:event_btBuscarClienteProActionPerformed
-
+    
     private void ftfDataInicioProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfDataInicioProActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ftfDataInicioProActionPerformed
-
+    
     private void btCancelarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarProActionPerformed
         cPro.acaoCancelar();
     }//GEN-LAST:event_btCancelarProActionPerformed
-
+    
     private void btCancelarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarCliActionPerformed
         cCli.acaoCancelar();
     }//GEN-LAST:event_btCancelarCliActionPerformed
-
+    
     private void btCancelarDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarDesActionPerformed
         cDes.acaoCancelar();
     }//GEN-LAST:event_btCancelarDesActionPerformed
-
+    
     private void btAdicionarTopicoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdicionarTopicoProActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1359,36 +1524,122 @@ public class fPrincipal extends javax.swing.JFrame {
             cPro.addTopico(t);
         }
     }//GEN-LAST:event_btAdicionarTopicoProActionPerformed
-
+    
     private void tbTopicosProMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbTopicosProMouseClicked
         cPro.descreveTopico();
     }//GEN-LAST:event_tbTopicosProMouseClicked
-
-    private void btCadastrarClienteProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCadastrarClienteProActionPerformed
-        mClientesActionPerformed(evt);
-        btSalvarCliActionPerformed(evt);
-    }//GEN-LAST:event_btCadastrarClienteProActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        new Relatorios().listagem("RS");
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+    
     private void btNovoTopicoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNovoTopicoProActionPerformed
         cPro.acaoBotaoNovoTopico();
     }//GEN-LAST:event_btNovoTopicoProActionPerformed
-
+    
     private void btAdicionarDesenvolvedorProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdicionarDesenvolvedorProActionPerformed
-     cS = new SelecionarControl();
+        cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
         cS.setJanela("desenvolvedores");
         cS.setFiltro(tfFiltroSel1);
         cS.setTb(tbSelecionar1);
         cS.filtro();
-        Desenvolvedor d = new DesenvolvedoresDAO().linha(cS.getCodigo());
-        if (d != null) {
-            cPro.addDesenvolvedor(d);
+        if (cS.getCodigo() != null) {
+            
+            Desenvolvedor d = new DesenvolvedoresDAO().linha(cS.getCodigo());
+            if (d != null) {
+                cPro.addDesenvolvedor(d);
+            }
         }
     }//GEN-LAST:event_btAdicionarDesenvolvedorProActionPerformed
+    
+    private void ftfData1FiltroProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfData1FiltroProActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ftfData1FiltroProActionPerformed
+    
+    private void btClienteFiltroProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClienteFiltroProActionPerformed
+        cS = new SelecionarControl();
+        cS.setDl(dlSelecionar);
+        cS.setJanela("clientes");
+        cS.setFiltro(tfFiltroSel1);
+        cS.setTb(tbSelecionar1);
+        cS.filtro();
+        if (cS.getCodigo() != null) {
+            Cliente c = new ClientesDAO().linha(cS.getCodigo());
+            cPro.setFiltroIdCli(c.getId());
+            tfClienteFiltroPro.setText(c.getNome());
+        }
+        cPro.popularProjetos();
+    }//GEN-LAST:event_btClienteFiltroProActionPerformed
+    
+    private void btlimparFiltroProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimparFiltroProActionPerformed
+        Funcoes.limparCampos(pFiltrosPro);
+        
+        cPro.setFiltroIdCli(0);
+        cPro.setFiltroIdDes(0);
+        cPro.popularProjetos();
+    }//GEN-LAST:event_btlimparFiltroProActionPerformed
+    
+    private void tfNomeFiltroProKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNomeFiltroProKeyReleased
+        cPro.popularProjetos();
+    }//GEN-LAST:event_tfNomeFiltroProKeyReleased
+    
+    private void btDesenvolvedorFiltroProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDesenvolvedorFiltroProActionPerformed
+        cS = new SelecionarControl();
+        cS.setDl(dlSelecionar);
+        cS.setJanela("desenvolvedores");
+        cS.setFiltro(tfFiltroSel1);
+        cS.setTb(tbSelecionar1);
+        cS.filtro();
+        if (cS.getCodigo() != null) {
+            Desenvolvedor d = new DesenvolvedoresDAO().linha(cS.getCodigo());
+            cPro.setFiltroIdDes(d.getId());
+            tfDesenvolvedorFiltroPro.setText(d.getNome());
+        }
+        cPro.popularProjetos();
+    }//GEN-LAST:event_btDesenvolvedorFiltroProActionPerformed
+    
+    private void ftfData2FiltroProKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ftfData2FiltroProKeyReleased
+        
+        cPro.popularProjetos();
+        
+        
+    }//GEN-LAST:event_ftfData2FiltroProKeyReleased
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Data data1 = new Data(1, 1, 1);
+        Data data2 = new Data(1, 1, 1);
+        data1.setData(ftfData1FiltroPro.getText());
+        data2.setData(ftfData2FiltroPro.getText());
+        new Relatorios().relatorioProjetos(data1, data2, cPro.getFiltroIdCli(), cPro.getFiltroIdDes(), tfNomeFiltroPro.getText());
+    }//GEN-LAST:event_jButton1ActionPerformed
+    
+    private void btCancelarTopicoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarTopicoProActionPerformed
+        cPro.cancelarTopico();
+    }//GEN-LAST:event_btCancelarTopicoProActionPerformed
+    
+    private void btBuscarClienteCadProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarClienteCadProActionPerformed
+        cS = new SelecionarControl();
+        cS.setDl(dlSelecionar);
+        cS.setJanela("clientes");
+        cS.setFiltro(tfFiltroSel1);
+        cS.setTb(tbSelecionar1);
+        cS.filtro();
+        if (cS.getCodigo() != null) {
+            cPro.setIdCliente(Integer.parseInt(cS.getCodigo()));
+            tfClientePro.setText(new ClientesDAO().linha(cPro.getIdCliente() + "").getNome());
+        }
+    }//GEN-LAST:event_btBuscarClienteCadProActionPerformed
+    
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        new Relatorios().relatorioClientes(tfFiltroCli.getText());
+        
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+    
+    private void cbSituacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSituacaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbSituacaoActionPerformed
+    
+    private void btSelecionarSituacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelecionarSituacaoActionPerformed
+        cPro.getSitControl().getDl().setVisible(false);
+    }//GEN-LAST:event_btSelecionarSituacaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1427,11 +1678,13 @@ public class fPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAdicionarDesenvolvedorPro;
     private javax.swing.JButton btAdicionarTopicoPro;
-    private javax.swing.JButton btBuscarClientePro;
-    private javax.swing.JButton btCadastrarClientePro;
+    private javax.swing.JButton btBuscarClienteCadPro;
     private javax.swing.JButton btCancelarCli;
     private javax.swing.JButton btCancelarDes;
     private javax.swing.JButton btCancelarPro;
+    private javax.swing.JButton btCancelarTopicoPro;
+    private javax.swing.JButton btClienteFiltroPro;
+    private javax.swing.JButton btDesenvolvedorFiltroPro;
     private javax.swing.JButton btNovoTopicoPro;
     private javax.swing.JButton btSair;
     private javax.swing.JButton btSairCli;
@@ -1441,10 +1694,15 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btSalvarCli;
     private javax.swing.JButton btSalvarDes;
     private javax.swing.JButton btSalvarPro;
+    private javax.swing.JButton btSelecionarSituacao;
+    private javax.swing.JButton btlimparFiltroPro;
     private javax.swing.JComboBox cbCategoriaDes;
-    private javax.swing.JCheckBox chProjetoPro;
+    private javax.swing.JComboBox cbSituacao;
     private javax.swing.JDialog dlSelecionar;
+    private javax.swing.JDialog dlSelecionarSituacao;
     private javax.swing.JDesktopPane dpDesktop;
+    private javax.swing.JFormattedTextField ftfData1FiltroPro;
+    private javax.swing.JFormattedTextField ftfData2FiltroPro;
     private javax.swing.JFormattedTextField ftfDataInicioPro;
     private javax.swing.JFormattedTextField ftfDataPrevisaoPro;
     private javax.swing.JFormattedTextField ftfTelefone;
@@ -1453,16 +1711,21 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JInternalFrame ifClientes;
     private javax.swing.JInternalFrame ifDesenvolvedores;
     private javax.swing.JInternalFrame ifProjetos;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1484,7 +1747,6 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lbFiltro;
     private javax.swing.JLabel lbFiltro1;
     private javax.swing.JLabel lbFiltroCli;
-    private javax.swing.JLabel lbFiltroPro;
     private javax.swing.JLabel lbFiltroSel1;
     private javax.swing.JLabel lbNomeCli;
     private javax.swing.JLabel lbNomeDes;
@@ -1504,6 +1766,7 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel pCadastrarDes;
     private javax.swing.JPanel pCadastrarPro;
     private javax.swing.JPanel pCidadesCli;
+    private javax.swing.JPanel pFiltrosPro;
     private javax.swing.JPanel pPesquisa;
     private javax.swing.JPanel pPesquisaCli;
     private javax.swing.JPanel pPesquisaDes;
@@ -1528,16 +1791,18 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JTable tbSelecionar1;
     private javax.swing.JTable tbTopicosPro;
     private javax.swing.JTextField tfCidadeCli;
+    private javax.swing.JTextField tfClienteFiltroPro;
     private javax.swing.JTextField tfClientePro;
+    private javax.swing.JTextField tfDesenvolvedorFiltroPro;
     private javax.swing.JTextField tfEmail;
     private javax.swing.JTextField tfEmailCli;
     private javax.swing.JTextField tfFiltro;
     private javax.swing.JTextField tfFiltroCli;
     private javax.swing.JTextField tfFiltroDes;
-    private javax.swing.JTextField tfFiltroPro;
     private javax.swing.JTextField tfFiltroSel1;
     private javax.swing.JTextField tfNomeCli;
     private javax.swing.JTextField tfNomeDes;
+    private javax.swing.JTextField tfNomeFiltroPro;
     private javax.swing.JTextField tfTitulo;
     private javax.swing.JTextField tfTituloPro;
     private javax.swing.JTextField tfTituloTopico;

@@ -23,6 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import util.Funcoes;
 import view.Editar;
+import view.Excluir;
 import view.Msg;
 
 /**
@@ -59,19 +60,21 @@ public final class ClientesControl {
 
 
         this.tb = tb;
-        popula();
+        
     }
 
     public void popula() {
-       
-        rs = new ClientesDAO().resultado("");
+
+        rs = new ClientesDAO().resultado(filtro.getText());
         try {
             rs.first();
-            Funcoes.populaTabela(this.tb, "Editar,Nome,Telefone,Email", this.rs, "idcliente,nome,telefone,email");
+            Funcoes.populaTabela(this.tb, "Excluír,Editar,Nome,Telefone,Email", this.rs, "idcliente,idcliente,nome,telefone,email");
         } catch (SQLException ex) {
             Logger.getLogger(ClientesControl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        new editCli(tb, 0);
+        new delCli(tb, 0);
+        new editCli(tb, 1);
+
 
     }
 
@@ -89,21 +92,21 @@ public final class ClientesControl {
         ClientesDAO iuds = new ClientesDAO();
         if (operante == 'u' || operante == 'i') {
             if (nome.getText().length() > 0) {
-            if (cidade.getText().length() > 0) {
-            Cliente c = new Cliente(codigo, Integer.parseInt(idcidade), nome.getText(), telefone.getText(), email.getText(), adicional.getText());
-                if (iuds.iud(operante, c) > 0) {
-                    Funcoes.limparCampos(p);
-                    Funcoes.limparCampos(p2);
-                    adicional.setText("");
-                    new Msg().msgRegistrado(frame);
-                    tp.setSelectedIndex(0);
-                    btSalvar.setText("Novo");
-                    popula();
+                if (cidade.getText().length() > 0) {
+                    Cliente c = new Cliente(codigo, Integer.parseInt(idcidade), nome.getText(), telefone.getText(), email.getText(), adicional.getText());
+                    if (iuds.iud(operante, c) > 0) {
+                        Funcoes.limparCampos(p);
+                        Funcoes.limparCampos(p2);
+                        adicional.setText("");
+                        new Msg().msgRegistrado(frame);
+                        tp.setSelectedIndex(0);
+                        btSalvar.setText("Novo");
+                        popula();
+                    }
+                } else {
+                    new Msg().msgGeneric("A Cidade precisa ser preenchida!");
+                    cidade.requestFocus();
                 }
-            } else {
-                new Msg().msgGeneric("A Cidade precisa ser preenchida!");
-                cidade.requestFocus();
-            }
             } else {
                 new Msg().msgGeneric("O nome precisa ser preenchido!");
                 nome.requestFocus();
@@ -127,6 +130,7 @@ public final class ClientesControl {
         Funcoes.limparCampos(p2);
         this.tp.setSelectedIndex(0);
     }
+
     public void acaoBotaoSair() {
         acaoCancelar();
         this.frame.setVisible(false);
@@ -145,16 +149,34 @@ public final class ClientesControl {
             operante = 'u';
             f = new Funcoes();
             ClientesDAO dao = new ClientesDAO();
-            Cliente c = dao.linha(e.getActionCommand()+"");
+            Cliente c = dao.linha(e.getActionCommand() + "");
             nome.setText(c.getNome() + "");
             telefone.setText(c.getTelefone());
-            idcidade = c.getIdcidade() +"";
+            idcidade = c.getIdcidade() + "";
             adicional.setText(c.getAdicional());
             cidade.setText(new CidadesDAO().linha(idcidade).getNome());
             email.setText(c.getEmail());
             btSalvar.setText("Salvar");
-            
+        }
+    }
 
+    class delCli extends Excluir {
+
+        public delCli(JTable table, int column) {
+            super(table, column);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            ClientesDAO dao = new ClientesDAO();
+            Cliente c = dao.linha(e.getActionCommand());
+            if (!dao.estaEmProjeto(e.getActionCommand())) {
+                if (new Msg().opcaoExcluir(p)) {
+                    dao.iud('d', c);
+                }
+            } else {
+                new Msg().msgGeneric("Este Cliente pertence a um projeto Não pode ser excluído");
+            }
+            popula();
         }
     }
 

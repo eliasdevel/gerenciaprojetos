@@ -76,7 +76,7 @@ public class Excluir extends AbstractCellEditor
     public Component getTableCellEditorComponent(
             JTable table, Object value, boolean isSelected, int row, int column) {
         text = (value == null) ? "" : value.toString();
-        editButton.setText(text);
+        editButton.setActionCommand(text);
         return editButton;
     }
 

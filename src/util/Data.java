@@ -20,36 +20,39 @@ public class Data {
         this.ano = ano;
         this.dia = dia;
         this.mes = mes;
-        if (!validar(this)) {
+        if (!validar()) {
             this.dia = 9;
             this.mes = 3;
             this.ano = 1993;
         }
     }
 
-    public boolean validar(Data d) {
+    public boolean validar() {
         boolean valido = true;
-        if (d.getDia() > 31 || d.getDia() < 1) {
+        if(this.mes>12 || this.mes<1){
             valido = false;
         }
-
-        if (mes == 4 && dia > 30) {
+        
+        if (dia > 31 || dia < 1) {
             valido = false;
         }
-
-        if (mes == 6 && dia > 30) {
+        
+        if(anoBissexto()){
+            if(mes==2 && dia > 29){
             valido = false;
-        }
-
-        if (mes == 8 && dia > 30) {
+            }
+        }else{
+            if(mes==2 && dia > 28){
             valido = false;
+            }
         }
-
-        if (mes == 11 && dia > 30) {
+        
+        if (mes == 4 || mes == 6 || mes == 8 || mes == 11 && dia > 30) {
             valido = false;
         }
 
         if (!valido) {
+            JOptionPane.showMessageDialog(null,"Data inválida!: " + this.getData() + " esta data será substituída por 09/03/1993" );
             this.dia = 9;
             this.mes = 3;
             this.ano = 1993;
@@ -64,7 +67,7 @@ public class Data {
             this.mes = Integer.parseInt(d[1]);
             this.dia = Integer.parseInt(d[2]);
         }
-        validar(this);
+        validar();
 
     }
 
@@ -86,7 +89,17 @@ public class Data {
 
             }
         }
-        validar(this);
+        validar();
+    }
+    
+    public boolean anoBissexto()
+    {
+        boolean ok = false;
+        if ((ano % 4 == 0 && ano % 100 != 0) || ano % 400 == 0)
+        {
+            ok = true;
+        }
+        return ok;
     }
 
     public int getAno() {
@@ -113,3 +126,5 @@ public class Data {
         this.mes = mes;
     }
 }
+
+

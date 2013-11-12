@@ -21,7 +21,6 @@ public class ProjetoDesenvolvedorDAO {
 
     ResultSet rs = null;
 
-
     public ResultSet resultadoProjeto(String idprojeto) {
         if (idprojeto != null) {
 //        String where = "";
@@ -42,8 +41,6 @@ public class ProjetoDesenvolvedorDAO {
         }
         return rs;
     }
-
-  
 
     public int iud(char op, ProjetoDesenvolvedor pd) {
         String sql;

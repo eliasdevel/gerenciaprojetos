@@ -35,7 +35,7 @@ CREATE TABLE `categorias` (
   `titulo` varchar(45) DEFAULT NULL,
   `descricao` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idcategoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +44,7 @@ CREATE TABLE `categorias` (
 
 LOCK TABLES `categorias` WRITE;
 /*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
-INSERT INTO `categorias` VALUES (99,'Programador','O cara que e não ganha nada pra isso!'),(101,'Designer','O cara gay');
+INSERT INTO `categorias` VALUES (96,'Programador','testejgk,ykujkjjgyxtfdxtfdxtfdxtfdx'),(117,'designer','edita bannersiiuhivbiubv8yt\n'),(120,'categoria doJuca','fgasd');
 /*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,7 +93,7 @@ CREATE TABLE `clientes` (
   PRIMARY KEY (`idcliente`),
   KEY `fk_clientes_cidades1_idx` (`idcidade`),
   CONSTRAINT `fk_clientes_cidades1` FOREIGN KEY (`idcidade`) REFERENCES `cidades` (`idcidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +102,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (2,110006,'dfgdfg','(  )    -    ','','dfdf'),(3,430780,'\'','(El)ias -    ','email@emnail','wsdfsdf'),(4,431846,'juca','(12)313 -    ','email','adicionais'),(5,110008,'asdasd','(12)3   -    ','asdasd','asdasd'),(6,110005,'Elias','(51)8249-2748','elias.muller1@gmail.com','teste'),(7,430780,'Elias','(51)8249-2748','elias.müller1@gmail.com','aaa'),(8,110010,'teste','(22)2222-2222','elias@gmail.com','ss'),(9,110020,'Elias','(29)002--0202','dlsdkjflskj','teste para ver o resultado'),(10,430780,'Elias','(51)8249-2748','elias.muller1@gmail.com','teste para ver o resultado'),(11,110006,'teste','(33)3333-3333','elias','ss'),(12,110007,'Elias','(51)5151-5151','',''),(13,430780,'Elias','(51)8249-2748','elias.muller1@gmail.com','Um ótimo cliente que sempre cumpre o combinado');
+INSERT INTO `clientes` VALUES (1,430780,'elias','82492748',NULL,NULL),(3,430780,'Elias','(51)-82492748','elias.muller1@gmail.com','adicional'),(7,110020,'qwe','','qweqwe','qwqwqw'),(8,110011,'Elias','(13)490i-3249','açsldkfsdçlfjk','sdfsdfsdf'),(9,110020,'szxczxczx','(12)2312-3123','asdf','zxc'),(10,110011,'Cliente teste 54','(11)1111-1111','email@site.com',''),(11,110011,'teste 1993','(22)2222-2222','email@sitre,xom','');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,7 +122,7 @@ CREATE TABLE `desenvolvedores` (
   PRIMARY KEY (`iddesenvolvedor`),
   KEY `fk_desenvolvedores_categoriadesenvolvedor_idx` (`idcategoria`),
   CONSTRAINT `fk_desenvolvedores_categoriadesenvolvedor` FOREIGN KEY (`idcategoria`) REFERENCES `categorias` (`idcategoria`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +131,7 @@ CREATE TABLE `desenvolvedores` (
 
 LOCK TABLES `desenvolvedores` WRITE;
 /*!40000 ALTER TABLE `desenvolvedores` DISABLE KEYS */;
-INSERT INTO `desenvolvedores` VALUES (9,99,'Elias','(51)8249-2748','elias.muller1@gmail.com'),(10,101,'Juca','(11)1111-1111','juca@gmail.com');
+INSERT INTO `desenvolvedores` VALUES (27,96,'elias','(12)3123-1231','emailljhgpkhiçpuk'),(38,117,'Elias','(12)1212-1212','elias@gmail.com'),(40,117,'juca Bala','(12)3123-1231','sdfsdfsdf'),(41,96,'Fabricio','(03)1010-3103','ssdlçkf');
 /*!40000 ALTER TABLE `desenvolvedores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -178,7 +178,7 @@ CREATE TABLE `projetos` (
   PRIMARY KEY (`idprojeto`),
   KEY `fk_projetos_clientes1_idx` (`idcliente`),
   CONSTRAINT `fk_projetos_clientes1` FOREIGN KEY (`idcliente`) REFERENCES `clientes` (`idcliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +187,7 @@ CREATE TABLE `projetos` (
 
 LOCK TABLES `projetos` WRITE;
 /*!40000 ALTER TABLE `projetos` DISABLE KEYS */;
-INSERT INTO `projetos` VALUES (29,12,'teste do texto do tópico','descricao',NULL,NULL,'0001-01-01','0001-01-01'),(30,11,'teste','descricao',NULL,NULL,'2012-10-10','2012-10-10'),(31,10,'Gerencia Projetos','Projeto Cujo Objetivo é organizar os projetos e informar ao cliente como esta o andamento do projeto com facilidade	',NULL,NULL,'2013-10-10','2013-10-10'),(32,9,'teste','dfd',NULL,NULL,'2012-10-10','2012-12-12'),(33,10,'TESTE','PROJETO TESTE',NULL,NULL,'2013-10-10','2013-10-10');
+INSERT INTO `projetos` VALUES (3,8,'Gerencia projetos','Aplidativo cujo objetivo é controlar e organizar as aplicações.',NULL,NULL,'2013-11-10','2013-11-11'),(10,11,'teste','teste',NULL,NULL,'2000-01-01','2012-10-10');
 /*!40000 ALTER TABLE `projetos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -215,7 +215,7 @@ CREATE TABLE `projetos_desenvolvedores` (
 
 LOCK TABLES `projetos_desenvolvedores` WRITE;
 /*!40000 ALTER TABLE `projetos_desenvolvedores` DISABLE KEYS */;
-INSERT INTO `projetos_desenvolvedores` VALUES (30,9),(31,9),(32,9),(32,10);
+INSERT INTO `projetos_desenvolvedores` VALUES (3,38),(10,40);
 /*!40000 ALTER TABLE `projetos_desenvolvedores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -244,7 +244,7 @@ CREATE TABLE `projetos_topicos` (
 
 LOCK TABLES `projetos_topicos` WRITE;
 /*!40000 ALTER TABLE `projetos_topicos` DISABLE KEYS */;
-INSERT INTO `projetos_topicos` VALUES (1,29,0),(2,29,0),(3,29,0),(4,29,0),(6,29,0),(9,33,1),(10,33,1),(15,33,1),(16,31,1),(16,32,0),(17,31,1),(18,31,0),(20,33,0),(21,31,1);
+INSERT INTO `projetos_topicos` VALUES (2,10,0),(3,3,1),(4,3,1),(7,3,0),(8,3,1),(11,3,0),(12,3,0);
 /*!40000 ALTER TABLE `projetos_topicos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -260,7 +260,7 @@ CREATE TABLE `topicos` (
   `titulo` varchar(100) DEFAULT NULL,
   `descricao` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idtopico`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,7 +269,7 @@ CREATE TABLE `topicos` (
 
 LOCK TABLES `topicos` WRITE;
 /*!40000 ALTER TABLE `topicos` DISABLE KEYS */;
-INSERT INTO `topicos` VALUES (1,'teste','teste descricao'),(2,'teste1','descricao de teste para ver como fica o texto grande'),(3,'teste2','teste descricao'),(4,'teste3','teste descricao'),(5,'teste4','teste descricao'),(6,'teste de edição 3.0','teste descricao de edição para ver se funciona'),(7,'teste',''),(8,'Tópico','Fazer listagem do diabo a 4'),(9,'teste','teste de descrição do tópico.... 2'),(10,'nada','teste de nada'),(11,'Tópico pronto','Adicionar registro de tópico pronto epintar a linha da tabela de verde..'),(12,'Edição de tópico','Fazer parte da edição de tópico'),(13,'teste novop','a?sjd'),(14,'teste novo 2','asas'),(15,'teste novo 3','novo 3\n'),(16,'Conclusão de tópico.','fazer Conclusão de tópico e pintar a linha da tabela de verde.'),(17,'ediçãod e tópico','Fazer parte de edição de tópicos.'),(18,'Porcentagem','Mostrar Porcentagem de tópicos concluídos.'),(19,'Cadastro de teste','Cadastro para testar'),(20,'TESTE DE TÓPICO','TESTE DE TÓPICO'),(21,'fazer asçldkjhasod','ldkflkdjfl/;a,mdfldjf ');
+INSERT INTO `topicos` VALUES (1,'teste','descricao de teste'),(2,'teste','tópico'),(3,'Cadastro de datas','Fazer o cadastro de datas do projeto.'),(4,'Desenvolvedores','Adicionar desenvolvedores no projeto.'),(5,'teste de descricao','nada'),(6,'Teste de cadastro','nada'),(7,'Porcentagem','Mostrar porcentagem de conclusão no listágem dos projetos.'),(8,'Relatórios','Fazer relatórios dos projetos: Com filtros de cliente, desenvolvedor, tópico e por categoria, por projeto individualmente e seu andamento.\n\n'),(9,'teste','çklsjn'),(10,'validação de campos','validar'),(11,'situação','Planejado, Desenvolvimento, teste, Criado,  concluído. '),(12,'Adiconar desenvolvedor no topico','');
 /*!40000 ALTER TABLE `topicos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -282,4 +282,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-10-24 20:55:53
+-- Dump completed on 2013-11-09 10:08:46

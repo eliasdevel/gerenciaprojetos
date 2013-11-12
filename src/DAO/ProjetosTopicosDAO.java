@@ -125,7 +125,7 @@ public class ProjetosTopicosDAO {
             ps.setInt(2, idProjeto);
             rs = ps.executeQuery();
             rs.first();
-            pt = new ProjetoTopico(idTopico, rs.getInt("idprojeto"), rs.getBoolean("pronto"));
+            pt = new ProjetoTopico(idTopico, rs.getInt("idprojeto"), rs.getBoolean("pronto"),rs.getString("situacao").charAt(0));
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }
@@ -137,21 +137,24 @@ public class ProjetosTopicosDAO {
         int rows = 0;
         try {
             if (op == 'i') {
-                sql = ("INSERT INTO projetos_topicos (idprojeto,idtopico,pronto) VALUES(?,?,?)");
+                sql = ("INSERT INTO projetos_topicos (idprojeto,idtopico,pronto,situacao) VALUES(?,?,?,?)");
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                 ps.setInt(1, pt.getIdProjeto());
                 ps.setInt(2, pt.getIdTopico());
                 ps.setBoolean(3, pt.isPronto());
+                ps.setString(4, pt.getSituacao()+"");
+                
                 rows = ps.executeUpdate();
                 ps.close();
             } else {
                 if (op == 'u') {
 //                                                              1                   2                 3
-                    sql = "UPDATE projetos_topicos SET pronto = ?  WHERE idtopico = ? AND idprojeto = ?";
+                    sql = "UPDATE projetos_topicos SET pronto = ? , situacal = WHERE idtopico = ? AND idprojeto = ?";
                     PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                     ps.setBoolean(1, pt.isPronto());
-                    ps.setInt(2, pt.getIdProjeto());
+                    ps.setString(2, pt.getSituacao()+"");
                     ps.setInt(3, pt.getIdTopico());
+                    ps.setInt(4, pt.getIdProjeto());
                     rows = ps.executeUpdate();
                     ps.close();
                 } else {

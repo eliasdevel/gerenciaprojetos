@@ -18,7 +18,6 @@ import entidadesRelacoes.Topico;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,6 +34,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import util.Data;
 import util.Funcoes;
 import view.Concluir;
 import view.Editar;
@@ -79,14 +79,28 @@ public class ProjetosControl {
     int codigo;
     int codigoTopico;
     ResultSet rs;
+//    Filtros
+    JTextField filtroDes;
+    int filtroIdDes;
+    int filtroIdCli;
+    JTextField filtroCli;
+    JTextField filtroNom;
+    JFormattedTextField filtroData1;
+    JFormattedTextField filtroData2;
+    SituacaoControl sitControl;
 
-    public void popularProjetos(String pesquisa) {
-        rs = new ProjetosDAO().resultado(pesquisa);
-        try {
-            rs.first();
-        } catch (SQLException ex) {
-            Logger.getLogger(ProjetosControl.class.getName()).log(Level.SEVERE, null, ex);
+    public void popularProjetos() {
+        Data data1 = new Data(1, 1, 1);
+        Data data2 = new Data(1, 1, 1);
+        if (filtroData1.getText().trim().length() == 10) {
+            data1.setData(filtroData1.getText());
         }
+        if (filtroData2.getText().trim().length() == 10) {
+
+            data2.setData(filtroData2.getText());
+        }
+        rs = new ProjetosDAO().resultado(filtroNom.getText(), filtroIdCli, filtroIdDes, data1, data2);
+
         Funcoes.populaTabela(tb, "Excluír,Editar,Titulo,Cliente,Descrição", rs, "idprojeto,idprojeto,titulo,cliente,descricao");
         new editProjeto(tb, 1);
         new delProjeto(tb, 0);
@@ -120,7 +134,7 @@ public class ProjetosControl {
                         ProjetoTopico pt; //seta variavel de projeto tópico
 
                         if (operante == 'u') {//verifica se o projeto esta em modo de edição 
-                            pt = new ProjetoTopico(0, p.getId(), false);
+                            pt = new ProjetoTopico(0, p.getId(), false,'d');
                             iudsProjetosTopicos.iud('d', pt);//exclusão de topicos
                             pt = null;
                             pd = new ProjetoDesenvolvedor(p.getId(), 0);
@@ -128,7 +142,7 @@ public class ProjetosControl {
                             pd = null;
                         }
                         for (int i = 0; i < topicosList.size(); i++) {
-                            pt = new ProjetoTopico(topicosList.get(i).getId(), p.getId(), topicosList.get(i).isPronto());  // instancia novo objeto;
+                            pt = new ProjetoTopico(topicosList.get(i).getId(), p.getId(), topicosList.get(i).isPronto(),topicosList.get(i).getSituacao());  // instancia novo objeto;
                             iudsProjetosTopicos.iud('i', pt);//inserção dos tópicos
                             pt = null; //esvazia objeto
                         }
@@ -144,7 +158,7 @@ public class ProjetosControl {
                         new Msg().msgRegistrado(form);
                         tp.setSelectedIndex(0);
                         btSalvar.setText("Novo");
-                        popularProjetos("");
+                        popularProjetos();
                         topicosList = null;
                         topicosList = new ArrayList();
                         desenvolvedorList = null;
@@ -180,7 +194,7 @@ public class ProjetosControl {
         if (operanteTopicos == 'u' || operanteTopicos == 'i') {
             TopicosDAO iudsTopicos = new TopicosDAO();
             if (tituloTopico.getText().length() != 0) {
-                Topico t = new Topico(codigoTopico, tituloTopico.getText(), descricaoTopicoCad.getText(), false);
+                Topico t = new Topico(codigoTopico, tituloTopico.getText(), descricaoTopicoCad.getText(), false,'c');
                 if (iudsTopicos.iud(operanteTopicos, t) > 0) {
                     new Msg().msgRegistrado(form);
                     if (operanteTopicos == 'i') {
@@ -215,21 +229,28 @@ public class ProjetosControl {
 
     public void acaoCancelar() {
         tp.setSelectedIndex(0);
-        tpTopicos.setSelectedIndex(0);
         Funcoes.limparCampos(p1);
         Funcoes.limparCampos(p2);
-        Funcoes.limparCampos(p1Topicos);
-        Funcoes.limparCampos(p2Topicos);
         descricao.setText("");
-        descricaoTopicoCad.setText("");
         descricaoTopico.setText("");
         bt.setText("Novo");
-        btSalvarTopicos.setText("Novo");
         operante = 'n';
         topicosList = null;
+        desenvolvedorList = null;
+        desenvolvedorList = new ArrayList();
         topicosList = new ArrayList();
+        populaDesenvolvedores();
         populaTopicos();
-        popularProjetos("");
+        popularProjetos();
+        cancelarTopico();
+    }
+
+    public void cancelarTopico() {
+        tpTopicos.setSelectedIndex(0);
+        btSalvarTopicos.setText("Novo");
+        Funcoes.limparCampos(p1Topicos);
+        Funcoes.limparCampos(p2Topicos);
+        descricaoTopicoCad.setText("");
     }
 
     public void addTopico(Topico t) {
@@ -257,14 +278,14 @@ public class ProjetosControl {
         populaTopicos();
     }
 
-    public void terminoTopico(int index) {
-        if (!topicosList.get(index).isPronto()) {
-            topicosList.get(index).setPronto(true);
-        } else {
-            topicosList.get(index).setPronto(false);
-        }
-        populaTopicos();
-    }
+//    public void terminoTopico(int index) {
+//        if (!topicosList.get(index).isPronto()) {
+//            topicosList.get(index).setPronto(true);
+//        } else {
+//            topicosList.get(index).setPronto(false);
+//        }
+//        populaTopicos();
+//    }
 
     public void populaTopicos() {
 
@@ -279,7 +300,7 @@ public class ProjetosControl {
                         dados[i][j] = topicosList.get(i).getId();
                         break;
                     case 2:
-                        dados[i][j] = topicosList.get(i).isPronto();
+                        dados[i][j] = topicosList.get(i).getSituacao();
                         break;
                     case 3:
                         dados[i][j] = topicosList.get(i).getTitulo();
@@ -287,7 +308,7 @@ public class ProjetosControl {
                 }
             }
         }
-        topicos.setModel(new DefaultTableModel(dados, new Object[]{"Editar", "Remover", "Concluído", "Titulo"}));
+        topicos.setModel(new DefaultTableModel(dados, new Object[]{"Editar", "Remover", "Situação", "Titulo"}));
         new editTopico(topicos, 0);
         new delTopico(topicos, 1);
         new concluirTopico(topicos, 2);
@@ -340,15 +361,17 @@ public class ProjetosControl {
         public void actionPerformed(ActionEvent e) {
             ProjetosDAO pdao = new ProjetosDAO();
             ProjetosTopicosDAO tdao = new ProjetosTopicosDAO();
+            ProjetoDesenvolvedorDAO ptDao = new ProjetoDesenvolvedorDAO();
             Projeto p = pdao.linha(e.getActionCommand());
             if (new Msg().opcaoExcluir(form)) {
-                tdao.iud('d', new ProjetoTopico(0, p.getId(), false));
+                tdao.iud('d', new ProjetoTopico(0, p.getId(),false,'p'));
+                ptDao.iud('d', new ProjetoDesenvolvedor(p.getId(), 0));
                 if (pdao.iud('d', p) == 0) {
                     new Msg().msgGeneric("Erro ao excluír");
                 }
 
             }
-            popularProjetos("");
+            popularProjetos();
         }
     }
 
@@ -405,7 +428,11 @@ public class ProjetosControl {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            terminoTopico(topicos.getSelectedRow());
+            
+            sitControl.selectIndex(topicosList.get(topicos.getSelectedRow()).getSituacao());
+            topicosList.get(topicos.getSelectedRow()).setSituacao(sitControl.getSituacao());
+                    
+            System.out.println(topicosList.get(topicos.getSelectedRow()).getSituacao());
             populaTopicos();
         }
     }
@@ -479,6 +506,16 @@ public class ProjetosControl {
         }
         populaDesenvolvedores();
     }
+
+    public SituacaoControl getSitControl() {
+        return sitControl;
+    }
+
+    public void setSitControl(SituacaoControl sitControl) {
+        this.sitControl = sitControl;
+    }
+    
+    
 
     public JButton getBtSalvar() {
         return btSalvar;
@@ -570,6 +607,8 @@ public class ProjetosControl {
     }
 
     public void setDescricaoTopicoCad(JTextArea descricaoTopicoCad) {
+        descricaoTopicoCad.setLineWrap(true);
+        descricaoTopicoCad.setWrapStyleWord(true);
         this.descricaoTopicoCad = descricaoTopicoCad;
     }
 
@@ -698,5 +737,63 @@ public class ProjetosControl {
 
     public void setProntoPro(JCheckBox prontoPro) {
         this.prontoPro = prontoPro;
+    }
+
+    public JTextField getFiltroDes() {
+        return filtroDes;
+    }
+
+    public void setFiltroDes(JTextField filtroDes) {
+        this.filtroDes = filtroDes;
+    }
+
+    public JTextField getFiltroCli() {
+        return filtroCli;
+    }
+
+    public void setFiltroCli(JTextField filtroCli) {
+        this.filtroCli = filtroCli;
+    }
+
+    public JTextField getFiltroNom() {
+        return filtroNom;
+    }
+
+    public void setFiltroNom(JTextField filtroNom) {
+        this.filtroNom = filtroNom;
+    }
+
+    public JFormattedTextField getFiltroData1() {
+        return filtroData1;
+    }
+
+    public void setFiltroData1(JFormattedTextField filtroData1) {
+        Funcoes.formataCampo(filtroData1, "##/##/####");
+        this.filtroData1 = filtroData1;
+    }
+
+    public JFormattedTextField getFiltroData2() {
+        return filtroData2;
+    }
+
+    public void setFiltroData2(JFormattedTextField filtroData2) {
+        Funcoes.formataCampo(filtroData2, "##/##/####");
+        this.filtroData2 = filtroData2;
+    }
+
+    public int getFiltroIdDes() {
+        return filtroIdDes;
+    }
+
+    public void setFiltroIdDes(int filtroIdDes) {
+        this.filtroIdDes = filtroIdDes;
+    }
+
+    public int getFiltroIdCli() {
+        return filtroIdCli;
+    }
+
+    public void setFiltroIdCli(int filtroIdCli) {
+        this.filtroIdCli = filtroIdCli;
     }
 }

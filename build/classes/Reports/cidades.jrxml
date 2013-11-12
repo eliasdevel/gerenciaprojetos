@@ -7,7 +7,7 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select * from cidades where siglaestado = $P{estado}]]>
+		<![CDATA[select *,count(*)as registros from cidades where siglaestado = $P{estado}]]>
 	</queryString>
 	<field name="idcidade" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -21,7 +21,7 @@
 	<field name="siglaestado" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<variable name="variable1" class="java.lang.String"/>
+	<field name="registros" class="java.lang.Long"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -87,6 +87,11 @@
 				<textElement/>
 				<text><![CDATA[De]]></text>
 			</staticText>
+			<textField>
+				<reportElement uuid="de4e13e6-2b73-41ce-b02a-f8e4887735b0" x="270" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{registros}]]></textFieldExpression>
+			</textField>
 			<staticText>
 				<reportElement uuid="d7517bdd-e347-492c-bb67-3a755b51ae21" x="180" y="0" width="100" height="20"/>
 				<textElement/>

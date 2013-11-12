@@ -11,6 +11,8 @@ import entidadesRelacoes.Estado;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import util.Funcoes;
 
@@ -89,6 +91,20 @@ public class ClientesDAO {
         return c;
     }
 
+    public boolean  estaEmProjeto(String id){
+        boolean esta = false;
+        try {
+            rs = ConexaoBD.con.createStatement().executeQuery("select * from projetos where idcliente = "+ id);
+            rs.beforeFirst();
+            if(rs.next()){
+                esta = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return esta;
+    }
+    
     public int iud(char op, Cliente c) {
         String sql = "";
         int rows = 0;
@@ -129,7 +145,7 @@ public class ClientesDAO {
                     if (op == 'd') {
                         rows = ConexaoBD.con.createStatement().executeUpdate(""
                                 + "DELETE FROM clientes "
-                                + "WHERE idcategoria = " + c.getId());
+                                + "WHERE idcliente = " + c.getId());
                     }
                 }
             }
@@ -138,4 +154,5 @@ public class ClientesDAO {
         }
         return rows;
     }
+    
 }

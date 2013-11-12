@@ -5,31 +5,29 @@
 package DAO;
 
 import connection.ConexaoBD;
-import entidadesRelacoes.Categoria;
 import entidadesRelacoes.Topico;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import view.Msg;
 
 /**
  *
  * @author elias
  */
 public class TopicosDAO {
-    
+
     ResultSet rs = null;
     ArrayList<Topico> topicosList;
-    
+
     public ResultSet resultado(String pesquisa) {
         if (pesquisa != null) {
 //        String where = "";
             pesquisa = "%" + pesquisa + "%";
-            
+
             String sql = "SELECT idtopico,titulo,descricao FROM topicos WHERE titulo like ? ORDER BY titulo";
-            
+
             try {
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                 ps.setString(1, pesquisa);
@@ -42,11 +40,11 @@ public class TopicosDAO {
             JOptionPane.showMessageDialog(null, "A variável de pesquisa não pode ser nula!, se quiser uma variavé sem valor mande: \"\" ");
         }
         return rs;
-        
+
     }
-    
+
     public Topico linha(String id) {
-        Topico c = new Topico(1, null, null, false);
+        Topico c = new Topico(1, null, null, false, 'c');
         String sql = "SELECT * FROM topicos WHERE idtopico = ?";
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
@@ -66,25 +64,27 @@ public class TopicosDAO {
         }
         return c;
     }
-    
+
     public ArrayList linhas(String idProjeto) {
         topicosList = new ArrayList();
-        String sql = "SELECT t.idtopico,t.titulo,t.descricao,pt.pronto FROM topicos t INNER JOIN projetos_topicos pt ON t.idtopico = pt.idtopico WHERE pt.idprojeto = ?";
+        String sql = "SELECT t.idtopico,t.titulo,t.descricao,pt.pronto,pt.situacao FROM topicos t INNER JOIN projetos_topicos pt ON t.idtopico = pt.idtopico WHERE pt.idprojeto = ?";
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, idProjeto);
             rs = ps.executeQuery();
-            
+
             while (rs.next()) {
-                Topico t = new Topico(rs.getInt("idtopico"), rs.getString("titulo"), rs.getString("descricao"), rs.getBoolean("pronto"));
-                topicosList.add(t);
+                if (rs.getInt("idtopico") > 0) {
+                    Topico t = new Topico(rs.getInt("idtopico"), rs.getString("titulo"), rs.getString("descricao"), rs.getBoolean("pronto"), rs.getString("situacao").charAt(0));
+                    topicosList.add(t);
+                }
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }
         return topicosList;
     }
-    
+
     public int iud(char op, Topico c) {
         String sql;
         int rows = 0;

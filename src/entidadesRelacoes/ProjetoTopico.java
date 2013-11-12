@@ -12,12 +12,24 @@ public class ProjetoTopico {
     int idTopico;
     int idProjeto;
     boolean pronto;
+    char situacao;
 
-    public ProjetoTopico(int idTopico, int idProjeto, boolean pronto) {
+    public ProjetoTopico(int idTopico, int idProjeto, boolean pronto, char situacao) {
         this.idTopico = idTopico;
         this.idProjeto = idProjeto;
         this.pronto = pronto;
+        this.situacao = situacao;
+    }
+
+
     
+    
+    public char getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(char situacao) {
+        this.situacao = situacao;
     }
 
     public int getIdTopico() {

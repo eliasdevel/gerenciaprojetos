@@ -21,34 +21,76 @@ public class ProjetosDAO {
 
     ResultSet rs = null;
 
-    public ResultSet resultado(String pesquisa) {
-        if (pesquisa != null) {
-            String pesquisa2 = "%" + pesquisa + "%";
-            String sql = "SELECT idprojeto,c.nome AS cliente, titulo,descricao FROM projetos p INNER JOIN clientes c ON c.idcliente = p.idcliente";
-            String where = "WHERE p.titulo like ? OR p.descricao LIKE ?  OR c.nome LIKE ? ORDER BY p.titulo";
+    public ResultSet resultado(String nome, int idCliente, int idDesenvolvedor, Data data1, Data data2) {
+        if (nome != null) {
+            String pesquisa2 = "%" + nome + "%";
+            String sql = " SELECT idprojeto,c.nome AS cliente, titulo,descricao FROM projetos p INNER JOIN clientes c ON c.idcliente = p.idcliente WHERE "
+                    + " (case"
+                    + " when @dataInicialPro = true"
+                    + " then  p.dataInicial BETWEEN ? AND ?"
+                    + " else true"
+                    + "  end)"
+                    + " AND "
+                    + " (case"
+                    + " when @idClientePro = true"
+                    + " then  c.idcliente = ?"
+                    + " else true"
+                    + "  end) "
+                    + " AND "
+                    + " (case"
+                    + " when @idDesenvolvedorPro = true"
+                    + " then  p.idprojeto IN (select pd.idprojeto from projetos_desenvolvedores pd where pd.iddesenvolvedor = ?)"
+                    + " else true"
+                    + "  end) "
+                    + "  AND "
+                    + " (case"
+                    + " when @tituloPro = true"
+                    + " then  p.titulo LIKE ?"
+                    + " else true"
+                    + " end) ORDER BY p.titulo";
+
+
+            boolean temWhere = false;
+
 
             try {
+                connection.ConexaoBD.con.createStatement().executeQuery(" set @dataInicialPro= false ;");
+                connection.ConexaoBD.con.createStatement().executeQuery(" set @idDesenvolvedorPro= false;");
+                connection.ConexaoBD.con.createStatement().executeQuery(" set @idClientePro= false ;");
+                connection.ConexaoBD.con.createStatement().executeQuery(" set @tituloPro= false ;");
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
-                if (!pesquisa.trim().equals("")) {
-                    sql += where;
-                    ps.setString(1, pesquisa2);
-                    ps.setString(2, pesquisa2);
-                    ps.setString(3, pesquisa2);
+                if (!nome.trim().equals("")) {
+                    connection.ConexaoBD.con.createStatement().executeQuery("  set @tituloPro = true; ");
                 }
+                if (idCliente > 0) {
+                    connection.ConexaoBD.con.createStatement().executeQuery(" set @idClientePro = true ");
+                }
+                if (idDesenvolvedor > 0) {
+                    connection.ConexaoBD.con.createStatement().executeQuery(" set  @idDesenvolvedorPro = true ");
+                }
+                if (data2.getAno() > 1993) {
+                    connection.ConexaoBD.con.createStatement().executeQuery(" set @dataInicialPro = true ");
+                }
+                ps.setString(1, data1.getDBData());
+                ps.setString(2, data2.getDBData());
+                ps.setInt(3, idCliente);
+                ps.setInt(4, idDesenvolvedor);
+                ps.setString(5, pesquisa2);
+
                 rs = ps.executeQuery();
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro: " + ex);
+                JOptionPane.showMessageDialog(null, " Erro: " + ex);
             }
             System.out.println(sql);
         } else {
-            JOptionPane.showMessageDialog(null, "A variável de pesquisa não pode ser nula!, se quiser uma variável sem valor mande: \"\" ");
+            JOptionPane.showMessageDialog(null, " A variável de pesquisa não pode ser nula!, se quiser uma variável sem valor mande: \" \"  ");
         }
         return rs;
     }
 
     public Projeto linha(String id) {
         Projeto p = new Projeto(0, 0, null, null, false);
-        String sql = "SELECT * FROM projetos WHERE idprojeto = ?";
+        String sql = " SELECT * FROM projetos WHERE idprojeto = ?";
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, id);
@@ -86,13 +128,13 @@ public class ProjetosDAO {
                 d.setData(p.getDataPrevisao());
                 ps.setString(5, d.getDBData());
                 rows = ps.executeUpdate();
-                rs = ConexaoBD.con.createStatement().executeQuery("SELECT MAX(idprojeto) AS maior FROM projetos");
+                rs = ConexaoBD.con.createStatement().executeQuery(" SELECT MAX(idprojeto) AS maior FROM projetos");
                 rs.first();
                 p.setId(rs.getInt("maior"));
                 ps.close();
             } else {
                 if (op == 'u') {
-                    sql = "UPDATE projetos SET titulo = ?, descricao = ?, idcliente = ?, dataInicial = ?,dataPrevisao = ? WHERE idprojeto = ?";
+                    sql = " UPDATE projetos SET titulo = ?, descricao = ?, idcliente = ?, dataInicial = ?,dataPrevisao = ? WHERE idprojeto = ?";
                     PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                     Data d = new Data(1, 1, 1);
                     ps.setString(1, p.getTitulo());
@@ -107,13 +149,13 @@ public class ProjetosDAO {
                     ps.close();
                 } else {
                     if (op == 'd') {
-                        rows = ConexaoBD.con.createStatement().executeUpdate("DELETE FROM projetos "
-                                + "WHERE idprojeto = " + p.getId());
+                        rows = ConexaoBD.con.createStatement().executeUpdate(" DELETE FROM projetos "
+                                + " WHERE idprojeto = " + p.getId());
                     }
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro: " + ex);
+            JOptionPane.showMessageDialog(null, " Erro: " + ex);
         }
         return rows;
     }
