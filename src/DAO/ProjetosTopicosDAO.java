@@ -23,13 +23,7 @@ public class ProjetosTopicosDAO {
         if (con.abriuConexao()) {
             ProjetosTopicosDAO teste = new ProjetosTopicosDAO();
 
-            if (teste.estaNoProjeto("1", "1")) {
-                new Msg().msgGeneric("o tópico esta no projeto");
-                new Msg().msgGeneric(teste.linha(1, 1).getIdProjeto() + "");
-
-            } else {
-                new Msg().msgGeneric("o tópico não esta no projeto");
-            }
+            new Msg().msgGeneric(teste.porcentagensTopicosProjeto(3)[3]);
         }
     }
     ResultSet rs = null;
@@ -52,6 +46,30 @@ public class ProjetosTopicosDAO {
 
     public void addTopicoProjeto() {
     }
+
+    public String[] porcentagensTopicosProjeto(int idProjeto) {
+        String[] porcentagens = new String[5];
+        String[] sql = new String[5];
+
+        sql[0] = "select concat((select count(idtopico) * 100 from projetos_topicos where idprojeto = " + idProjeto + " and situacao = 'f')/ count(idtopico),'% dos Tópicos estão finalizados') as porcentagem from projetos_topicos where idprojeto = " + idProjeto;
+        sql[1] = "select concat((select count(idtopico) * 100 from projetos_topicos where idprojeto = " + idProjeto + " and situacao = 'd')/ count(idtopico),'% dos Tópicos estão em desenvolvimento') as porcentagem from projetos_topicos where idprojeto = " + idProjeto;
+        sql[2] = "select concat((select count(idtopico) * 100 from projetos_topicos where idprojeto = " + idProjeto + " and situacao = 'c')/ count(idtopico),'% dos Tópicos estão criados') as porcentagem from projetos_topicos where idprojeto = " + idProjeto;
+        sql[3] = "select concat((select count(idtopico) * 100 from projetos_topicos where idprojeto = " + idProjeto + " and situacao = 't')/ count(idtopico),'% dos Tópicos estão em teste') as porcentagem from projetos_topicos where idprojeto = " + idProjeto;
+        sql[4] = "select concat((select count(idtopico) * 100 from projetos_topicos where idprojeto = " + idProjeto + " and situacao = 'p')/ count(idtopico),'% dos Tópicos estão planejados') as porcentagem from projetos_topicos where idprojeto = " + idProjeto;
+        for (int i = 0; i < sql.length; i++) {
+            try {
+                rs = ConexaoBD.con.createStatement().executeQuery(sql[i]);
+                rs.beforeFirst();
+                if (rs.next()) {
+                    porcentagens[i] = rs.getString("porcentagem");
+                }
+            } catch (SQLException ex) {
+                new Msg().msgGeneric("Erro Projetos Topicos:  " + ex);
+            }
+        }
+        return porcentagens;
+    }
+    
 
     public ResultSet resultadoProjeto(String idprojeto) {
         if (idprojeto != null) {
@@ -76,7 +94,7 @@ public class ProjetosTopicosDAO {
 
     public boolean estaEmDoisProjetos(String idtopico) {
         boolean esta = false;
-        String sql = "select * from projetos_topicos where idtopico = ?" ;
+        String sql = "select * from projetos_topicos where idtopico = ?";
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, idtopico);
@@ -94,26 +112,26 @@ public class ProjetosTopicosDAO {
                 }
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro para verificacao: " + ex+ sql);
+            JOptionPane.showMessageDialog(null, "Erro para verificacao: " + ex + sql);
         }
         return esta;
     }
-    
-    public int porcentagem(int idprojeto){
-        int porcentagem =0;
-         String sql = "select ((select count(idtopico) from projetos_topicos where idprojeto = ? and pronto = true)*100/"
-                 + "(select count(idtopico) from projetos_topicos where idprojeto = ?))as porcentagem";
-            try {
-                PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
-                ps.setInt(1, idprojeto);
-                ps.setInt(2, idprojeto);
-                rs = ps.executeQuery();
-                rs.first();
-                porcentagem = rs.getInt("porcentagem");
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro: " + ex);
-            }
-        return  porcentagem;
+
+    public int porcentagem(int idprojeto) {
+        int porcentagem = 0;
+        String sql = "select ((select count(idtopico) from projetos_topicos where idprojeto = ? and pronto = true)*100/"
+                + "(select count(idtopico) from projetos_topicos where idprojeto = ?))as porcentagem";
+        try {
+            PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
+            ps.setInt(1, idprojeto);
+            ps.setInt(2, idprojeto);
+            rs = ps.executeQuery();
+            rs.first();
+            porcentagem = rs.getInt("porcentagem");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro: " + ex);
+        }
+        return porcentagem;
     }
 
     public ProjetoTopico linha(int idTopico, int idProjeto) {
@@ -125,7 +143,7 @@ public class ProjetosTopicosDAO {
             ps.setInt(2, idProjeto);
             rs = ps.executeQuery();
             rs.first();
-            pt = new ProjetoTopico(idTopico, rs.getInt("idprojeto"), rs.getBoolean("pronto"),rs.getString("situacao").charAt(0));
+            pt = new ProjetoTopico(idTopico, rs.getInt("idprojeto"), rs.getBoolean("pronto"), rs.getString("situacao").charAt(0), rs.getInt("iddesenvolvedor"));
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: " + ex);
         }
@@ -137,13 +155,14 @@ public class ProjetosTopicosDAO {
         int rows = 0;
         try {
             if (op == 'i') {
-                sql = ("INSERT INTO projetos_topicos (idprojeto,idtopico,pronto,situacao) VALUES(?,?,?,?)");
+                sql = ("INSERT INTO projetos_topicos (idprojeto,idtopico,pronto,situacao,iddesenvolvedor) VALUES(?,?,?,?,?)");
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                 ps.setInt(1, pt.getIdProjeto());
                 ps.setInt(2, pt.getIdTopico());
                 ps.setBoolean(3, pt.isPronto());
-                ps.setString(4, pt.getSituacao()+"");
-                
+                ps.setString(4, pt.getSituacao() + "");
+                ps.setString(5, pt.getIdDesenvolvedor() + "");
+
                 rows = ps.executeUpdate();
                 ps.close();
             } else {
@@ -152,7 +171,7 @@ public class ProjetosTopicosDAO {
                     sql = "UPDATE projetos_topicos SET pronto = ? , situacal = WHERE idtopico = ? AND idprojeto = ?";
                     PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                     ps.setBoolean(1, pt.isPronto());
-                    ps.setString(2, pt.getSituacao()+"");
+                    ps.setString(2, pt.getSituacao() + "");
                     ps.setInt(3, pt.getIdTopico());
                     ps.setInt(4, pt.getIdProjeto());
                     rows = ps.executeUpdate();

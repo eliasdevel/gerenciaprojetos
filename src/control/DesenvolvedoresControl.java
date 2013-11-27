@@ -3,6 +3,7 @@ package control;
 import DAO.CategoriasDAO;
 import DAO.DesenvolvedoresDAO;
 import entidadesRelacoes.Desenvolvedor;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -115,9 +116,13 @@ public class DesenvolvedoresControl {
                     new Msg().msgRegistrado(form);
                     tp.setSelectedIndex(0);
                     bt.setText("Novo");
+                     nome.setBackground(new Color(255, 255, 255));
                     populaDesenvolvedores();
                 }
             } else {
+
+                nome.setBackground(new Color(150, 0, 0));
+                nome.requestFocus();
                 new Msg().msgGeneric("O nome precisa ser preenchido!");
             }
         }
@@ -133,7 +138,7 @@ public class DesenvolvedoresControl {
 
     public void acaoCancelar() {
         tp.setSelectedIndex(0);
-
+        nome.setBackground(new Color(255, 255, 255));
 
         Funcoes.limparCampos(p);
         Funcoes.limparCampos(p2);
@@ -156,8 +161,10 @@ public class DesenvolvedoresControl {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+//            aqui vão todas as ações quendo vc clicar no botão aqui tem algumas classes que eu uso no meu sistema
+            
             tp.setSelectedIndex(1);
-            codigo = Integer.parseInt(e.getActionCommand());
+            codigo = Integer.parseInt(e.getActionCommand());//código da célula
             operante = 'u';
             f = new Funcoes();
             DesenvolvedoresDAO pes = new DesenvolvedoresDAO();
@@ -170,6 +177,12 @@ public class DesenvolvedoresControl {
 
             //JOptionPane.showMessageDialog(null, des.getIdCategoria()+idCategoria[2]);
         }
+    }
+    public void adicionarBotao(){
+        int coluna = 0;
+        JTable suajtable = new JTable();
+        
+        new editDes(suajtable, coluna);
     }
 
     class delDes extends Excluir

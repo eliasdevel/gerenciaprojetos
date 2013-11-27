@@ -19,15 +19,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -47,6 +47,8 @@ import view.Msg;
  */
 public class ProjetosControl {
 
+    
+    Funcoes f = new Funcoes();
     char operante;
     char operanteTopicos;
     JCheckBox prontoPro;
@@ -67,6 +69,7 @@ public class ProjetosControl {
     JFormattedTextField dataPrevisao;
     JFormattedTextField dataFim;
     //    Tópicos
+    ButtonGroup bgTopicos;
     JTextField tituloTopico;
     JButton btSalvarTopicos;
     JTextArea descricaoTopico;
@@ -74,7 +77,10 @@ public class ProjetosControl {
     JTabbedPane tpTopicos;
     JPanel p1Topicos;
     JPanel p2Topicos;
+    JComboBox desenvolvedorTopico;
+    String [] idsDesenvolvedorTopico;
     ArrayList<Topico> topicosList = new ArrayList();
+    ArrayList<Topico> topicosListRemovidos = new ArrayList();
     ArrayList<Desenvolvedor> desenvolvedorList = new ArrayList();
     int codigo;
     int codigoTopico;
@@ -88,6 +94,12 @@ public class ProjetosControl {
     JFormattedTextField filtroData1;
     JFormattedTextField filtroData2;
     SituacaoControl sitControl;
+    JRadioButton rTodosTopicos;
+    JRadioButton rTesteTopicos;
+    JRadioButton rPlanejadosTopicos;
+    JRadioButton rCriadosTopicos;
+    JRadioButton rDesenvolvimentoTopicos;
+    JRadioButton rfinalizadosTopicos;
 
     public void popularProjetos() {
         Data data1 = new Data(1, 1, 1);
@@ -128,13 +140,14 @@ public class ProjetosControl {
             if (p.getTitulo().length() > 0) {
                 if (p.getIdcliente() > 0) {
                     if (iuds.iud(operante, p) > 0) {
+                            retornaFiltrados();
 
 //                      rotina para inserção de tópicos e desenvolvedores
                         ProjetoDesenvolvedor pd; //variável do projeto desenvolvedor
                         ProjetoTopico pt; //seta variavel de projeto tópico
 
                         if (operante == 'u') {//verifica se o projeto esta em modo de edição 
-                            pt = new ProjetoTopico(0, p.getId(), false,'d');
+                            pt = new ProjetoTopico(0, p.getId(), false, 'd',0);
                             iudsProjetosTopicos.iud('d', pt);//exclusão de topicos
                             pt = null;
                             pd = new ProjetoDesenvolvedor(p.getId(), 0);
@@ -142,7 +155,7 @@ public class ProjetosControl {
                             pd = null;
                         }
                         for (int i = 0; i < topicosList.size(); i++) {
-                            pt = new ProjetoTopico(topicosList.get(i).getId(), p.getId(), topicosList.get(i).isPronto(),topicosList.get(i).getSituacao());  // instancia novo objeto;
+                            pt = new ProjetoTopico(topicosList.get(i).getId(), p.getId(), topicosList.get(i).isPronto(), topicosList.get(i).getSituacao(),topicosList.get(i).getIdDesenvolvedor());  // instancia novo objeto;
                             iudsProjetosTopicos.iud('i', pt);//inserção dos tópicos
                             pt = null; //esvazia objeto
                         }
@@ -163,6 +176,8 @@ public class ProjetosControl {
                         topicosList = new ArrayList();
                         desenvolvedorList = null;
                         desenvolvedorList = new ArrayList();
+                        bgTopicos.getSelection().setSelected(false);
+                        rTodosTopicos.setSelected(true);
                         populaTopicos();
                         populaDesenvolvedores();
                     }
@@ -194,7 +209,7 @@ public class ProjetosControl {
         if (operanteTopicos == 'u' || operanteTopicos == 'i') {
             TopicosDAO iudsTopicos = new TopicosDAO();
             if (tituloTopico.getText().length() != 0) {
-                Topico t = new Topico(codigoTopico, tituloTopico.getText(), descricaoTopicoCad.getText(), false,'c');
+                Topico t = new Topico(codigoTopico, tituloTopico.getText(), descricaoTopicoCad.getText(), false, 'c',Integer.parseInt(idsDesenvolvedorTopico[desenvolvedorTopico.getSelectedIndex()]));
                 if (iudsTopicos.iud(operanteTopicos, t) > 0) {
                     new Msg().msgRegistrado(form);
                     if (operanteTopicos == 'i') {
@@ -202,6 +217,7 @@ public class ProjetosControl {
                     } else {
                         topicosList.get(topicos.getSelectedRow()).setDescricao(t.getDescricao());
                         topicosList.get(topicos.getSelectedRow()).setTitulo(t.getTitulo());
+                        topicosList.get(topicos.getSelectedRow()).setIdDesenvolvedor(t.getIdDesenvolvedor());
                     }
                     populaTopicos();
                     tpTopicos.setSelectedIndex(0);
@@ -251,6 +267,7 @@ public class ProjetosControl {
         Funcoes.limparCampos(p1Topicos);
         Funcoes.limparCampos(p2Topicos);
         descricaoTopicoCad.setText("");
+        populaTopicos();
     }
 
     public void addTopico(Topico t) {
@@ -286,12 +303,10 @@ public class ProjetosControl {
 //        }
 //        populaTopicos();
 //    }
-
     public void populaTopicos() {
-
-        Object[][] dados = new Object[topicosList.size()][4];
+        Object[][] dados = new Object[topicosList.size()][5];
         for (int i = 0; i < topicosList.size(); i++) {
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < 5; j++) {
                 switch (j) {
                     case 0:
                         dados[i][j] = topicosList.get(i).getId();
@@ -303,12 +318,16 @@ public class ProjetosControl {
                         dados[i][j] = topicosList.get(i).getSituacao();
                         break;
                     case 3:
+                        dados[i][j] = new DesenvolvedoresDAO().linha(topicosList.get(i).getIdDesenvolvedor()+"").getNome() ;
+                        break;
+                    case 4:
                         dados[i][j] = topicosList.get(i).getTitulo();
                         break;
                 }
             }
         }
-        topicos.setModel(new DefaultTableModel(dados, new Object[]{"Editar", "Remover", "Situação", "Titulo"}));
+
+        topicos.setModel(new DefaultTableModel(dados, new Object[]{"Editar", "Remover", "Situação", "Responsável","Titulo"}));
         new editTopico(topicos, 0);
         new delTopico(topicos, 1);
         new concluirTopico(topicos, 2);
@@ -319,6 +338,8 @@ public class ProjetosControl {
         modeloDaColuna.getColumn(1).setMinWidth(75);
         modeloDaColuna.getColumn(2).setMaxWidth(75);
         modeloDaColuna.getColumn(2).setMinWidth(75);
+        modeloDaColuna.getColumn(3).setMaxWidth(150);
+        modeloDaColuna.getColumn(3).setMinWidth(150);
     }
 
     class editProjeto extends Editar {
@@ -364,7 +385,7 @@ public class ProjetosControl {
             ProjetoDesenvolvedorDAO ptDao = new ProjetoDesenvolvedorDAO();
             Projeto p = pdao.linha(e.getActionCommand());
             if (new Msg().opcaoExcluir(form)) {
-                tdao.iud('d', new ProjetoTopico(0, p.getId(),false,'p'));
+                tdao.iud('d', new ProjetoTopico(0, p.getId(), false, 'p',0));
                 ptDao.iud('d', new ProjetoDesenvolvedor(p.getId(), 0));
                 if (pdao.iud('d', p) == 0) {
                     new Msg().msgGeneric("Erro ao excluír");
@@ -400,6 +421,8 @@ public class ProjetosControl {
             TopicosDAO dao = new TopicosDAO();
             ProjetosTopicosDAO ptdao = new ProjetosTopicosDAO();
             Topico t = dao.linha(e.getActionCommand());
+           
+            f.selecionaIndiceCombo(desenvolvedorTopico, idsDesenvolvedorTopico, topicosList.get(topicos.getSelectedRow()).getIdDesenvolvedor()+"");
             if (ptdao.estaEmDoisProjetos(e.getActionCommand())) {
                 if (new Msg().opcaoDuplicado(form)) {
                     editar(t);
@@ -428,10 +451,10 @@ public class ProjetosControl {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+
             sitControl.selectIndex(topicosList.get(topicos.getSelectedRow()).getSituacao());
             topicosList.get(topicos.getSelectedRow()).setSituacao(sitControl.getSituacao());
-                    
+
             System.out.println(topicosList.get(topicos.getSelectedRow()).getSituacao());
             populaTopicos();
         }
@@ -514,8 +537,6 @@ public class ProjetosControl {
     public void setSitControl(SituacaoControl sitControl) {
         this.sitControl = sitControl;
     }
-    
-    
 
     public JButton getBtSalvar() {
         return btSalvar;
@@ -795,5 +816,120 @@ public class ProjetosControl {
 
     public void setFiltroIdCli(int filtroIdCli) {
         this.filtroIdCli = filtroIdCli;
+    }
+
+    public ButtonGroup getBgTopicos() {
+        return bgTopicos;
+    }
+
+    public void setBgTopicos(ButtonGroup bgTopicos) {
+
+        this.bgTopicos = bgTopicos;
+    }
+
+    public JRadioButton getrTodosTopicos() {
+        return rTodosTopicos;
+    }
+
+    public void setrTodosTopicos(JRadioButton rTodosTopicos) {
+        rTodosTopicos.addActionListener(new acaoRadioTopicos());
+        this.rTodosTopicos = rTodosTopicos;
+    }
+
+    public JRadioButton getrTesteTopicos() {
+        return rTesteTopicos;
+    }
+
+    public void setrTesteTopicos(JRadioButton rTesteTopicos) {
+        rTesteTopicos.addActionListener(new acaoRadioTopicos());
+        this.rTesteTopicos = rTesteTopicos;
+    }
+
+    public JRadioButton getrPlanejadosTopicos() {
+        return rPlanejadosTopicos;
+    }
+
+    public void setrPlanejadosTopicos(JRadioButton rPlanejadosTopicos) {
+        rPlanejadosTopicos.addActionListener(new acaoRadioTopicos());
+        this.rPlanejadosTopicos = rPlanejadosTopicos;
+    }
+
+    public JRadioButton getrCriadosTopicos() {
+        return rCriadosTopicos;
+    }
+
+    public JComboBox getDesenvolvedorTopico() {
+        return desenvolvedorTopico;
+    }
+
+    public void setDesenvolvedorTopico(JComboBox desenvolvedorTopico) {
+        
+        DesenvolvedoresDAO dDao = new DesenvolvedoresDAO();
+      idsDesenvolvedorTopico = f.populaComboBox(desenvolvedorTopico, dDao.resultado(""), "nome","iddesenvolvedor").split(",");
+        this.desenvolvedorTopico = desenvolvedorTopico;
+        
+    }
+    
+    
+
+    public void setrCriadosTopicos(JRadioButton rCriadosTopicos) {
+        rCriadosTopicos.addActionListener(new acaoRadioTopicos());
+        this.rCriadosTopicos = rCriadosTopicos;
+    }
+
+    public JRadioButton getrDesenvolvimentoTopicos() {
+        return rDesenvolvimentoTopicos;
+    }
+
+    public void setrDesenvolvimentoTopicos(JRadioButton rDesenvolvimentoTopicos) {
+        rDesenvolvimentoTopicos.addActionListener(new acaoRadioTopicos());
+        this.rDesenvolvimentoTopicos = rDesenvolvimentoTopicos;
+    }
+
+    public JRadioButton getRfinalizadosTopicos() {
+        return rfinalizadosTopicos;
+    }
+
+    public void setRfinalizadosTopicos(JRadioButton rfinalizadosTopicos) {
+        rfinalizadosTopicos.addActionListener(new acaoRadioTopicos());
+        this.rfinalizadosTopicos = rfinalizadosTopicos;
+    }
+
+    public class acaoRadioTopicos implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            retornaFiltrados();
+            if (!e.getActionCommand().equals("a")) {
+                filtroTopicos();
+            }
+
+            populaTopicos();
+        }
+    }
+
+    public void retornaFiltrados() {
+        for (int i = 0; i < topicosListRemovidos.size(); i++) {
+            topicosList.add(topicosListRemovidos.get(i));//Retorna removidos a lista de tópicos
+        }
+        topicosListRemovidos = new ArrayList();
+
+    }
+
+    public void filtroTopicos() {
+        char situacao = bgTopicos.getSelection().getActionCommand().charAt(0);
+        int posicao = 0;
+        while (posicao != topicosList.size()) {
+            if (topicosList.size() > 0) {
+                if (topicosList.get(posicao).getSituacao() != situacao) {
+                    topicosListRemovidos.add(topicosList.get(posicao));
+                    topicosList.remove(posicao);
+                } else {
+                    posicao++;
+                }
+            }
+        }
+
     }
 }

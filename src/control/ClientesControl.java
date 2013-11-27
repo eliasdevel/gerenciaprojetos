@@ -5,6 +5,7 @@ import DAO.ClientesDAO;
 import DAO.DAO;
 import DAO.EstadosDAO;
 import entidadesRelacoes.Cliente;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -60,11 +61,11 @@ public final class ClientesControl {
 
 
         this.tb = tb;
-        
+
     }
 
     public void popula() {
-
+     
         rs = new ClientesDAO().resultado(filtro.getText());
         try {
             rs.first();
@@ -102,14 +103,18 @@ public final class ClientesControl {
                         tp.setSelectedIndex(0);
                         btSalvar.setText("Novo");
                         popula();
+                        branco();
                     }
                 } else {
                     new Msg().msgGeneric("A Cidade precisa ser preenchida!");
                     cidade.requestFocus();
+                    cidade.setBackground(new Color(150, 0, 0));
                 }
             } else {
                 new Msg().msgGeneric("O nome precisa ser preenchido!");
                 nome.requestFocus();
+                nome.setBackground(new Color(150, 0, 0));
+
             }
         }
         if (operante == 'n') {
@@ -129,6 +134,7 @@ public final class ClientesControl {
         Funcoes.limparCampos(p);
         Funcoes.limparCampos(p2);
         this.tp.setSelectedIndex(0);
+        branco();
     }
 
     public void acaoBotaoSair() {
@@ -178,6 +184,12 @@ public final class ClientesControl {
             }
             popula();
         }
+    }
+
+    public void branco() {
+        nome.setBackground(new Color(255, 255, 255));
+        cidade.setBackground(new Color(255, 255, 255));
+
     }
 
     public JInternalFrame getFrame() {

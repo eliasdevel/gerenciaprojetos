@@ -44,7 +44,7 @@ public class TopicosDAO {
     }
 
     public Topico linha(String id) {
-        Topico c = new Topico(1, null, null, false, 'c');
+        Topico c = new Topico(1, null, null, false, 'c',0);
         String sql = "SELECT * FROM topicos WHERE idtopico = ?";
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
@@ -67,7 +67,7 @@ public class TopicosDAO {
 
     public ArrayList linhas(String idProjeto) {
         topicosList = new ArrayList();
-        String sql = "SELECT t.idtopico,t.titulo,t.descricao,pt.pronto,pt.situacao FROM topicos t INNER JOIN projetos_topicos pt ON t.idtopico = pt.idtopico WHERE pt.idprojeto = ?";
+        String sql = "SELECT t.idtopico,t.titulo,t.descricao,pt.pronto,pt.situacao,pt.iddesenvolvedor FROM topicos t INNER JOIN projetos_topicos pt ON t.idtopico = pt.idtopico WHERE pt.idprojeto = ? ORDER BY pt.situacao";
         try {
             PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
             ps.setString(1, idProjeto);
@@ -75,7 +75,7 @@ public class TopicosDAO {
 
             while (rs.next()) {
                 if (rs.getInt("idtopico") > 0) {
-                    Topico t = new Topico(rs.getInt("idtopico"), rs.getString("titulo"), rs.getString("descricao"), rs.getBoolean("pronto"), rs.getString("situacao").charAt(0));
+                    Topico t = new Topico(rs.getInt("idtopico"), rs.getString("titulo"), rs.getString("descricao"), rs.getBoolean("pronto"), rs.getString("situacao").charAt(0),rs.getInt("iddesenvolvedor"));
                     topicosList.add(t);
                 }
             }

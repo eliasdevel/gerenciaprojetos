@@ -18,6 +18,9 @@
 	<parameter name="tituloPro" class="java.lang.String">
 		<defaultValueExpression><![CDATA[aa]]></defaultValueExpression>
 	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/elias/Dropbox/gerenciadorprojetos/src/Reports/"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT idprojeto,c.nome AS cliente,p.dataInicial, titulo,descricao FROM projetos p INNER JOIN clientes c ON c.idcliente = p.idcliente WHERE
 (case
@@ -75,15 +78,10 @@ end) ORDER BY p.titulo]]>
 				<textElement/>
 				<text><![CDATA[titulo]]></text>
 			</staticText>
-			<staticText>
-				<reportElement uuid="e29a8d6a-9e43-4c2c-9790-e55f54935b8e" x="252" y="2" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Data Inicial]]></text>
-			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="126" splitType="Stretch">
 			<textField>
 				<reportElement uuid="25966cef-126a-487d-a709-efb6659d4369" x="152" y="0" width="100" height="20"/>
 				<textElement/>
@@ -94,11 +92,14 @@ end) ORDER BY p.titulo]]>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="630c18c1-0c9a-4e8b-8f4a-b5b3ba2c3475" x="252" y="0" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{dataInicial}]]></textFieldExpression>
-			</textField>
+			<subreport>
+				<reportElement uuid="26632e78-e0b8-46c8-b774-aaa92699e6cd" x="62" y="20" width="510" height="100"/>
+				<subreportParameter name="idprojeto">
+					<subreportParameterExpression><![CDATA[$P{idprojeto}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "ProjetosRel_subreport2.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</detail>
 	<columnFooter>

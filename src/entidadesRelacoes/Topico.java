@@ -14,6 +14,7 @@ public class Topico {
     String descricao;
     boolean pronto;
     char situacao;
+    int idDesenvolvedor;
     
     public int getId() {
         return id;
@@ -55,14 +56,25 @@ public class Topico {
         this.pronto = pronto;
     }
 
-    public Topico(int id, String titulo, String descricao, boolean pronto, char situacao) {
+    public int getIdDesenvolvedor() {
+        return idDesenvolvedor;
+    }
+
+    public void setIdDesenvolvedor(int idDesenvolvedor) {
+        this.idDesenvolvedor = idDesenvolvedor;
+    }
+
+  
+    public Topico(int id, String titulo, String descricao, boolean pronto, char situacao, int idDesenvolvedor) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.pronto = pronto;
         this.situacao = situacao;
+        this.idDesenvolvedor = idDesenvolvedor;
     }
-    
+
+  
     
 
    
