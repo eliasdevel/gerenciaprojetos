@@ -189,6 +189,7 @@ public class Funcoes {
      * @return String - com os ids separados por vírgila.
      */
     public String populaComboBox(JComboBox cb, ResultSet rs, String colunaNomes, String colunaId) {
+        cb.removeAllItems();
         int lin = 0;
         String valores = "";
         try {

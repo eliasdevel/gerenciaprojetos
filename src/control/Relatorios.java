@@ -14,6 +14,12 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 import util.Data;
+import java.lang.Object;
+import groovy.lang.ExpandoMetaClass;
+ import groovy.lang.GroovyObject;
+ import groovy.lang.MetaClass;
+ import groovy.lang.MetaMethod;
+ import groovy.lang.MissingMethodException;
 
 /**
  *
@@ -57,7 +63,10 @@ public class Relatorios {
             parametros.put("dataInicialPro2", data2.getDBData());
             parametros.put("idclientePro", idcliente);
             parametros.put("iddesenvolvedorPro", iddesenvolvedor);
+            parametros.put("idprojeto", 1);
             parametros.put("tituloPro", "%"+titulo+"%");
+            
+            
 
             // Executa relatoio
             JasperPrint impressao = JasperFillManager.fillReport(relatorio, parametros, new ConexaoBD().con);

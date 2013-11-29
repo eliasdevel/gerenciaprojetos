@@ -47,7 +47,6 @@ import view.Msg;
  */
 public class ProjetosControl {
 
-    
     Funcoes f = new Funcoes();
     char operante;
     char operanteTopicos;
@@ -78,7 +77,7 @@ public class ProjetosControl {
     JPanel p1Topicos;
     JPanel p2Topicos;
     JComboBox desenvolvedorTopico;
-    String [] idsDesenvolvedorTopico;
+    String[] idsDesenvolvedorTopico;
     ArrayList<Topico> topicosList = new ArrayList();
     ArrayList<Topico> topicosListRemovidos = new ArrayList();
     ArrayList<Desenvolvedor> desenvolvedorList = new ArrayList();
@@ -140,14 +139,14 @@ public class ProjetosControl {
             if (p.getTitulo().length() > 0) {
                 if (p.getIdcliente() > 0) {
                     if (iuds.iud(operante, p) > 0) {
-                            retornaFiltrados();
+                        retornaFiltrados();
 
 //                      rotina para inserção de tópicos e desenvolvedores
                         ProjetoDesenvolvedor pd; //variável do projeto desenvolvedor
                         ProjetoTopico pt; //seta variavel de projeto tópico
 
                         if (operante == 'u') {//verifica se o projeto esta em modo de edição 
-                            pt = new ProjetoTopico(0, p.getId(), false, 'd',0);
+                            pt = new ProjetoTopico(0, p.getId(), false, 'd', 0);
                             iudsProjetosTopicos.iud('d', pt);//exclusão de topicos
                             pt = null;
                             pd = new ProjetoDesenvolvedor(p.getId(), 0);
@@ -155,7 +154,7 @@ public class ProjetosControl {
                             pd = null;
                         }
                         for (int i = 0; i < topicosList.size(); i++) {
-                            pt = new ProjetoTopico(topicosList.get(i).getId(), p.getId(), topicosList.get(i).isPronto(), topicosList.get(i).getSituacao(),topicosList.get(i).getIdDesenvolvedor());  // instancia novo objeto;
+                            pt = new ProjetoTopico(topicosList.get(i).getId(), p.getId(), topicosList.get(i).isPronto(), topicosList.get(i).getSituacao(), topicosList.get(i).getIdDesenvolvedor());  // instancia novo objeto;
                             iudsProjetosTopicos.iud('i', pt);//inserção dos tópicos
                             pt = null; //esvazia objeto
                         }
@@ -172,11 +171,13 @@ public class ProjetosControl {
                         tp.setSelectedIndex(0);
                         btSalvar.setText("Novo");
                         popularProjetos();
-                        topicosList = null;
                         topicosList = new ArrayList();
-                        desenvolvedorList = null;
+                        topicosListRemovidos = new ArrayList();
                         desenvolvedorList = new ArrayList();
-                        bgTopicos.getSelection().setSelected(false);
+                        if (bgTopicos.getSelection() != null) {
+                            bgTopicos.getSelection().setSelected(false);
+
+                        }
                         rTodosTopicos.setSelected(true);
                         populaTopicos();
                         populaDesenvolvedores();
@@ -199,42 +200,46 @@ public class ProjetosControl {
     }
 
     public void acaoBotaoNovoTopico() {
-        if (this.tpTopicos.getSelectedIndex() != 1) {
-            operanteTopicos = 'n';
-        } else {
-            if (operanteTopicos != 'i') {
-                operanteTopicos = 'u';
-            }
-        }
-        if (operanteTopicos == 'u' || operanteTopicos == 'i') {
-            TopicosDAO iudsTopicos = new TopicosDAO();
-            if (tituloTopico.getText().length() != 0) {
-                Topico t = new Topico(codigoTopico, tituloTopico.getText(), descricaoTopicoCad.getText(), false, 'c',Integer.parseInt(idsDesenvolvedorTopico[desenvolvedorTopico.getSelectedIndex()]));
-                if (iudsTopicos.iud(operanteTopicos, t) > 0) {
-                    new Msg().msgRegistrado(form);
-                    if (operanteTopicos == 'i') {
-                        addTopico(t);
-                    } else {
-                        topicosList.get(topicos.getSelectedRow()).setDescricao(t.getDescricao());
-                        topicosList.get(topicos.getSelectedRow()).setTitulo(t.getTitulo());
-                        topicosList.get(topicos.getSelectedRow()).setIdDesenvolvedor(t.getIdDesenvolvedor());
-                    }
-                    populaTopicos();
-                    tpTopicos.setSelectedIndex(0);
-                    btSalvarTopicos.setText("Novo");
-                    Funcoes.limparCampos(p1Topicos);
-                    descricaoTopicoCad.setText("");
-                    Funcoes.limparCampos(p2Topicos);
-                }
+        if (desenvolvedores.getRowCount() > 0) {
+            if (this.tpTopicos.getSelectedIndex() != 1) {
+                operanteTopicos = 'n';
             } else {
-                new Msg().msgGeneric("O Título precisa ser preenchido");
-                tituloTopico.requestFocus();
+                if (operanteTopicos != 'i') {
+                    operanteTopicos = 'u';
+                }
             }
-        }
-        if (operanteTopicos == 'n') {
-            btSalvarTopicos.setText("Salvar");
-            tpTopicos.setSelectedIndex(1);
-            operanteTopicos = 'i';
+            if (operanteTopicos == 'u' || operanteTopicos == 'i') {
+                TopicosDAO iudsTopicos = new TopicosDAO();
+                if (tituloTopico.getText().length() != 0) {
+                    Topico t = new Topico(codigoTopico, tituloTopico.getText(), descricaoTopicoCad.getText(), false, 'c', desenvolvedorList.get(desenvolvedorTopico.getSelectedIndex()).getId());
+                    if (iudsTopicos.iud(operanteTopicos, t) > 0) {
+                        new Msg().msgRegistrado(form);
+                        if (operanteTopicos == 'i') {
+                            addTopico(t);
+                        } else {
+                            topicosList.get(topicos.getSelectedRow()).setDescricao(t.getDescricao());
+                            topicosList.get(topicos.getSelectedRow()).setTitulo(t.getTitulo());
+                            topicosList.get(topicos.getSelectedRow()).setIdDesenvolvedor(t.getIdDesenvolvedor());
+                        }
+                        populaTopicos();
+                        tpTopicos.setSelectedIndex(0);
+                        btSalvarTopicos.setText("Novo");
+                        Funcoes.limparCampos(p1Topicos);
+                        descricaoTopicoCad.setText("");
+                        Funcoes.limparCampos(p2Topicos);
+                    }
+                } else {
+                    new Msg().msgGeneric("O Título precisa ser preenchido");
+                    tituloTopico.requestFocus();
+                }
+            }
+            if (operanteTopicos == 'n') {
+                btSalvarTopicos.setText("Salvar");
+                tpTopicos.setSelectedIndex(1);
+                operanteTopicos = 'i';
+            }
+        } else {
+            new Msg().msgGeneric("Não tem nenhum desenvolvedor vinculado ao projeto, adicione desenvolvedores antes de criar tópicos.");
         }
     }
 
@@ -244,6 +249,7 @@ public class ProjetosControl {
     }
 
     public void acaoCancelar() {
+        rTodosTopicos.setSelected(true);
         tp.setSelectedIndex(0);
         Funcoes.limparCampos(p1);
         Funcoes.limparCampos(p2);
@@ -255,6 +261,7 @@ public class ProjetosControl {
         desenvolvedorList = null;
         desenvolvedorList = new ArrayList();
         topicosList = new ArrayList();
+        topicosListRemovidos = new ArrayList();
         populaDesenvolvedores();
         populaTopicos();
         popularProjetos();
@@ -262,6 +269,7 @@ public class ProjetosControl {
     }
 
     public void cancelarTopico() {
+
         tpTopicos.setSelectedIndex(0);
         btSalvarTopicos.setText("Novo");
         Funcoes.limparCampos(p1Topicos);
@@ -281,6 +289,7 @@ public class ProjetosControl {
 
     public void addDesenvolvedor(Desenvolvedor d) {
         if (!estaNaListaDesenvolvedor(d)) {
+            desenvolvedorTopico.addItem(d.getNome());
             desenvolvedorList.add(d);
         } else {
             new Msg().msgGeneric("O desenvolvedor já esta na lista.");
@@ -290,19 +299,12 @@ public class ProjetosControl {
 
     public void removeTopico(int index) {
         if (new Msg().opcaoExcluir(form)) {
+
             topicosList.remove(index);
         }
         populaTopicos();
     }
 
-//    public void terminoTopico(int index) {
-//        if (!topicosList.get(index).isPronto()) {
-//            topicosList.get(index).setPronto(true);
-//        } else {
-//            topicosList.get(index).setPronto(false);
-//        }
-//        populaTopicos();
-//    }
     public void populaTopicos() {
         Object[][] dados = new Object[topicosList.size()][5];
         for (int i = 0; i < topicosList.size(); i++) {
@@ -318,7 +320,7 @@ public class ProjetosControl {
                         dados[i][j] = topicosList.get(i).getSituacao();
                         break;
                     case 3:
-                        dados[i][j] = new DesenvolvedoresDAO().linha(topicosList.get(i).getIdDesenvolvedor()+"").getNome() ;
+                        dados[i][j] = new DesenvolvedoresDAO().linha(topicosList.get(i).getIdDesenvolvedor() + "").getNome();
                         break;
                     case 4:
                         dados[i][j] = topicosList.get(i).getTitulo();
@@ -327,7 +329,7 @@ public class ProjetosControl {
             }
         }
 
-        topicos.setModel(new DefaultTableModel(dados, new Object[]{"Editar", "Remover", "Situação", "Responsável","Titulo"}));
+        topicos.setModel(new DefaultTableModel(dados, new Object[]{"Editar", "Remover", "Situação", "Responsável", "Titulo"}));
         new editTopico(topicos, 0);
         new delTopico(topicos, 1);
         new concluirTopico(topicos, 2);
@@ -385,7 +387,7 @@ public class ProjetosControl {
             ProjetoDesenvolvedorDAO ptDao = new ProjetoDesenvolvedorDAO();
             Projeto p = pdao.linha(e.getActionCommand());
             if (new Msg().opcaoExcluir(form)) {
-                tdao.iud('d', new ProjetoTopico(0, p.getId(), false, 'p',0));
+                tdao.iud('d', new ProjetoTopico(0, p.getId(), false, 'p', 0));
                 ptDao.iud('d', new ProjetoDesenvolvedor(p.getId(), 0));
                 if (pdao.iud('d', p) == 0) {
                     new Msg().msgGeneric("Erro ao excluír");
@@ -421,8 +423,11 @@ public class ProjetosControl {
             TopicosDAO dao = new TopicosDAO();
             ProjetosTopicosDAO ptdao = new ProjetosTopicosDAO();
             Topico t = dao.linha(e.getActionCommand());
-           
-            f.selecionaIndiceCombo(desenvolvedorTopico, idsDesenvolvedorTopico, topicosList.get(topicos.getSelectedRow()).getIdDesenvolvedor()+"");
+            for (int i = 0; i < desenvolvedorList.size(); i++) {
+                if (desenvolvedorList.get(i).getId() == topicosList.get(topicos.getSelectedRow()).getIdDesenvolvedor()) {
+                    desenvolvedorTopico.setSelectedIndex(i);
+                }
+            }
             if (ptdao.estaEmDoisProjetos(e.getActionCommand())) {
                 if (new Msg().opcaoDuplicado(form)) {
                     editar(t);
@@ -480,8 +485,10 @@ public class ProjetosControl {
 
 //    Desenvolvedores
     public void populaDesenvolvedores() {
+        desenvolvedorTopico.removeAllItems();
         Object[][] dados = new Object[desenvolvedorList.size()][3];
         for (int i = 0; i < desenvolvedorList.size(); i++) {
+            desenvolvedorTopico.addItem(desenvolvedorList.get(i).getNome());
             for (int j = 0; j < 4; j++) {
                 switch (j) {
                     case 0:
@@ -524,8 +531,26 @@ public class ProjetosControl {
     }
 
     public void removeDesenvolvedor(int index) {
-        if (new Msg().opcaoExcluir(form)) {
-            desenvolvedorList.remove(index);
+        boolean vinculado = false;
+//       verificações para ver se está vinculado
+        for (int i = 0; i < topicosList.size(); i++) {
+            if (topicosList.get(i).getIdDesenvolvedor() == desenvolvedorList.get(index).getId()) {
+                vinculado = true;
+            }
+        }
+
+        for (int i = 0; i < topicosListRemovidos.size(); i++) {
+            if (topicosListRemovidos.get(i).getIdDesenvolvedor() == desenvolvedorList.get(index).getId()) {
+                vinculado = true;
+            }
+        }
+
+        if (!vinculado) {
+            if (new Msg().opcaoExcluir(form)) {
+                desenvolvedorList.remove(index);
+            }
+        } else {
+            new Msg().msgGeneric("O desenvolvedor está vinculado aos tópicos, não pode ser removido.");
         }
         populaDesenvolvedores();
     }
@@ -832,7 +857,7 @@ public class ProjetosControl {
     }
 
     public void setrTodosTopicos(JRadioButton rTodosTopicos) {
-        rTodosTopicos.addActionListener(new acaoRadioTopicos());
+        rTodosTopicos.addActionListener(new AcaoRadioTopicosPro());
         this.rTodosTopicos = rTodosTopicos;
     }
 
@@ -841,7 +866,7 @@ public class ProjetosControl {
     }
 
     public void setrTesteTopicos(JRadioButton rTesteTopicos) {
-        rTesteTopicos.addActionListener(new acaoRadioTopicos());
+        rTesteTopicos.addActionListener(new AcaoRadioTopicosPro());
         this.rTesteTopicos = rTesteTopicos;
     }
 
@@ -850,7 +875,7 @@ public class ProjetosControl {
     }
 
     public void setrPlanejadosTopicos(JRadioButton rPlanejadosTopicos) {
-        rPlanejadosTopicos.addActionListener(new acaoRadioTopicos());
+        rPlanejadosTopicos.addActionListener(new AcaoRadioTopicosPro());
         this.rPlanejadosTopicos = rPlanejadosTopicos;
     }
 
@@ -863,17 +888,15 @@ public class ProjetosControl {
     }
 
     public void setDesenvolvedorTopico(JComboBox desenvolvedorTopico) {
-        
+
         DesenvolvedoresDAO dDao = new DesenvolvedoresDAO();
-      idsDesenvolvedorTopico = f.populaComboBox(desenvolvedorTopico, dDao.resultado(""), "nome","iddesenvolvedor").split(",");
+//      idsDesenvolvedorTopico = f.populaComboBox(desenvolvedorTopico, dDao.resultado(""), "nome","iddesenvolvedor").split(",");
         this.desenvolvedorTopico = desenvolvedorTopico;
-        
+
     }
-    
-    
 
     public void setrCriadosTopicos(JRadioButton rCriadosTopicos) {
-        rCriadosTopicos.addActionListener(new acaoRadioTopicos());
+        rCriadosTopicos.addActionListener(new AcaoRadioTopicosPro());
         this.rCriadosTopicos = rCriadosTopicos;
     }
 
@@ -882,7 +905,7 @@ public class ProjetosControl {
     }
 
     public void setrDesenvolvimentoTopicos(JRadioButton rDesenvolvimentoTopicos) {
-        rDesenvolvimentoTopicos.addActionListener(new acaoRadioTopicos());
+        rDesenvolvimentoTopicos.addActionListener(new AcaoRadioTopicosPro());
         this.rDesenvolvimentoTopicos = rDesenvolvimentoTopicos;
     }
 
@@ -891,11 +914,11 @@ public class ProjetosControl {
     }
 
     public void setRfinalizadosTopicos(JRadioButton rfinalizadosTopicos) {
-        rfinalizadosTopicos.addActionListener(new acaoRadioTopicos());
+        rfinalizadosTopicos.addActionListener(new AcaoRadioTopicosPro());
         this.rfinalizadosTopicos = rfinalizadosTopicos;
     }
 
-    public class acaoRadioTopicos implements ActionListener {
+    public class AcaoRadioTopicosPro implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {

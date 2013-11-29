@@ -21,24 +21,48 @@ public class TopicosDAO {
     ResultSet rs = null;
     ArrayList<Topico> topicosList;
 
-    public ResultSet resultado(String pesquisa) {
-        if (pesquisa != null) {
+    public ResultSet resultado(int idProjeto, char situacao,int iddesenvolvedor) {
+        
 //        String where = "";
-            pesquisa = "%" + pesquisa + "%";
+            
 
-            String sql = "SELECT idtopico,titulo,descricao FROM topicos WHERE titulo like ? ORDER BY titulo";
+            String sql = "SELECT t.idtopico,t.titulo,t.descricao,pt.pronto,pt.iddesenvolvedor ,"
+                    + "(select nome from desenvolvedores where iddesenvolvedor = pt.iddesenvolvedor) as desenvolvedor ,"
+                    + " (case when pt.situacao = 't'\n" +
+"then 'Teste'\n" +
+"else case when pt.situacao = 'd'\n" +
+"    then 'Desenvolvimento'\n" +
+"        else case when pt.situacao = 'c'\n" +
+"        then 'Criado'\n" +
+"            else case when pt.situacao = 'f'\n" +
+"            then 'Finalizado'\n" +
+"                else case when pt.situacao = 'p'\n" +
+"                then 'Planejado'\n" +
+"    \n" +
+"                end\n" +
+"            end\n" +
+"        end\n" +
+"    end\n" +
+" end )  as situacao  FROM topicos t INNER JOIN projetos_topicos pt ON t.idtopico = pt.idtopico WHERE pt.idprojeto = ? ";
 
+            if(situacao!= 'a'){
+                sql += " AND pt.situacao = '"+ situacao+"'";
+            }
+            
+            if(iddesenvolvedor>0){
+                sql += " AND pt.iddesenvolvedor = "+iddesenvolvedor;
+            }
+            
+                sql += " ORDER BY pt.situacao";
             try {
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
-                ps.setString(1, pesquisa);
+                ps.setInt(1, idProjeto);
                 rs = ps.executeQuery();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro: " + ex);
             }
             System.out.println(sql);
-        } else {
-            JOptionPane.showMessageDialog(null, "A variável de pesquisa não pode ser nula!, se quiser uma variavé sem valor mande: \"\" ");
-        }
+       
         return rs;
 
     }

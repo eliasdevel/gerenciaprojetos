@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProjetosRel_subreport2" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c5154586-b8e6-41e6-a8dc-00ba0285e354">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProjetosRel_subreport2" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c5154586-b8e6-41e6-a8dc-00ba0285e354">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="idprojeto" class="java.lang.String"/>
+	<parameter name="idPro" class="java.lang.Integer"/>
 	<queryString>
-		<![CDATA[SELECT t.idtopico,t.titulo,t.descricao,pt.pronto,pt.situacao,pt.iddesenvolvedor FROM topicos t INNER JOIN projetos_topicos pt ON t.idtopico = pt.idtopico where pt.idprojeto = $P{idprojeto}]]>
+		<![CDATA[SELECT t.idtopico,t.titulo,t.descricao,pt.pronto, (case when pt.situacao = 't'
+then 'Teste'
+else case when pt.situacao = 'd'
+    then 'Desenvolvimento'
+        else case when pt.situacao = 'c'
+        then 'Criado'
+            else case when pt.situacao = 'f'
+            then 'Finalizado'
+                else case when pt.situacao = 'p'
+                then 'Planejado'
+
+                end
+            end
+        end
+    end
+ end )  as situacao ,pt.iddesenvolvedor, (select nome from desenvolvedores d where d.iddesenvolvedor = pt.iddesenvolvedor) as Desenvolvedor FROM topicos t INNER JOIN projetos_topicos pt ON t.idtopico = pt.idtopico where pt.idprojeto = $P{idPro}]]>
 	</queryString>
 	<field name="idtopico" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -25,45 +40,50 @@
 	<field name="iddesenvolvedor" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="Desenvolvedor" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<columnHeader>
-		<band height="25" splitType="Stretch">
+		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="14497396-87c8-4045-96f3-63c6bad6cad8" x="32" y="2" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[titulo]]></text>
+				<reportElement x="32" y="2" width="100" height="20" uuid="14497396-87c8-4045-96f3-63c6bad6cad8"/>
+				<text><![CDATA[Topico]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a3206932-00cc-4364-b25c-a6c326dc4aab" x="149" y="2" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[descricao]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="2254c53d-042d-47c3-b4fc-7ea1c12c9ac3" x="283" y="2" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="158" y="2" width="100" height="20" uuid="2254c53d-042d-47c3-b4fc-7ea1c12c9ac3"/>
 				<text><![CDATA[situacao]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="272" y="2" width="100" height="20" uuid="cd9a3ffe-89a2-4b6c-b92b-738e2b62b56b"/>
+				<text><![CDATA[Desenvolvedor]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="21" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement uuid="f36b74a2-162c-4f34-934c-e69167a6b1cc" x="32" y="0" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="32" y="6" width="100" height="14" uuid="f36b74a2-162c-4f34-934c-e69167a6b1cc"/>
 				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="f7ff69b4-cb4f-4c3f-afb0-eb40c09c353f" x="149" y="0" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="ae24d396-52ea-48a6-82cb-61cfa1649a7e" x="283" y="0" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="158" y="5" width="100" height="15" uuid="ae24d396-52ea-48a6-82cb-61cfa1649a7e"/>
 				<textFieldExpression><![CDATA[$F{situacao}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="1" width="555" height="1" uuid="4c8d281a-45f8-4d92-8c85-ee9499a2a72b"/>
+			</line>
+			<textField>
+				<reportElement x="272" y="6" width="100" height="14" uuid="9f48f2e2-dbc8-46fb-809e-0be7fb883a00"/>
+				<textFieldExpression><![CDATA[$F{Desenvolvedor}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
+	<columnFooter>
+		<band height="31">
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="5b5455f2-03e2-4f1e-b12f-36f1c2c91c4c"/>
+			</line>
+		</band>
+	</columnFooter>
 </jasperReport>

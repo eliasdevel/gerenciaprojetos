@@ -157,9 +157,11 @@ CREATE TABLE IF NOT EXISTS `gerenciaprojetos`.`projetos_topicos` (
   `idprojeto` INT(11) NOT NULL,
   `pronto` TINYINT(1) NULL DEFAULT NULL,
   `situacao` CHAR(1) NULL,
+  `iddesenvolvedor` INT(11) NOT NULL,
   PRIMARY KEY (`idtopico`, `idprojeto`),
   INDEX `fk_topicosprojeto_has_projetos_projetos1_idx` (`idprojeto` ASC),
   INDEX `fk_topicosprojeto_has_projetos_topicosprojeto1_idx` (`idtopico` ASC),
+  INDEX `fk_projetos_topicos_desenvolvedores1_idx` (`iddesenvolvedor` ASC),
   CONSTRAINT `fk_topicosprojeto_has_projetos_projetos1`
     FOREIGN KEY (`idprojeto`)
     REFERENCES `gerenciaprojetos`.`projetos` (`idprojeto`)
@@ -168,6 +170,11 @@ CREATE TABLE IF NOT EXISTS `gerenciaprojetos`.`projetos_topicos` (
   CONSTRAINT `fk_topicosprojeto_has_projetos_topicosprojeto1`
     FOREIGN KEY (`idtopico`)
     REFERENCES `gerenciaprojetos`.`topicos` (`idtopico`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_projetos_topicos_desenvolvedores1`
+    FOREIGN KEY (`iddesenvolvedor`)
+    REFERENCES `gerenciaprojetos`.`desenvolvedores` (`iddesenvolvedor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

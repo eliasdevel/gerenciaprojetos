@@ -44,7 +44,7 @@ public class SelecionarControl {
                 dl.setSize(500, 600);
                 break;
             case "topicos":
-                rs = new TopicosDAO().resultado(filtro.getText());
+                rs = new TopicosDAO().resultado(0 ,'0',0);
                 Funcoes.populaTabelaSelecao(tb, "Selecione,Titulo", rs, "idtopico,titulo");
                 dl.setSize(500, 600);
                 break;

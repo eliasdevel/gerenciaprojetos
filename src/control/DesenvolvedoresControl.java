@@ -194,10 +194,15 @@ public class DesenvolvedoresControl {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+           
             if (new Msg().opcaoExcluir(p)) {
 
                 DesenvolvedoresDAO dao = new DesenvolvedoresDAO();
+                if(!dao.estaEmProjeto(e.getActionCommand())){
                 dao.iud('d', new Desenvolvedor(Integer.parseInt(e.getActionCommand()), 0, "", "", ""));
+                }else{
+                    new Msg().msgGeneric("O desenvolvedor está vinculado a um projeto, não pode ser excluido!");
+                }
                 dao = null;
             }
             populaDesenvolvedores();

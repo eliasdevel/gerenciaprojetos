@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,12 +30,11 @@ ArrayList<Desenvolvedor> desenvolvedoresList;
 
             String sql = "SELECT d.iddesenvolvedor,d.iddesenvolvedor, d.nome, d.telefone,d.email,c.titulo AS 'categoria'  "
                     + "FROM desenvolvedores d ,  categorias c "
-                    + "WHERE d.idcategoria=c.idcategoria AND nome LIKE ? AND c.titulo LIKE ? ORDER BY nome";
+                    + "WHERE d.idcategoria=c.idcategoria AND nome LIKE ? ORDER BY nome";
 
             try {
                 PreparedStatement ps = ConexaoBD.con.prepareStatement(sql);
                 ps.setString(1, pesquisa);
-                ps.setString(2, pesquisa);
                 rs = ps.executeQuery();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Erro: " + ex);
@@ -83,6 +84,19 @@ ArrayList<Desenvolvedor> desenvolvedoresList;
         }
         return desenvolvedoresList;
     }
+     public boolean estaEmProjeto(String idDesenvolvedor){
+         boolean esta = false;
+        try {
+            rs = ConexaoBD.con.createStatement().executeQuery("Select * from projetos_desenvolvedores where iddesenvolvedor = "+idDesenvolvedor);
+        rs.beforeFirst();
+        if(rs.next()){
+            esta = true;
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(DesenvolvedoresDAO.class.getName()).log(Level.SEVERE, null,"Erro técnico: "+ ex);
+        }
+         return esta;
+     }
 
     public int iud(char op, Desenvolvedor d) {
         String sql;

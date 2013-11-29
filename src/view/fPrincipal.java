@@ -7,8 +7,6 @@ package view;
 import DAO.CidadesDAO;
 import DAO.ClientesDAO;
 import DAO.DesenvolvedoresDAO;
-import DAO.ProjetosTopicosDAO;
-import DAO.TopicosDAO;
 import control.CategoriasControl;
 import control.ClientesControl;
 import control.DesenvolvedoresControl;
@@ -19,13 +17,6 @@ import control.SelecionarControl;
 import control.SituacaoControl;
 import entidadesRelacoes.Cliente;
 import entidadesRelacoes.Desenvolvedor;
-import entidadesRelacoes.Topico;
-import java.awt.Color;
-import java.beans.PropertyVetoException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import util.Data;
@@ -40,7 +31,7 @@ import util.Funcoes;
  *
  */
 public class fPrincipal extends javax.swing.JFrame {
-    
+
     char operante;
     Funcoes f = new Funcoes();
     SelecionarControl cS;
@@ -63,13 +54,13 @@ public class fPrincipal extends javax.swing.JFrame {
         } catch (Exception e) {
         }
         initComponents();
-        
-        
+
+
         cDesh = new DeshboardControl();
-        
-        
-        
-        
+
+
+
+
     }
 
     /**
@@ -91,6 +82,7 @@ public class fPrincipal extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         btSelecionarSituacao = new javax.swing.JButton();
         bgTopicosPro = new javax.swing.ButtonGroup();
+        bgTopicosDesh = new javax.swing.ButtonGroup();
         dpDesktop = new javax.swing.JDesktopPane();
         ifDesenvolvedores = new javax.swing.JInternalFrame();
         tpDesenvolvedores = new javax.swing.JTabbedPane();
@@ -223,22 +215,31 @@ public class fPrincipal extends javax.swing.JFrame {
         tfNomeFiltroPro1 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         tfClienteFiltroPro1 = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        tfDesenvolvedorFiltroPro1 = new javax.swing.JTextField();
         ftfData1FiltroPro1 = new javax.swing.JFormattedTextField();
         ftfData2FiltroPro1 = new javax.swing.JFormattedTextField();
         jLabel17 = new javax.swing.JLabel();
-        btDesenvolvedorFiltroPro1 = new javax.swing.JButton();
         btClienteFiltroPro1 = new javax.swing.JButton();
         btlimparFiltroPro1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jScrollPane7 = new javax.swing.JScrollPane();
         tbProjetosDesh = new javax.swing.JTable();
         jScrollPane8 = new javax.swing.JScrollPane();
         tbTopicosDesh = new javax.swing.JTable();
-        jLabel20 = new javax.swing.JLabel();
         lbPorcentagensTopicos = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        rbFinalizadosTop1 = new javax.swing.JRadioButton();
+        rbTesteTop1 = new javax.swing.JRadioButton();
+        rbDesenvolvimentoTop1 = new javax.swing.JRadioButton();
+        rbPlanejadosTop1 = new javax.swing.JRadioButton();
+        rbCriadosTop1 = new javax.swing.JRadioButton();
+        rbTodosTop1 = new javax.swing.JRadioButton();
+        jLabel22 = new javax.swing.JLabel();
+        tfDesenvolvedorFiltroPro1 = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        btDesenvolvedorFiltroPro1 = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
+        btlimparFiltroPro2 = new javax.swing.JButton();
+        btSairDesh = new javax.swing.JButton();
         mbMenuTotal = new javax.swing.JMenuBar();
         mArquivo = new javax.swing.JMenu();
         mDesenvolvedores = new javax.swing.JMenu();
@@ -650,7 +651,7 @@ public class fPrincipal extends javax.swing.JFrame {
 
         pFiltrosPro.setPreferredSize(new java.awt.Dimension(10, 0));
 
-        jLabel7.setText("Nome:");
+        jLabel7.setText("Título:");
 
         tfNomeFiltroPro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -745,7 +746,7 @@ public class fPrincipal extends javax.swing.JFrame {
                         .addComponent(btlimparFiltroPro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
-                .addContainerGap(410, Short.MAX_VALUE))
+                .addContainerGap(474, Short.MAX_VALUE))
         );
         pFiltrosProLayout.setVerticalGroup(
             pFiltrosProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -799,7 +800,7 @@ public class fPrincipal extends javax.swing.JFrame {
                         .addComponent(spProjetos)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pPesquisaProLayout.createSequentialGroup()
-                        .addComponent(pFiltrosPro, javax.swing.GroupLayout.DEFAULT_SIZE, 1318, Short.MAX_VALUE)
+                        .addComponent(pFiltrosPro, javax.swing.GroupLayout.DEFAULT_SIZE, 1382, Short.MAX_VALUE)
                         .addGap(75, 75, 75))))
         );
         pPesquisaProLayout.setVerticalGroup(
@@ -889,7 +890,6 @@ public class fPrincipal extends javax.swing.JFrame {
         spDescricaoTopicoPro.setViewportView(taDescricaoTopicoPro);
 
         bgTopicosPro.add(rbTodosTop);
-        rbTodosTop.setSelected(true);
         rbTodosTop.setText("Todos");
         rbTodosTop.setActionCommand("a");
 
@@ -947,7 +947,7 @@ public class fPrincipal extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rbFinalizadosTop))
                             .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)))
                 .addGroup(pnListagemTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel19)
                     .addComponent(spDescricaoTopicoPro, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -967,8 +967,8 @@ public class fPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabel19))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnListagemTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(spDescricaoTopicoPro)
-                    .addComponent(spTopicosPro, javax.swing.GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE))
+                    .addComponent(spDescricaoTopicoPro, javax.swing.GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE)
+                    .addComponent(spTopicosPro))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -995,17 +995,17 @@ public class fPrincipal extends javax.swing.JFrame {
         pnManutencaoTopico.setLayout(pnManutencaoTopicoLayout);
         pnManutencaoTopicoLayout.setHorizontalGroup(
             pnManutencaoTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnManutencaoTopicoLayout.createSequentialGroup()
+            .addGroup(pnManutencaoTopicoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnManutencaoTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cbDesenvolvedorTopicoPro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tfTituloTopico, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 952, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnManutencaoTopicoLayout.createSequentialGroup()
+                .addGroup(pnManutencaoTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfTituloTopico)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 1016, Short.MAX_VALUE)
+                    .addGroup(pnManutencaoTopicoLayout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btCancelarTopicoPro))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnManutencaoTopicoLayout.createSequentialGroup()
+                    .addComponent(cbDesenvolvedorTopicoPro, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnManutencaoTopicoLayout.createSequentialGroup()
                         .addGroup(pnManutencaoTopicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1024,12 +1024,12 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbDesenvolvedorTopicoPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(221, Short.MAX_VALUE))
+                .addContainerGap(223, Short.MAX_VALUE))
         );
 
         tpTopicos.addTab("Manutenção", pnManutencaoTopico);
@@ -1091,7 +1091,7 @@ public class fPrincipal extends javax.swing.JFrame {
                         .addComponent(btNovoTopicoPro)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btCancelarPro))
-                    .addComponent(tpTopicos, javax.swing.GroupLayout.DEFAULT_SIZE, 984, Short.MAX_VALUE)))
+                    .addComponent(tpTopicos)))
         );
         pCadastrarProLayout.setVerticalGroup(
             pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1105,8 +1105,8 @@ public class fPrincipal extends javax.swing.JFrame {
                             .addComponent(btNovoTopicoPro)))
                     .addComponent(btCancelarPro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(pCadastrarProLayout.createSequentialGroup()
+                .addGroup(pCadastrarProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pCadastrarProLayout.createSequentialGroup()
                         .addComponent(tfTituloPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbDescricaoPro)
@@ -1131,9 +1131,9 @@ public class fPrincipal extends javax.swing.JFrame {
                             .addComponent(lbDesenvolvedor)
                             .addComponent(btAdicionarDesenvolvedorPro))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spDesenvolvedoresPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(tpTopicos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(177, Short.MAX_VALUE))
+                        .addComponent(spDesenvolvedoresPro, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tpTopicos, javax.swing.GroupLayout.PREFERRED_SIZE, 760, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(282, Short.MAX_VALUE))
         );
 
         tpTopicos.getAccessibleContext().setAccessibleName("Tópicos do Projeto");
@@ -1163,7 +1163,7 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addComponent(btSalvarPro)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btSairPro, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(tpProjetos, javax.swing.GroupLayout.DEFAULT_SIZE, 1413, Short.MAX_VALUE)
+            .addComponent(tpProjetos)
         );
         ifProjetosLayout.setVerticalGroup(
             ifProjetosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1386,11 +1386,12 @@ public class fPrincipal extends javax.swing.JFrame {
         ifClientes.setBounds(270, 60, 510, 410);
         dpDesktop.add(ifClientes, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        ifDashboard.setTitle("Situação dos Projetos");
         ifDashboard.setVisible(false);
 
         pFiltrosPro1.setPreferredSize(new java.awt.Dimension(10, 0));
 
-        jLabel13.setText("Nome:");
+        jLabel13.setText("Titulo:");
 
         tfNomeFiltroPro1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -1402,11 +1403,7 @@ public class fPrincipal extends javax.swing.JFrame {
 
         tfClienteFiltroPro1.setEditable(false);
 
-        jLabel15.setText("Desenvolvedor:");
-
         jLabel16.setText("Período Data de início:");
-
-        tfDesenvolvedorFiltroPro1.setEditable(false);
 
         ftfData1FiltroPro1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1422,13 +1419,6 @@ public class fPrincipal extends javax.swing.JFrame {
 
         jLabel17.setText("a");
 
-        btDesenvolvedorFiltroPro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/pesquisar.png"))); // NOI18N
-        btDesenvolvedorFiltroPro1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btDesenvolvedorFiltroPro1ActionPerformed(evt);
-            }
-        });
-
         btClienteFiltroPro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/pesquisar.png"))); // NOI18N
         btClienteFiltroPro1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1440,13 +1430,6 @@ public class fPrincipal extends javax.swing.JFrame {
         btlimparFiltroPro1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btlimparFiltroPro1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Relatório");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
             }
         });
 
@@ -1467,43 +1450,27 @@ public class fPrincipal extends javax.swing.JFrame {
                         .addComponent(btClienteFiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pFiltrosPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15)
-                    .addGroup(pFiltrosPro1Layout.createSequentialGroup()
-                        .addComponent(tfDesenvolvedorFiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btDesenvolvedorFiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pFiltrosPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel16)
                     .addGroup(pFiltrosPro1Layout.createSequentialGroup()
                         .addComponent(ftfData1FiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ftfData2FiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btlimparFiltroPro1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                        .addComponent(btlimparFiltroPro1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pFiltrosPro1Layout.setVerticalGroup(
             pFiltrosPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pFiltrosPro1Layout.createSequentialGroup()
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pFiltrosPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btDesenvolvedorFiltroPro1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pFiltrosPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(ftfData1FiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(ftfData2FiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel17)
-                        .addComponent(btlimparFiltroPro1)
-                        .addComponent(jButton2))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pFiltrosPro1Layout.createSequentialGroup()
-                .addComponent(jLabel15)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tfDesenvolvedorFiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pFiltrosPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ftfData1FiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ftfData2FiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17)
+                    .addComponent(btlimparFiltroPro1)))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pFiltrosPro1Layout.createSequentialGroup()
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1535,18 +1502,65 @@ public class fPrincipal extends javax.swing.JFrame {
 
         tbTopicosDesh.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane8.setViewportView(tbTopicosDesh);
 
-        jLabel20.setText("Andamento:");
+        jLabel21.setText("Filtrar Topicos:");
+
+        bgTopicosDesh.add(rbFinalizadosTop1);
+        rbFinalizadosTop1.setText("Finalizados");
+        rbFinalizadosTop1.setActionCommand("f");
+
+        bgTopicosDesh.add(rbTesteTop1);
+        rbTesteTop1.setText("Em Teste");
+        rbTesteTop1.setActionCommand("t");
+
+        bgTopicosDesh.add(rbDesenvolvimentoTop1);
+        rbDesenvolvimentoTop1.setText("Em Desenvolvimento");
+        rbDesenvolvimentoTop1.setActionCommand("d");
+
+        bgTopicosDesh.add(rbPlanejadosTop1);
+        rbPlanejadosTop1.setText("Planejados");
+        rbPlanejadosTop1.setActionCommand("p");
+
+        bgTopicosDesh.add(rbCriadosTop1);
+        rbCriadosTop1.setText("Criados");
+        rbCriadosTop1.setActionCommand("c");
+
+        bgTopicosDesh.add(rbTodosTop1);
+        rbTodosTop1.setSelected(true);
+        rbTodosTop1.setText("Todos");
+        rbTodosTop1.setActionCommand("a");
+
+        jLabel22.setText("Projetos:");
+
+        tfDesenvolvedorFiltroPro1.setEditable(false);
+
+        jLabel15.setText("Desenvolvedor:");
+
+        btDesenvolvedorFiltroPro1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/pesquisar.png"))); // NOI18N
+        btDesenvolvedorFiltroPro1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btDesenvolvedorFiltroPro1ActionPerformed(evt);
+            }
+        });
+
+        jLabel20.setText("Tópicos:");
+
+        btlimparFiltroPro2.setText("Limpar");
+        btlimparFiltroPro2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btlimparFiltroPro2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pInformacoesLayout = new javax.swing.GroupLayout(pInformacoes);
         pInformacoes.setLayout(pInformacoesLayout);
@@ -1556,44 +1570,105 @@ public class fPrincipal extends javax.swing.JFrame {
                 .addGroup(pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pInformacoesLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(pFiltrosPro1, javax.swing.GroupLayout.DEFAULT_SIZE, 932, Short.MAX_VALUE))
+                        .addComponent(pFiltrosPro1, javax.swing.GroupLayout.DEFAULT_SIZE, 1041, Short.MAX_VALUE)
+                        .addGap(82, 82, 82))
                     .addGroup(pInformacoesLayout.createSequentialGroup()
-                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addGroup(pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel22)
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(lbPorcentagensTopicos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane8)
                             .addGroup(pInformacoesLayout.createSequentialGroup()
-                                .addComponent(jLabel20)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(lbPorcentagensTopicos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGroup(pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel21)
+                                    .addGroup(pInformacoesLayout.createSequentialGroup()
+                                        .addComponent(rbTodosTop1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(rbCriadosTop1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(rbPlanejadosTop1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(rbDesenvolvimentoTop1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(rbTesteTop1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(rbFinalizadosTop1))
+                                    .addComponent(jLabel15)
+                                    .addGroup(pInformacoesLayout.createSequentialGroup()
+                                        .addComponent(tfDesenvolvedorFiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btDesenvolvedorFiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btlimparFiltroPro2))
+                                    .addComponent(jLabel20))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         pInformacoesLayout.setVerticalGroup(
             pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pInformacoesLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addComponent(pFiltrosPro1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
+                .addGroup(pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pInformacoesLayout.createSequentialGroup()
+                        .addComponent(jLabel22)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pInformacoesLayout.createSequentialGroup()
+                        .addComponent(lbPorcentagensTopicos, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pInformacoesLayout.createSequentialGroup()
+                                .addComponent(jLabel15)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfDesenvolvedorFiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btlimparFiltroPro2)
+                                .addComponent(btDesenvolvedorFiltroPro1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pInformacoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rbTodosTop1)
+                            .addComponent(rbCriadosTop1)
+                            .addComponent(rbPlanejadosTop1)
+                            .addComponent(rbDesenvolvimentoTop1)
+                            .addComponent(rbTesteTop1)
+                            .addComponent(rbFinalizadosTop1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel20)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbPorcentagensTopicos, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(161, 161, 161))))
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
+
+        btSairDesh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/sair.png"))); // NOI18N
+        btSairDesh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSairDeshActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout ifDashboardLayout = new javax.swing.GroupLayout(ifDashboard.getContentPane());
         ifDashboard.getContentPane().setLayout(ifDashboardLayout);
         ifDashboardLayout.setHorizontalGroup(
             ifDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pInformacoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(ifDashboardLayout.createSequentialGroup()
+                .addComponent(pInformacoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btSairDesh, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         ifDashboardLayout.setVerticalGroup(
             ifDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pInformacoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(ifDashboardLayout.createSequentialGroup()
+                .addGroup(ifDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pInformacoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btSairDesh, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         ifDashboard.setBounds(0, 0, 660, 520);
@@ -1665,7 +1740,7 @@ public class fPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
+            .addComponent(dpDesktop, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
         );
 
         pack();
@@ -1678,64 +1753,64 @@ public class fPrincipal extends javax.swing.JFrame {
         cDes.populaDesenvolvedores();
         ifDesenvolvedores.setVisible(true);
     }//GEN-LAST:event_miCadDesenvolvedoresActionPerformed
-    
+
     private void miCadCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCadCategoriasActionPerformed
         cCat = new CategoriasControl();
         cCat.populaCategorias(tfFiltro, tbCategorias, tpCategorias, btSalvar, tfTitulo, taDescricao);
         ifCategorias.setVisible(true);
     }//GEN-LAST:event_miCadCategoriasActionPerformed
-    
+
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
         cCat.acaoBotaoNovoSalvar(tpCategorias, tfTitulo, pCadastrar, taDescricao, ifCategorias, btSalvar, tfFiltro, tbCategorias);
     }//GEN-LAST:event_btSalvarActionPerformed
-    
+
     private void btSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairActionPerformed
         cCat.acaoSair(ifCategorias, tpCategorias, pCadastrar, pPesquisa, btSalvar);
         taDescricao.setText("");
         cCat = null;
     }//GEN-LAST:event_btSairActionPerformed
-    
+
     private void tfFiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroKeyReleased
         cCat.populaCategorias(tfFiltro, tbCategorias, tpCategorias, btSalvar, tfTitulo, taDescricao);
     }//GEN-LAST:event_tfFiltroKeyReleased
-    
+
     private void tfFiltroDesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroDesKeyReleased
         cDes.populaDesenvolvedores();
     }//GEN-LAST:event_tfFiltroDesKeyReleased
-    
+
     private void btSalvarDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarDesActionPerformed
         cDes.acaoBotaoNovoSalvar();
     }//GEN-LAST:event_btSalvarDesActionPerformed
-    
+
     private void btSairDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairDesActionPerformed
         cDes.acaoSair();
-        cDes = null;
+
     }//GEN-LAST:event_btSairDesActionPerformed
-    
+
     private void btSalvarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarProActionPerformed
         cPro.acaoBotaoNovoSalvar();
-        
+
     }//GEN-LAST:event_btSalvarProActionPerformed
-    
+
     private void btSairProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairProActionPerformed
         cPro.acaoSair();
-        
-        cPro = null;
+
+
     }//GEN-LAST:event_btSairProActionPerformed
-    
+
     private void tfFiltroCliKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroCliKeyReleased
         cCli.popula();
     }//GEN-LAST:event_tfFiltroCliKeyReleased
-    
+
     private void btSalvarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarCliActionPerformed
         cCli.acaoBotaoNovoSalvar();
     }//GEN-LAST:event_btSalvarCliActionPerformed
-    
+
     private void btSairCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairCliActionPerformed
         cCli.acaoBotaoSair();
-        
+
     }//GEN-LAST:event_btSairCliActionPerformed
-    
+
     private void mClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mClientesActionPerformed
         cCli = new ClientesControl(jTable1);
         cCli.setTb(jTable1);
@@ -1744,7 +1819,7 @@ public class fPrincipal extends javax.swing.JFrame {
         cCli.setAdicional(taAdicionalCli);
         cCli.setEmail(tfEmailCli);
         cCli.setFrame(ifClientes);
-        
+
         cCli.setNome(tfNomeCli);
         cCli.setTelefone(ftfTelefoneCli);
         cCli.setTp(tpClientes);
@@ -1755,11 +1830,11 @@ public class fPrincipal extends javax.swing.JFrame {
         cCli.popula();
         ifClientes.setVisible(true);
     }//GEN-LAST:event_mClientesActionPerformed
-    
+
     private void tfFiltroSel1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroSel1KeyReleased
         cS.filtro();
     }//GEN-LAST:event_tfFiltroSel1KeyReleased
-    
+
     private void btBuscarCidadeCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarCidadeCliActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1771,9 +1846,9 @@ public class fPrincipal extends javax.swing.JFrame {
             cCli.setIdcidade(cS.getCodigo());
         }
         tfCidadeCli.setText(new CidadesDAO().linha(cCli.getIdcidade()).getNome());
-        
+
     }//GEN-LAST:event_btBuscarCidadeCliActionPerformed
-    
+
     private void setControlProjeto() {
         cPro = new ProjetosControl();
         cPro.setForm(ifProjetos);
@@ -1782,12 +1857,12 @@ public class fPrincipal extends javax.swing.JFrame {
         cPro.setP2(pCadastrarPro);
         cPro.setBt(btSalvarPro);
         cPro.setTb(tbProjetos);
-        
+
         cPro.setBtSalvar(btSalvarPro);
         cPro.setCliente(tfClientePro);
         cPro.setTitulo(tfTituloPro);
         cPro.setDescricao(taDescricaoProjeto);
-        
+
         cPro.setDescricaoTopico(taDescricaoTopicoPro);
         cPro.setDataInicio(ftfDataInicioPro);
         cPro.setDataPrevisao(ftfDataPrevisaoPro);
@@ -1824,37 +1899,37 @@ public class fPrincipal extends javax.swing.JFrame {
         cPro.setFiltroData1(ftfData1FiltroPro);
         cPro.setFiltroData2(ftfData2FiltroPro);
     }
-    
+
     private void jmProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmProjetosActionPerformed
         setControlProjeto();
         btlimparFiltroProActionPerformed(evt);
         ifProjetos.setVisible(true);
     }//GEN-LAST:event_jmProjetosActionPerformed
-    
+
     private void ftfDataInicioProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfDataInicioProActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ftfDataInicioProActionPerformed
-    
+
     private void btCancelarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarProActionPerformed
         cPro.acaoCancelar();
     }//GEN-LAST:event_btCancelarProActionPerformed
-    
+
     private void btCancelarCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarCliActionPerformed
         cCli.acaoCancelar();
     }//GEN-LAST:event_btCancelarCliActionPerformed
-    
+
     private void btCancelarDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarDesActionPerformed
         cDes.acaoCancelar();
     }//GEN-LAST:event_btCancelarDesActionPerformed
-    
+
     private void tbTopicosProMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbTopicosProMouseClicked
         cPro.descreveTopico();
     }//GEN-LAST:event_tbTopicosProMouseClicked
-    
+
     private void btNovoTopicoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNovoTopicoProActionPerformed
         cPro.acaoBotaoNovoTopico();
     }//GEN-LAST:event_btNovoTopicoProActionPerformed
-    
+
     private void btAdicionarDesenvolvedorProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAdicionarDesenvolvedorProActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1863,18 +1938,18 @@ public class fPrincipal extends javax.swing.JFrame {
         cS.setTb(tbSelecionar1);
         cS.filtro();
         if (cS.getCodigo() != null) {
-            
+
             Desenvolvedor d = new DesenvolvedoresDAO().linha(cS.getCodigo());
             if (d != null) {
                 cPro.addDesenvolvedor(d);
             }
         }
     }//GEN-LAST:event_btAdicionarDesenvolvedorProActionPerformed
-    
+
     private void ftfData1FiltroProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfData1FiltroProActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ftfData1FiltroProActionPerformed
-    
+
     private void btClienteFiltroProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClienteFiltroProActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1884,25 +1959,25 @@ public class fPrincipal extends javax.swing.JFrame {
         cS.filtro();
         if (cS.getCodigo() != null) {
             Cliente c = new ClientesDAO().linha(cS.getCodigo());
-            
+
             cPro.setFiltroIdCli(c.getId());
             tfClienteFiltroPro.setText(c.getNome());
         }
         cPro.popularProjetos();
     }//GEN-LAST:event_btClienteFiltroProActionPerformed
-    
+
     private void btlimparFiltroProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimparFiltroProActionPerformed
         Funcoes.limparCampos(pFiltrosPro);
-        
+
         cPro.setFiltroIdCli(0);
         cPro.setFiltroIdDes(0);
         cPro.popularProjetos();
     }//GEN-LAST:event_btlimparFiltroProActionPerformed
-    
+
     private void tfNomeFiltroProKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNomeFiltroProKeyReleased
         cPro.popularProjetos();
     }//GEN-LAST:event_tfNomeFiltroProKeyReleased
-    
+
     private void btDesenvolvedorFiltroProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDesenvolvedorFiltroProActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1917,14 +1992,14 @@ public class fPrincipal extends javax.swing.JFrame {
         }
         cPro.popularProjetos();
     }//GEN-LAST:event_btDesenvolvedorFiltroProActionPerformed
-    
+
     private void ftfData2FiltroProKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ftfData2FiltroProKeyReleased
-        
+
         cPro.popularProjetos();
-        
-        
+
+
     }//GEN-LAST:event_ftfData2FiltroProKeyReleased
-    
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Data data1 = new Data(1, 1, 1);
         Data data2 = new Data(1, 1, 1);
@@ -1932,11 +2007,11 @@ public class fPrincipal extends javax.swing.JFrame {
         data2.setData(ftfData2FiltroPro.getText());
         new Relatorios().relatorioProjetos(data1, data2, cPro.getFiltroIdCli(), cPro.getFiltroIdDes(), tfNomeFiltroPro.getText());
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private void btCancelarTopicoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarTopicoProActionPerformed
         cPro.cancelarTopico();
     }//GEN-LAST:event_btCancelarTopicoProActionPerformed
-    
+
     private void btBuscarClienteCadProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuscarClienteCadProActionPerformed
         cS = new SelecionarControl();
         cS.setDl(dlSelecionar);
@@ -1949,51 +2024,76 @@ public class fPrincipal extends javax.swing.JFrame {
             tfClientePro.setText(new ClientesDAO().linha(cPro.getIdCliente() + "").getNome());
         }
     }//GEN-LAST:event_btBuscarClienteCadProActionPerformed
-    
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         new Relatorios().relatorioClientes(tfFiltroCli.getText());
-        
-        
+
+
     }//GEN-LAST:event_jButton3ActionPerformed
-    
+
     private void cbSituacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSituacaoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbSituacaoActionPerformed
-    
+
     private void btSelecionarSituacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelecionarSituacaoActionPerformed
-        
+
         cPro.getSitControl().getDl().setVisible(false);
-        
+
     }//GEN-LAST:event_btSelecionarSituacaoActionPerformed
-    
+
     private void tfNomeFiltroPro1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNomeFiltroPro1KeyReleased
-        // TODO add your handling code here:
+        cDesh.popularProjetos();
+        cDesh.setIdProjetoFiltro(0);
+        cDesh.popularTopicos();
+        cDesh.popularPorcentagens();
+
     }//GEN-LAST:event_tfNomeFiltroPro1KeyReleased
-    
-    private void ftfData1FiltroPro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfData1FiltroPro1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ftfData1FiltroPro1ActionPerformed
-    
-    private void ftfData2FiltroPro1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ftfData2FiltroPro1KeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ftfData2FiltroPro1KeyReleased
-    
+
     private void btDesenvolvedorFiltroPro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDesenvolvedorFiltroPro1ActionPerformed
-        // TODO add your handling code here:
+        cS = new SelecionarControl();
+        cS.setDl(dlSelecionar);
+        cS.setJanela("desenvolvedores");
+        cS.setFiltro(tfFiltroSel1);
+        cS.setTb(tbSelecionar1);
+        cS.filtro();
+        if (cS.getCodigo() != null) {
+            Desenvolvedor d = new DesenvolvedoresDAO().linha(cS.getCodigo());
+            cDesh.setFiltroIdDes(d.getId());
+            tfDesenvolvedorFiltroPro1.setText(d.getNome());
+        }
+        cDesh.popularTopicos();
+
     }//GEN-LAST:event_btDesenvolvedorFiltroPro1ActionPerformed
-    
+
     private void btClienteFiltroPro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClienteFiltroPro1ActionPerformed
-        // TODO add your handling code here:
+        cS = new SelecionarControl();
+        cS.setDl(dlSelecionar);
+        cS.setJanela("clientes");
+        cS.setFiltro(tfFiltroSel1);
+        cS.setTb(tbSelecionar1);
+        cS.filtro();
+        if (cS.getCodigo() != null) {
+            Cliente c = new ClientesDAO().linha(cS.getCodigo());
+
+            cDesh.setFiltroIdCli(c.getId());
+            tfClienteFiltroPro1.setText(c.getNome());
+        }
+        cDesh.popularProjetos();
+        cDesh.setIdProjetoFiltro(0);
+        cDesh.popularTopicos();
+        cDesh.popularPorcentagens();
     }//GEN-LAST:event_btClienteFiltroPro1ActionPerformed
-    
+
     private void btlimparFiltroPro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimparFiltroPro1ActionPerformed
-        // TODO add your handling code here:
+        Funcoes.limparCampos(pFiltrosPro1);
+
+        cDesh.setFiltroIdCli(0);
+        cDesh.setIdProjetoFiltro(0);
+        cDesh.popularTopicos();
+        cDesh.popularPorcentagens();
+        cDesh.popularProjetos();
     }//GEN-LAST:event_btlimparFiltroPro1ActionPerformed
-    
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-    
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         cDesh = new DeshboardControl();
         cDesh.setFiltroData1(ftfData1FiltroPro1);
@@ -2002,25 +2102,46 @@ public class fPrincipal extends javax.swing.JFrame {
         cDesh.setProjetos(tbProjetosDesh);
         cDesh.setTopicos(tbTopicosDesh);
         cDesh.setFrame(ifDashboard);
+        cDesh.setPorcentagens(lbPorcentagensTopicos);
+        cDesh.setBgTopicos(bgTopicosDesh);
+        cDesh.setRfinalizadosTopicos(rbFinalizadosTop1);
+        cDesh.setrCriadosTopicos(rbCriadosTop1);
+        cDesh.setrDesenvolvimentoTopicos(rbDesenvolvimentoTop1);
+        cDesh.setrPlanejadosTopicos(rbPlanejadosTop1);
+        cDesh.setrTodosTopicos(rbTodosTop1);
+        cDesh.setrTesteTopicos(rbTesteTop1);
         ifDashboard.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-    
+
     private void rbTesteTopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbTesteTopActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_rbTesteTopActionPerformed
-    
+
     private void tbProjetosDeshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbProjetosDeshMouseClicked
-        String[] porcentagens;
-        String topico = (String) tbProjetosDesh.getValueAt(tbProjetosDesh.getSelectedRow(), 0);
-        porcentagens = new ProjetosTopicosDAO().porcentagensTopicosProjeto(Integer.parseInt(topico));
-        String porcentagensTotal = "<html>";
-        lbPorcentagensTopicos.setText("");
-        for (int i = 0; i < 5; i++) {
-            porcentagensTotal += porcentagens[i] + "<br>";
-        }
-        porcentagensTotal += "</html>";
-            lbPorcentagensTopicos.setText( porcentagensTotal );
     }//GEN-LAST:event_tbProjetosDeshMouseClicked
+
+    private void ftfData2FiltroPro1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ftfData2FiltroPro1KeyReleased
+        cDesh.popularProjetos();
+    }//GEN-LAST:event_ftfData2FiltroPro1KeyReleased
+
+    private void ftfData1FiltroPro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfData1FiltroPro1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ftfData1FiltroPro1ActionPerformed
+
+    private void btlimparFiltroPro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimparFiltroPro2ActionPerformed
+        tfDesenvolvedorFiltroPro1.setText("");
+        cDesh.setFiltroIdDes(0);
+        cDesh.getrTodosTopicos().setSelected(true);
+        cDesh.setFiltroTopico('a');
+        cDesh.popularTopicos();
+    }//GEN-LAST:event_btlimparFiltroPro2ActionPerformed
+
+    private void btSairDeshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairDeshActionPerformed
+        ifDashboard.setVisible(false);
+        btlimparFiltroPro1ActionPerformed(evt);
+        btlimparFiltroPro2ActionPerformed(evt);
+        cDesh = null;
+    }//GEN-LAST:event_btSairDeshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2057,6 +2178,7 @@ public class fPrincipal extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup bgTopicosDesh;
     private javax.swing.ButtonGroup bgTopicosPro;
     private javax.swing.JButton btAdicionarDesenvolvedorPro;
     private javax.swing.JButton btBuscarCidadeCli;
@@ -2073,6 +2195,7 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btSair;
     private javax.swing.JButton btSairCli;
     private javax.swing.JButton btSairDes;
+    private javax.swing.JButton btSairDesh;
     private javax.swing.JButton btSairPro;
     private javax.swing.JButton btSalvar;
     private javax.swing.JButton btSalvarCli;
@@ -2081,6 +2204,7 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btSelecionarSituacao;
     private javax.swing.JButton btlimparFiltroPro;
     private javax.swing.JButton btlimparFiltroPro1;
+    private javax.swing.JButton btlimparFiltroPro2;
     private javax.swing.JComboBox cbCategoriaDes;
     private javax.swing.JComboBox cbDesenvolvedorTopicoPro;
     private javax.swing.JComboBox cbSituacao;
@@ -2101,7 +2225,6 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JInternalFrame ifDesenvolvedores;
     private javax.swing.JInternalFrame ifProjetos;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2116,6 +2239,8 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -2177,11 +2302,17 @@ public class fPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel pnListagemTopico;
     private javax.swing.JPanel pnManutencaoTopico;
     private javax.swing.JRadioButton rbCriadosTop;
+    private javax.swing.JRadioButton rbCriadosTop1;
     private javax.swing.JRadioButton rbDesenvolvimentoTop;
+    private javax.swing.JRadioButton rbDesenvolvimentoTop1;
     private javax.swing.JRadioButton rbFinalizadosTop;
+    private javax.swing.JRadioButton rbFinalizadosTop1;
     private javax.swing.JRadioButton rbPlanejadosTop;
+    private javax.swing.JRadioButton rbPlanejadosTop1;
     private javax.swing.JRadioButton rbTesteTop;
+    private javax.swing.JRadioButton rbTesteTop1;
     private javax.swing.JRadioButton rbTodosTop;
+    private javax.swing.JRadioButton rbTodosTop1;
     private javax.swing.JScrollPane spDescricao;
     private javax.swing.JScrollPane spDescricaoTopicoPro;
     private javax.swing.JScrollPane spDesenvolvedoresPro;

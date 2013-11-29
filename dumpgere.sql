@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.32, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: gerenciaprojetos
 -- ------------------------------------------------------
--- Server version	5.5.32-0ubuntu0.13.04.1
+-- Server version	5.5.34-0ubuntu0.13.10.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -102,7 +102,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (1,430780,'elias','82492748',NULL,NULL),(3,430780,'Elias','(51)-82492748','elias.muller1@gmail.com','adicional'),(7,110020,'qwe','','qweqwe','qwqwqw'),(8,110011,'Elias','(13)490i-3249','açsldkfsdçlfjk','sdfsdfsdf'),(9,110020,'szxczxczx','(12)2312-3123','asdf','zxc'),(10,110011,'Cliente teste 54','(11)1111-1111','email@site.com',''),(11,110011,'teste 1993','(22)2222-2222','email@sitre,xom','');
+INSERT INTO `clientes` VALUES (8,110011,'Elias','(13)490i-3249','açsldkfsdçlfjk','sdfsdfsdf'),(11,110011,'teste 1993','(22)2222-2222','email@sitre,xom','');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -187,7 +187,7 @@ CREATE TABLE `projetos` (
 
 LOCK TABLES `projetos` WRITE;
 /*!40000 ALTER TABLE `projetos` DISABLE KEYS */;
-INSERT INTO `projetos` VALUES (3,8,'Gerencia projetos','Aplidativo cujo objetivo é controlar e organizar as aplicações.',NULL,NULL,'2013-11-10','2013-11-11'),(10,11,'teste','teste',NULL,NULL,'2000-01-01','2012-10-10');
+INSERT INTO `projetos` VALUES (3,8,'Gerencia projetos','Aplidativo cujo objetivo é controlar e organizar as aplicações.',NULL,NULL,'2013-11-10','2013-11-11'),(10,11,'teste','teste',NULL,NULL,'0001-01-01','2012-10-10');
 /*!40000 ALTER TABLE `projetos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -215,7 +215,7 @@ CREATE TABLE `projetos_desenvolvedores` (
 
 LOCK TABLES `projetos_desenvolvedores` WRITE;
 /*!40000 ALTER TABLE `projetos_desenvolvedores` DISABLE KEYS */;
-INSERT INTO `projetos_desenvolvedores` VALUES (3,38),(10,40);
+INSERT INTO `projetos_desenvolvedores` VALUES (3,27),(3,38),(3,40),(3,41),(10,41);
 /*!40000 ALTER TABLE `projetos_desenvolvedores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,9 +230,14 @@ CREATE TABLE `projetos_topicos` (
   `idtopico` int(11) NOT NULL,
   `idprojeto` int(11) NOT NULL,
   `pronto` tinyint(1) DEFAULT NULL,
+  `situacao` char(1) DEFAULT NULL,
+  `iddesenvolvedor` int(11) NOT NULL,
+  `anexo` blob,
   PRIMARY KEY (`idtopico`,`idprojeto`),
   KEY `fk_topicosprojeto_has_projetos_projetos1_idx` (`idprojeto`),
   KEY `fk_topicosprojeto_has_projetos_topicosprojeto1_idx` (`idtopico`),
+  KEY `fk_projetos_topicos_desenvolvedores1_idx` (`iddesenvolvedor`),
+  CONSTRAINT `fk_projetos_topicos_desenvolvedores1` FOREIGN KEY (`iddesenvolvedor`) REFERENCES `desenvolvedores` (`iddesenvolvedor`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_topicosprojeto_has_projetos_projetos1` FOREIGN KEY (`idprojeto`) REFERENCES `projetos` (`idprojeto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_topicosprojeto_has_projetos_topicosprojeto1` FOREIGN KEY (`idtopico`) REFERENCES `topicos` (`idtopico`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -244,7 +249,7 @@ CREATE TABLE `projetos_topicos` (
 
 LOCK TABLES `projetos_topicos` WRITE;
 /*!40000 ALTER TABLE `projetos_topicos` DISABLE KEYS */;
-INSERT INTO `projetos_topicos` VALUES (2,10,0),(3,3,1),(4,3,1),(7,3,0),(8,3,1),(11,3,0),(12,3,0);
+INSERT INTO `projetos_topicos` VALUES (31,3,0,'d',38,NULL),(32,3,0,'c',41,NULL),(33,3,0,'c',38,NULL),(34,3,0,'d',41,NULL),(36,3,0,'c',27,NULL),(38,3,0,'f',38,NULL),(39,3,0,'p',38,NULL),(40,3,0,'t',38,NULL),(41,3,0,'c',38,NULL),(42,3,0,'c',38,NULL),(43,10,0,'c',38,NULL);
 /*!40000 ALTER TABLE `projetos_topicos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -260,7 +265,7 @@ CREATE TABLE `topicos` (
   `titulo` varchar(100) DEFAULT NULL,
   `descricao` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idtopico`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -269,7 +274,7 @@ CREATE TABLE `topicos` (
 
 LOCK TABLES `topicos` WRITE;
 /*!40000 ALTER TABLE `topicos` DISABLE KEYS */;
-INSERT INTO `topicos` VALUES (1,'teste','descricao de teste'),(2,'teste','tópico'),(3,'Cadastro de datas','Fazer o cadastro de datas do projeto.'),(4,'Desenvolvedores','Adicionar desenvolvedores no projeto.'),(5,'teste de descricao','nada'),(6,'Teste de cadastro','nada'),(7,'Porcentagem','Mostrar porcentagem de conclusão no listágem dos projetos.'),(8,'Relatórios','Fazer relatórios dos projetos: Com filtros de cliente, desenvolvedor, tópico e por categoria, por projeto individualmente e seu andamento.\n\n'),(9,'teste','çklsjn'),(10,'validação de campos','validar'),(11,'situação','Planejado, Desenvolvimento, teste, Criado,  concluído. '),(12,'Adiconar desenvolvedor no topico','');
+INSERT INTO `topicos` VALUES (1,'teste','descricao de teste'),(2,'teste','tópico'),(3,'Cadastro de datas','Fazer o cadastro de datas do projeto.'),(4,'Desenvolvedores','Adicionar desenvolvedores no projeto.'),(5,'teste de descricao','nada'),(6,'Teste de cadastro','nada'),(7,'Porcentagem','Mostrar porcentagem de conclusão no listágem dos projetos.'),(8,'Relatórios','Fazer relatórios dos projetos: Com filtros de cliente, desenvolvedor, tópico e por categoria, por projeto individualmente e seu andamento.\n\n'),(9,'teste','çklsjn'),(10,'validação de campos','validar'),(11,'situação','Planejado, Desenvolvimento, teste, Criado,  concluído. '),(12,'Adiconar desenvolvedor no topico',''),(13,'teste','teste'),(14,'Ajustar relatórios','adicionar todos os dados nos relatórios'),(15,'cadastro de clientes','cadastrar, alterar excluir.\ncampos: nome, Telefone ...'),(16,'aa','teste'),(17,'teste','nada'),(18,'teste','nada'),(19,'teste','elais'),(20,'nada','teste de nada'),(21,'nada','as?d'),(22,'teste','çaslkj'),(23,'teste','slçfksdçl'),(24,'teste','nada'),(25,'teste','nada nada'),(26,'nada','testar'),(27,'teste',''),(28,'aaaaa','aaa'),(29,'nada','teste'),(30,'aaaaaa','aaaaaaaaa'),(31,'teste','ss'),(32,'aavvv','aa'),(33,'teste de registro novo','teste para ver se funciona o registro novo'),(34,'teste','nada'),(35,'Fazer relatórios','fazer relatórios corretamente'),(36,'teste','nada'),(37,'finalizado','nada'),(38,'teste','nada	'),(39,'planejamento','aaa'),(40,'teste porcentágem','teste'),(41,'porcentagem','teste'),(42,'teste dos 10','teste'),(43,'teste','nada');
 /*!40000 ALTER TABLE `topicos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -282,4 +287,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-11-09 10:08:46
+-- Dump completed on 2013-11-28  9:46:06
