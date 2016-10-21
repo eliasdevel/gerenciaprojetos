@@ -55,7 +55,7 @@ public class Concluir extends AbstractCellEditor
             JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         try {
             String situacao = "";
-            if (table.getValueAt(row, column) == 'f') {
+            if ((char) table.getValueAt(row, column) == 'f') {
                 situacao = "Finalizado";
                 Image img = null;
                 img = ImageIO.read(getClass().getResource("/view/completo.png"));
@@ -63,26 +63,26 @@ public class Concluir extends AbstractCellEditor
 
 
             } else {
-                if (table.getValueAt(row, column) == 'c') {
+                if ((char) table.getValueAt(row, column) == 'c') {
                     situacao = "Criado";
                     Image img = null;
                     img = ImageIO.read(getClass().getResource("/view/incompleto.png"));
                     renderButton.setIcon(new ImageIcon(img));
                 } else {
-                    if (table.getValueAt(row, column) == 't') {
+                    if ((char) table.getValueAt(row, column) == 't') {
                         situacao = "em fase de Teste";
                         Image img = null;
                         img = ImageIO.read(getClass().getResource("/view/teste.png"));
                         renderButton.setIcon(new ImageIcon(img));
                     } else {
-                        if (table.getValueAt(row, column) == 'd') {
+                        if ((char)table.getValueAt(row, column) == 'd') {
                             situacao = "em Desenvolvimento";
                             Image img = null;
                             img = ImageIO.read(getClass().getResource("/view/desenvolvimento.png"));
                             renderButton.setIcon(new ImageIcon(img));
 
                         } else {
-                            if (table.getValueAt(row, column) == 'p') {
+                            if ((char) table.getValueAt(row, column) == 'p') {
                                 situacao = "Planejado";
                                 Image img = null;
                                 img = ImageIO.read(getClass().getResource("/view/planejado.png"));

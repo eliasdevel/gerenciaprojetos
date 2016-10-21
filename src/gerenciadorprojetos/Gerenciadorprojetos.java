@@ -19,13 +19,13 @@ import view.fPrincipal;
  */
 public class Gerenciadorprojetos {
 
-    public static Dimension DIMENSAOFULL = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
+   
     Statement s;
     public static void main(String[] args) {
         ConexaoBD conexao = new ConexaoBD();
         if (conexao.abriuConexao()) {
             fPrincipal form = new fPrincipal();
-            form.setSize(DIMENSAOFULL);
+   //         form.setSize(DIMENSAOFULL);
             form.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "A conexão com o banco de dados falhou, contate o Administrador.");
